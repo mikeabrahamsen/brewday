@@ -1,0 +1,6 @@
+*.py[co]
+
+/client/bower_components/
+
+server/app.sqlite
+server/app/config.py
