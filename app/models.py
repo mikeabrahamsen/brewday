@@ -22,7 +22,7 @@ class User(db.Model):
 
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    beer_name = db.Column(db.String(120), nullable=False)
+    name = db.Column(db.String(120), nullable=False)
     beer_type = db.Column(db.String(120), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     created_at = db.Column(db.DateTime, default=db.func.now())
@@ -33,3 +33,24 @@ class Recipe(db.Model):
 
     def __repr__(self):
         return '<Recipe %r>' % self.name
+
+
+class Addition(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    addition_type = db.Column(db.String(50), nullable=False)
+    brew_stage = db.Column(db.Integer, nullable=False)
+    time = db.Column(db.Integer, nullable=False, default=0)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'))
+    __mapper_args__ = {'polymorphic_identity': 'addition'}
+    __mapper_args__ = {'polymorphic_on': addition_type}
+
+
+class Hop(Addition):
+    id = db.Column(db.Integer, db.ForeignKey('addition.id'), primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    __mapper_args__ = {'polymorphic_identity': 'hop'}
+
+class Grain(Addition):
+    id = db.Column(db.Integer, db.ForeignKey('addition.id'), primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    __mapper_args__ = {'polymorphic_identity': 'grain'}
