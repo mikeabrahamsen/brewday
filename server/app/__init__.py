@@ -5,17 +5,10 @@ from flask.ext import restful
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.httpauth import HTTPBasicAuth
-
-basedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../')
+from config import basedir
 
 app = Flask(__name__)
-app.config.from_object('app.config')
-
-# flask-sqlalchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(
-    basedir, 'app.sqlite'
-)
-
+app.config.from_object('config')
 db = SQLAlchemy(app)
 
 # flask-restful
@@ -27,6 +20,9 @@ flask_bcrypt = Bcrypt(app)
 # flask-httpauth
 auth = HTTPBasicAuth()
 
+@app.teardown_request
+def teardown_request(exception):
+    db.session.remove()
 
 @app.after_request
 def after_request(response):
@@ -36,4 +32,4 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
     return response
 
-import views
+from app import views, models

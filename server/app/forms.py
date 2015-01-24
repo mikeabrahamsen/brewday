@@ -4,8 +4,8 @@ from wtforms_alchemy import model_form_factory
 from wtforms import StringField
 from wtforms.validators import DataRequired
 
-from app.server import db
-from models import User
+from app import db
+from models import User, Recipe
 
 BaseModelForm = model_form_factory(Form)
 
@@ -24,3 +24,8 @@ class UserCreateForm(ModelForm):
 class SessionCreateForm(Form):
     email = StringField('email', validators=[DataRequired()])
     password = StringField('password', validators=[DataRequired()])
+
+
+class RecipeCreateForm(ModelForm):
+    class Meta:
+        model = Recipe

@@ -2,7 +2,7 @@ from flask import g
 
 from wtforms.validators import Email
 
-from server import db, flask_bcrypt
+from app import db, flask_bcrypt
 
 
 class User(db.Model):
@@ -10,7 +10,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False,
                       info={'validators': Email()})
     password = db.Column(db.String(80), nullable=False)
-    posts = db.relationship('Recipe', backref='user', lazy='dynamic')
+    recipes = db.relationship('Recipe', backref='user', lazy='dynamic')
 
     def __init__(self, email, password):
         self.email = email
@@ -27,8 +27,9 @@ class Recipe(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     created_at = db.Column(db.DateTime, default=db.func.now())
 
-    def __init__(self, name, body):
+    def __init__(self, name, beer_type):
         self.name = name
+        self.beer_type = beer_type
         self.user_id = g.user.id
 
     def __repr__(self):
