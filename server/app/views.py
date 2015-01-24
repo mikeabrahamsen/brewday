@@ -26,7 +26,6 @@ class UserView(restful.Resource):
     def post(self):
         form = UserCreateForm()
         if not form.validate_on_submit():
-            print form.errors
             return form.errors, 422
 
         user = User(form.email.data, form.password.data)

@@ -3,4 +3,6 @@
 /client/bower_components/
 
 server/app.sqlite
+server/app.db
+server/test.db
 server/app/config.py
