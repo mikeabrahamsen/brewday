@@ -1,11 +1,8 @@
-import os
-
 from flask import Flask
 from flask.ext import restful
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.httpauth import HTTPBasicAuth
-from config import basedir
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -20,9 +17,11 @@ flask_bcrypt = Bcrypt(app)
 # flask-httpauth
 auth = HTTPBasicAuth()
 
+
 @app.teardown_request
 def teardown_request(exception):
     db.session.remove()
+
 
 @app.after_request
 def after_request(response):

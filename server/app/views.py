@@ -3,8 +3,13 @@ from flask.ext import restful
 from flask.ext.restful import fields, marshal_with
 
 from app import api, db, flask_bcrypt, auth
-from models import User, Recipe
-from forms import UserCreateForm, SessionCreateForm, RecipeCreateForm
+from models import User, Recipe, Addition, Hop
+from forms import (
+    UserCreateForm,
+    SessionCreateForm,
+    RecipeCreateForm,
+    HopCreateForm,
+)
 
 
 @auth.verify_password
@@ -53,15 +58,16 @@ class SessionView(restful.Resource):
         return '', 401
 
 
-class RecipeListView(restful.Resource):
-    recipe_fields = {
-        'id': fields.Integer,
-        'name': fields.String,
-        'beer_type': fields.String,
-        'user': fields.Nested(UserView.user_fields),
-        'created_at': fields.DateTime
-    }
+recipe_fields = {
+    'id': fields.Integer,
+    'name': fields.String,
+    'beer_type': fields.String,
+    'user': fields.Nested(UserView.user_fields),
+    'created_at': fields.DateTime
+}
 
+
+class RecipeListView(restful.Resource):
     @marshal_with(recipe_fields)
     def get(self):
         recipes = Recipe.query.all()
@@ -80,12 +86,55 @@ class RecipeListView(restful.Resource):
 
 
 class RecipeView(restful.Resource):
-    @marshal_with(RecipeListView.recipe_fields)
+    @marshal_with(recipe_fields)
     def get(self, id):
         recipes = Recipe.query.filter_by(id=id).first()
         return recipes
+
+
+addition_fields = {
+    'id': fields.Integer,
+    'name': fields.String,
+    'addition_type': fields.String,
+    'brew_stage': fields.Integer,
+    'time': fields.Integer,
+    'recipe_id': fields.Integer,
+}
+
+
+class AdditionListView(restful.Resource):
+    @marshal_with(addition_fields)
+    def get(self):
+        additions = Addition.query.all()
+        return additions
+
+
+class HopListView(restful.Resource):
+    @marshal_with(addition_fields)
+    def get(self):
+        hops = Hop.query.all()
+        return hops
+
+    @auth.login_required
+    @marshal_with(addition_fields)
+    def post(self):
+        form = HopCreateForm()
+        if not form.validate_on_submit():
+            print form.errors
+            return form.errors, 422
+        addition = Hop(
+            form.name.data,
+            form.brew_stage.data,
+            form.time.data,
+            form.recipe_id.data
+        )
+        db.session.add(addition)
+        db.session.commit()
+        return addition, 201
 
 api.add_resource(UserView, '/api/v1/users')
 api.add_resource(SessionView, '/api/v1/sessions')
 api.add_resource(RecipeListView, '/api/v1/recipes')
 api.add_resource(RecipeView, '/api/v1/recipes/<int:id>')
+api.add_resource(AdditionListView, '/api/v1/additions')
+api.add_resource(HopListView, '/api/v1/additions/hops')

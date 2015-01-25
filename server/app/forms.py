@@ -5,7 +5,7 @@ from wtforms import StringField
 from wtforms.validators import DataRequired
 
 from app import db
-from models import User, Recipe
+from models import User, Recipe, Hop, Grain
 
 BaseModelForm = model_form_factory(Form)
 
@@ -29,3 +29,14 @@ class SessionCreateForm(Form):
 class RecipeCreateForm(ModelForm):
     class Meta:
         model = Recipe
+
+
+class HopCreateForm(ModelForm):
+    class Meta:
+        model = Hop
+        include = ['recipe_id']
+
+
+class GrainCreateForm(ModelForm):
+    class Meta:
+        model = Grain
