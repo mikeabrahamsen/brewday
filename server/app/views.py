@@ -107,20 +107,20 @@ addition_fields = {
 
 class AdditionListView(restful.Resource):
     @marshal_with(addition_fields)
-    def get(self):
-        additions = Addition.query.all()
+    def get(self, recipe_id):
+        additions = Addition.query.filter_by(recipe_id=recipe_id).all()
         return additions
 
 
 class HopListView(restful.Resource):
     @marshal_with(addition_fields)
-    def get(self):
-        hops = Hop.query.all()
+    def get(self, recipe_id):
+        hops = Hop.query.filter_by(recipe_id=recipe_id).all()
         return hops
 
     @auth.login_required
     @marshal_with(addition_fields)
-    def post(self):
+    def post(self, recipe_id):
         form = HopCreateForm()
         if not form.validate_on_submit():
             return form.errors, 422
@@ -128,7 +128,7 @@ class HopListView(restful.Resource):
             form.name.data,
             form.brew_stage.data,
             form.time.data,
-            form.recipe_id.data
+            recipe_id
         )
         db.session.add(addition)
         db.session.commit()
@@ -137,13 +137,13 @@ class HopListView(restful.Resource):
 
 class GrainListView(restful.Resource):
     @marshal_with(addition_fields)
-    def get(self):
-        grains = Grain.query.all()
+    def get(self, recipe_id):
+        grains = Grain.query.filter_by(recipe_id=recipe_id).all()
         return grains
 
     @auth.login_required
     @marshal_with(addition_fields)
-    def post(self):
+    def post(self, recipe_id):
         form = GrainCreateForm()
         if not form.validate_on_submit():
             return form.errors, 422
@@ -151,7 +151,7 @@ class GrainListView(restful.Resource):
             form.name.data,
             form.brew_stage.data,
             form.time.data,
-            form.recipe_id.data
+            recipe_id
         )
         db.session.add(addition)
         db.session.commit()
@@ -161,6 +161,8 @@ api.add_resource(UserView, '/api/v1/users')
 api.add_resource(SessionView, '/api/v1/sessions')
 api.add_resource(RecipeListView, '/api/v1/recipes')
 api.add_resource(RecipeView, '/api/v1/recipes/<int:id>')
-api.add_resource(AdditionListView, '/api/v1/additions')
-api.add_resource(HopListView, '/api/v1/additions/hops')
-api.add_resource(GrainListView, '/api/v1/additions/grains')
+api.add_resource(AdditionListView, '/api/v1/recipes/<int:recipe_id>/additions')
+api.add_resource(HopListView, '/api/v1/recipes/<int:recipe_id>/additions/hops')
+api.add_resource(
+    GrainListView, '/api/v1/recipes/<int:recipe_id>/additions/grains'
+)
