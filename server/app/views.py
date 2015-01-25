@@ -69,9 +69,10 @@ recipe_fields = {
 
 
 class RecipeListView(restful.Resource):
+    @auth.login_required
     @marshal_with(recipe_fields)
     def get(self):
-        recipes = Recipe.query.all()
+        recipes = Recipe.query.filter_by(user_id=g.user.id).all()
         return recipes
 
     @auth.login_required
@@ -87,9 +88,10 @@ class RecipeListView(restful.Resource):
 
 
 class RecipeView(restful.Resource):
+    @auth.login_required
     @marshal_with(recipe_fields)
     def get(self, id):
-        recipes = Recipe.query.filter_by(id=id).first()
+        recipes = Recipe.query.filter_by(user_id=g.user.id, id=id).one()
         return recipes
 
 
@@ -121,7 +123,6 @@ class HopListView(restful.Resource):
     def post(self):
         form = HopCreateForm()
         if not form.validate_on_submit():
-            print form.errors
             return form.errors, 422
         addition = Hop(
             form.name.data,
@@ -145,7 +146,6 @@ class GrainListView(restful.Resource):
     def post(self):
         form = GrainCreateForm()
         if not form.validate_on_submit():
-            print form.errors
             return form.errors, 422
         addition = Grain(
             form.name.data,
