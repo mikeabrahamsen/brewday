@@ -23,6 +23,7 @@ class RecipeRouteTests(TestCase):
         self.recipe_route = '/api/v1/recipes'
         self.addition_route = '/api/v1/additions'
         self.hop_route = '/api/v1/additions/hops'
+        self.grain_route = '/api/v1/additions/grains'
 
         self.email = 'test@test.com'
         self.password = 'admin'
@@ -47,6 +48,22 @@ class RecipeRouteTests(TestCase):
     def check_content_type(self, headers):
         self.assertEqual(headers['Content-Type'], 'application/json')
 
+    def add_addition(self, route, name, brew_stage, time):
+        rec = Recipe.query.order_by(Recipe.name).first()
+        hop = dict(name=name,
+                   brew_stage=brew_stage,
+                   time=time,
+                   recipe_id=rec.id)
+
+        rv = self.app.post(
+            route,
+            data=hop,
+            headers=self.auth_headers
+        )
+        return rv
+
+
+
     def test_get_response(self):
         rv = self.app.get(self.addition_route)
         self.check_content_type(rv.headers)
@@ -56,18 +73,9 @@ class RecipeRouteTests(TestCase):
         # make sure there are no recipes
         self.assertEqual(len(response), 0)
 
-    def test_adding_hop(self):
-        rec = Recipe.query.order_by(Recipe.name).first()
-        hop = dict(name='hopZone',
-                   brew_stage=3,
-                   time=60,
-                   recipe_id=rec.id)
 
-        rv = self.app.post(
-            self.hop_route,
-            data=hop,
-            headers=self.auth_headers
-        )
+    def test_adding_hop(self):
+        self.add_addition(self.hop_route,'Goldings', 2, 60)
 
         rv = self.app.get(self.addition_route)
         self.check_content_type(rv.headers)
@@ -84,3 +92,45 @@ class RecipeRouteTests(TestCase):
 
         # check that we now have a hop added
         self.assertEqual(len(response), 1)
+
+        self.add_addition(self.hop_route,'Kent', 2, 45)
+        self.add_addition(self.hop_route,'Contennial', 2, 45)
+
+        rv = self.app.get(self.hop_route)
+        self.check_content_type(rv.headers)
+        self.assertEqual(rv.status_code, 200)
+        response = json.loads(rv.data)
+
+        # check that we now have more hops added
+        self.assertEqual(len(response), 3)
+
+    def test_adding_grain(self):
+        self.add_addition(self.grain_route,'American Two-Row', 0, 60)
+
+        rv = self.app.get(self.addition_route)
+        self.check_content_type(rv.headers)
+        self.assertEqual(rv.status_code, 200)
+        response = json.loads(rv.data)
+
+        # check that we now have an addition
+        self.assertEqual(len(response), 1)
+
+        rv = self.app.get(self.grain_route)
+        self.check_content_type(rv.headers)
+        self.assertEqual(rv.status_code, 200)
+        response = json.loads(rv.data)
+
+        # check that we now have a grain added
+        self.assertEqual(len(response), 1)
+
+
+        self.add_addition(self.grain_route,'Crystal 60', 0, 60)
+        self.add_addition(self.grain_route,'Crystal 120', 0, 60)
+
+        rv = self.app.get(self.grain_route)
+        self.check_content_type(rv.headers)
+        self.assertEqual(rv.status_code, 200)
+        response = json.loads(rv.data)
+
+        # check that we now have more grains added
+        self.assertEqual(len(response), 3)

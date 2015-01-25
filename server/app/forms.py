@@ -40,3 +40,4 @@ class HopCreateForm(ModelForm):
 class GrainCreateForm(ModelForm):
     class Meta:
         model = Grain
+        include = ['recipe_id']

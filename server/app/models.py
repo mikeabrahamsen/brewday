@@ -73,3 +73,9 @@ class Grain(Addition):
     id = db.Column(db.Integer, db.ForeignKey('addition.id'), primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     __mapper_args__ = {'polymorphic_identity': 'grain'}
+
+    def __init__(self, name, brew_stage, time, recipe_id):
+        self.name = name
+        self.brew_stage = brew_stage
+        self.time = time
+        self.recipe_id = recipe_id
