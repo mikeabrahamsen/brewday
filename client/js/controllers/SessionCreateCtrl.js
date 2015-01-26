@@ -9,7 +9,7 @@ Brewday.controller('SessionCreateCtrl',  ['$scope', '$location', '$window', 'Aut
 
              AuthService.login(user).then(function(data) {
                  success = true;
-                $location.path('/posts/create');
+                $location.path('/recipes/create');
             });
         }
     }
