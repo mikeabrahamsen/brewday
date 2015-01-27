@@ -3,6 +3,8 @@ from wtforms.validators import Email
 from app import db, flask_bcrypt
 from sqlalchemy.dialects.mysql import INTEGER
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
+from decimal import Decimal
+from math import ceil
 
 
 class User(db.Model):
@@ -72,8 +74,7 @@ class Addition(db.Model):
 
         """
 
-        value = float(value)
-        return round(value * 453592.37)
+        return int(ceil(value * Decimal(453592.37)))
 
     def ouncesToMg(self, value):
         """Convert grain ounces to mg
@@ -83,8 +84,7 @@ class Addition(db.Model):
 
         """
 
-        value = float(value)
-        return round(value * 28349.5231)
+        return int(ceil(value * Decimal(28349.5231)))
 
     @hybrid_method
     def mgToPounds(self, value):
@@ -95,7 +95,7 @@ class Addition(db.Model):
 
         """
 
-        return round(value / 453592.37, 2)
+        return round(Decimal(value / Decimal(453592.37)), 2)
 
     @hybrid_method
     def mgToOunces(self, value):
@@ -106,7 +106,7 @@ class Addition(db.Model):
 
         """
 
-        return round(value / 28350.5231, 2)
+        return round(Decimal(value / Decimal(28350.5231)), 2)
 
 
 class Hop(Addition):
@@ -126,7 +126,7 @@ class Hop(Addition):
         """Return the value of hops in ounces"""
 
         amount = self.mgToOunces(self._amount)
-        return amount if type(amount) is float else self._amount
+        return amount
 
     @amount.setter
     def amount(self, value):
@@ -150,11 +150,7 @@ class Grain(Addition):
         """Return the value of grain in lbs"""
 
         amount = self.mgToPounds(self._amount)
-        return amount if type(amount) is float else self._amount
-        if type(amount) is float:
-            return amount
-        else:
-            return self._amount
+        return amount
 
     @amount.setter
     def amount(self, value):

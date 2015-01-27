@@ -1,7 +1,7 @@
 from flask.ext.wtf import Form
 
 from wtforms_alchemy import model_form_factory
-from wtforms import StringField
+from wtforms import StringField, DecimalField
 from wtforms.validators import DataRequired
 
 from app import db
@@ -35,11 +35,11 @@ class HopCreateForm(ModelForm):
     class Meta:
         model = Hop
         include = ['recipe_id']
-    amount = StringField('amount')
+    amount = DecimalField('amount')
 
 
 class GrainCreateForm(ModelForm):
     class Meta:
         model = Grain
         include = ['recipe_id']
-    amount = StringField('amount')
+    amount = DecimalField('amount')

@@ -101,7 +101,7 @@ addition_fields = {
     'addition_type': fields.String,
     'brew_stage': fields.Integer,
     'time': fields.Integer,
-    'amount': fields.Float,  # so we can send decimals after conversions
+    'amount': fields.Fixed,  # so we can send decimals after conversions
     'recipe_id': fields.Integer,
 }
 

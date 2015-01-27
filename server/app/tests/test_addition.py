@@ -105,7 +105,7 @@ class AdditionTests(TestCase):
         self.assertEqual(len(response), 3)
 
     def test_adding_grain(self):
-        self.add_addition(self.grain_route, 'American Two-Row', 0, 60,1)
+        self.add_addition(self.grain_route, 'American Two-Row', 0, 60, 1)
 
         rv = self.app.get(self.addition_route)
         self.check_content_type(rv.headers)
@@ -123,8 +123,8 @@ class AdditionTests(TestCase):
         # check that we now have a grain added
         self.assertEqual(len(response), 1)
 
-        self.add_addition(self.grain_route, 'Crystal 60', 0, 60,1)
-        self.add_addition(self.grain_route, 'Crystal 120', 0, 60,1)
+        self.add_addition(self.grain_route, 'Crystal 60', 0, 60, 1)
+        self.add_addition(self.grain_route, 'Crystal 120', 0, 60, 1)
 
         rv = self.app.get(self.grain_route)
         self.check_content_type(rv.headers)
