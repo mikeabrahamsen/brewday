@@ -1,5 +1,5 @@
 <h1>Create Recipe</h1>
-<form class="form-horizontal" name="postForm" ng-submit="submit_recipe(data.name, data.beertype)" novalidate>
+<form class="form-horizontal" name="postForm" ng-submit="submit_recipe(data.name, data.beertype, grains)" novalidate>
     <div class="form-group">
         <div class="row">
             <label class="col-md-1 control-label">Name</label>
@@ -26,10 +26,11 @@
             </div>
         </div>
     </div>
+    <ng-form name="grainForm" ng-model="grains">
     <div class="form-group" data-ng-repeat="grain in grains">
         <div class="row">
             <div class="col-md-1">
-                <input type="text" class="form-control" ng-model="weight.amount" name="" placeholder="lbs">
+                <input type="text" class="form-control" ng-model="grain.amount" name="" placeholder="lbs">
             </div>
             <div class="col-md-3">
                 <input type="text" class="form-control" ng-model="grain.name" name="" placeholder="Enter a grain type">
@@ -39,6 +40,7 @@
             </div>
         </div>
     </div>
+    </ng-form>
     <div class="form-group">
         <div class="col-md-11">
         <button type="submit" class="btn btn-primary pull-right">Save</button>
