@@ -5,10 +5,10 @@ from unittest import TestCase
 import json
 from config import basedir
 from app import app, db
-from app.models import User, Recipe
+from app.models import User
 
 
-class AdditionRouteTests(TestCase):
+class AdditionTests(TestCase):
     def setUp(self):
         app.config['TESTING'] = True
         app.config['WTF_CSRF_ENABLED'] = False
@@ -51,13 +51,14 @@ class AdditionRouteTests(TestCase):
     def replace_recipe_id(self, route, recipe_id):
         return route.replace('/1', '/' + str(recipe_id))
 
-    def add_addition(self, route, name, brew_stage, time, recipe_id=1):
+    def add_addition(self, route, name, brew_stage, time, amount, recipe_id=1):
         if recipe_id != 1:
             route = self.replace_recipe_id(route, recipe_id)
 
         hop = dict(name=name,
                    brew_stage=brew_stage,
                    time=time,
+                   amount=amount,
                    )
 
         rv = self.app.post(
@@ -77,7 +78,7 @@ class AdditionRouteTests(TestCase):
         self.assertEqual(len(response), 0)
 
     def test_adding_hop(self):
-        self.add_addition(self.hop_route, 'Goldings', 2, 60)
+        self.add_addition(self.hop_route, 'Goldings', 2, 60, 1)
 
         rv = self.app.get(self.addition_route)
         self.check_content_type(rv.headers)
@@ -95,8 +96,8 @@ class AdditionRouteTests(TestCase):
         # check that we now have a hop added
         self.assertEqual(len(response), 1)
 
-        self.add_addition(self.hop_route, 'Kent', 2, 45)
-        self.add_addition(self.hop_route, 'Contennial', 2, 45)
+        self.add_addition(self.hop_route, 'Kent', 2, 45, 1)
+        self.add_addition(self.hop_route, 'Contennial', 2, 45, 1)
 
         rv = self.app.get(self.hop_route)
         self.check_content_type(rv.headers)
@@ -107,7 +108,7 @@ class AdditionRouteTests(TestCase):
         self.assertEqual(len(response), 3)
 
     def test_adding_grain(self):
-        self.add_addition(self.grain_route, 'American Two-Row', 0, 60)
+        self.add_addition(self.grain_route, 'American Two-Row', 0, 60,1)
 
         rv = self.app.get(self.addition_route)
         self.check_content_type(rv.headers)
@@ -125,8 +126,8 @@ class AdditionRouteTests(TestCase):
         # check that we now have a grain added
         self.assertEqual(len(response), 1)
 
-        self.add_addition(self.grain_route, 'Crystal 60', 0, 60)
-        self.add_addition(self.grain_route, 'Crystal 120', 0, 60)
+        self.add_addition(self.grain_route, 'Crystal 60', 0, 60,1)
+        self.add_addition(self.grain_route, 'Crystal 120', 0, 60,1)
 
         rv = self.app.get(self.grain_route)
         self.check_content_type(rv.headers)
@@ -149,8 +150,8 @@ class AdditionRouteTests(TestCase):
         # check that we now have 2 recipes
         self.assertEqual(len(response), 2)
 
-        self.add_addition(self.grain_route, 'Crystal 60', 0, 60, 2)
-        self.add_addition(self.grain_route, 'Crystal 40', 0, 40, 2)
+        self.add_addition(self.grain_route, 'Crystal 60', 0, 60, 1, 2)
+        self.add_addition(self.grain_route, 'Crystal 40', 0, 40, 1, 2)
 
         rv = self.app.get(self.grain_route)
         self.check_content_type(rv.headers)
@@ -168,3 +169,22 @@ class AdditionRouteTests(TestCase):
 
         # check that there are 2 grains added to the second recipe
         self.assertEqual(len(response), 2)
+
+    def test_grain_conversions(self):
+        self.add_addition(self.grain_route, 'Crystal 60', 0, 60, 1.5)
+
+        rv = self.app.get(self.grain_route)
+        response = json.loads(rv.data)
+        # flask-restful returns a string so check against a float
+        amount = float(response[0]['amount'])
+
+        self.assertEqual(amount, 1.5)
+
+    def test_hop_conversions(self):
+        self.add_addition(self.hop_route, 'Goldings', 2, 60, 1.75)
+
+        rv = self.app.get(self.hop_route)
+        response = json.loads(rv.data)
+        amount = float(response[0]['amount'])
+
+        self.assertEqual(amount, 1.75)

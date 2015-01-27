@@ -101,6 +101,7 @@ addition_fields = {
     'addition_type': fields.String,
     'brew_stage': fields.Integer,
     'time': fields.Integer,
+    'amount': fields.Float,  # so we can send decimals after conversions
     'recipe_id': fields.Integer,
 }
 
@@ -128,6 +129,7 @@ class HopListView(restful.Resource):
             form.name.data,
             form.brew_stage.data,
             form.time.data,
+            form.amount.data,
             recipe_id
         )
         db.session.add(addition)
@@ -151,6 +153,7 @@ class GrainListView(restful.Resource):
             form.name.data,
             form.brew_stage.data,
             form.time.data,
+            form.amount.data,
             recipe_id
         )
         db.session.add(addition)

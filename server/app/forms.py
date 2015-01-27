@@ -35,9 +35,11 @@ class HopCreateForm(ModelForm):
     class Meta:
         model = Hop
         include = ['recipe_id']
+    amount = StringField('amount')
 
 
 class GrainCreateForm(ModelForm):
     class Meta:
         model = Grain
         include = ['recipe_id']
+    amount = StringField('amount')
