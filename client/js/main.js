@@ -86,6 +86,10 @@ window.Brewday = angular.module('Brewday', ['ngRoute', 'restangular', 'LocalStor
             controller: 'UserCreateCtrl',
             templateUrl: partialsDir + '/user/create.html'
         })
+        .when('/recipes/:recipe_id/edit', {
+            controller: 'RecipeEditCtrl',
+            templateUrl: partialsDir + '/recipes/edit.html'
+        })
         .when('/recipes/create', {
             controller: 'RecipeCreateCtrl',
             templateUrl: partialsDir + '/recipes/create.html',

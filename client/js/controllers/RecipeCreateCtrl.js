@@ -6,20 +6,23 @@ Brewday.controller('RecipeCreateCtrl',  ['$scope', '$location', '$window', 'Reci
             var newItemNo = $scope.grains.length+1;
             $scope.grains.push({'id':'grain'+newItemNo});
         };
-        $scope.submit_recipe = function submit_recipe(name,beertype,grains){
+        $scope.submit_recipe =
+            function submit_recipe(name,beertype,grains){
             var recipe = {};
+            var id = 0;
             recipe.name= name;
             recipe.beer_type = beertype;
             Recipe.create(recipe).then(function(data){
                 id = data.id;
                 console.log(id);
-                g = {}
                 grains.forEach(function(grain){
                     if (grain.name && grain.amount)
                     {
+                        g = {}
+                        console.log(grain);
                         g.name = grain.name;
                         g.amount = grain.amount;
-                        g.id = id;
+                        g.recipe_id = id;
                         g.brew_stage = 0;
                         g.time = 0;
                         Grain.add(g).then(function(data){
@@ -28,8 +31,8 @@ Brewday.controller('RecipeCreateCtrl',  ['$scope', '$location', '$window', 'Reci
 
                     }
                 });
+            $location.path('/recipes/'+ id + '/edit');
             });
-            // $location.path('/');
         }
     }
 ])

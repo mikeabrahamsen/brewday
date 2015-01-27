@@ -1,0 +1,5 @@
+<h1>{{recipe.name}}</h1>
+<h3>Grain Additions</h3>
+<div  data-ng-repeat="grain in grains">
+    {{grain.amount | number }} {{ grain.name }}
+</div>

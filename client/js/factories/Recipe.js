@@ -10,7 +10,10 @@ Brewday.factory('Recipe', function(Restangular) {
             return Restangular
                 .one('recipes')
                 .customPOST(data);
-        }
+        },
+        getOne: function(data) {
+            return Restangular.one('recipes',data).get();
+        },
     };
     return Recipe;
 })
