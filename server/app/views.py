@@ -165,7 +165,7 @@ api.add_resource(SessionView, '/api/v1/sessions')
 api.add_resource(RecipeListView, '/api/v1/recipes')
 api.add_resource(RecipeView, '/api/v1/recipes/<int:id>')
 api.add_resource(AdditionListView, '/api/v1/recipes/<int:recipe_id>/additions')
-api.add_resource(HopListView, '/api/v1/recipes/<int:recipe_id>/additions/hops')
+api.add_resource(HopListView, '/api/v1/recipes/<int:recipe_id>/hops')
 api.add_resource(
-    GrainListView, '/api/v1/recipes/<int:recipe_id>/additions/grains'
+    GrainListView, '/api/v1/recipes/<int:recipe_id>/grains'
 )

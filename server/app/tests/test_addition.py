@@ -19,8 +19,8 @@ class AdditionTests(TestCase):
 
         self.recipe_route = '/api/v1/recipes'
         self.addition_route = '/api/v1/recipes/1/additions'
-        self.hop_route = '/api/v1/recipes/1/additions/hops'
-        self.grain_route = '/api/v1/recipes/1/additions/grains'
+        self.hop_route = '/api/v1/recipes/1/hops'
+        self.grain_route = '/api/v1/recipes/1/grains'
 
         self.email = 'test@test.com'
         self.password = 'admin'
