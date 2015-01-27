@@ -1,9 +1,7 @@
-import os
 import unittest
 from unittest import TestCase
 
 import json
-from config import basedir
 from app import app, db
 
 
@@ -11,8 +9,7 @@ class UserRouteTests(TestCase):
     def setUp(self):
         app.config['TESTING'] = True
         app.config['WTF_CSRF_ENABLED'] = False
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
-            os.path.join(basedir, 'test.db')
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
 
         # added this as it was still reading from app db
         db.session.remove()
