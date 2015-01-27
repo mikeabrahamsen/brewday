@@ -52,12 +52,16 @@ class Addition(db.Model):
     def __init__(self, brew_stage, time, amount, recipe_id):
         self.brew_stage = brew_stage
         self.time = time
-        self._amount = amount
+        self.amount = amount
         self.recipe_id = recipe_id
 
     @hybrid_property
     def amount(self):
         return self._amount
+
+    @amount.setter
+    def amount(self, value):
+        self._amount = value
 
     def __repr__(self):
         return '<Addition %r, %d %d %.2f>' % (self.addition_type,
