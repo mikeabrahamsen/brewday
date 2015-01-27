@@ -58,10 +58,10 @@ class Addition(db.Model):
         return self._amount
 
     def __repr__(self):
-        return '<Addition %r, %d %d>' % (self.addition_type,
-                                         self.brew_stage,
-                                         self.time,
-                                         self.amount)
+        return '<Addition %r, %d %d %.2f>' % (self.addition_type,
+                                              self.brew_stage,
+                                              self.time,
+                                              self.amount)
 
     @hybrid_method
     def poundsToMg(self, value):
@@ -73,7 +73,7 @@ class Addition(db.Model):
         """
 
         value = float(value)
-        return int(value * 453592.37)
+        return round(value * 453592.37)
 
     def ouncesToMg(self, value):
         """Convert grain ounces to mg
@@ -84,7 +84,7 @@ class Addition(db.Model):
         """
 
         value = float(value)
-        return int(value * 28349.5231)
+        return round(value * 28349.5231)
 
     @hybrid_method
     def mgToPounds(self, value):
@@ -123,8 +123,7 @@ class Hop(Addition):
 
     @hybrid_property
     def amount(self):
-        """Return the value of _email up until the last twelve
-        characters."""
+        """Return the value of hops in ounces"""
 
         amount = self.mgToOunces(self._amount)
         return amount if type(amount) is float else self._amount
@@ -148,8 +147,7 @@ class Grain(Addition):
 
     @hybrid_property
     def amount(self):
-        """Return the value of _email up until the last twelve
-        characters."""
+        """Return the value of grain in lbs"""
 
         amount = self.mgToPounds(self._amount)
         return amount if type(amount) is float else self._amount

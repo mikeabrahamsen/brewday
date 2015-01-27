@@ -5,7 +5,7 @@ from unittest import TestCase
 import json
 from config import basedir
 from app import app, db
-from app.models import User
+from app.models import User, Addition
 
 
 class AdditionTests(TestCase):
@@ -173,6 +173,12 @@ class AdditionTests(TestCase):
     def test_grain_conversions(self):
         self.add_addition(self.grain_route, 'Crystal 60', 0, 60, 1.5)
 
+        # check the correct values are being stored in the database
+        # and that getting the amount property does the conversion
+        addition = Addition.query.first()
+        self.assertEqual(addition.amount, 1.5)
+        self.assertEqual(addition._amount, 680389)
+
         rv = self.app.get(self.grain_route)
         response = json.loads(rv.data)
         # flask-restful returns a string so check against a float
@@ -182,6 +188,12 @@ class AdditionTests(TestCase):
 
     def test_hop_conversions(self):
         self.add_addition(self.hop_route, 'Goldings', 2, 60, 1.75)
+
+        # check the correct values are being stored in the database
+        # and that getting the amount property does the conversion
+        addition = Addition.query.first()
+        self.assertEqual(addition.amount, 1.75)
+        self.assertEqual(addition._amount, 49612)
 
         rv = self.app.get(self.hop_route)
         response = json.loads(rv.data)
