@@ -28,6 +28,7 @@ class Recipe(db.Model):
     beer_type = db.Column(db.String(120), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     created_at = db.Column(db.DateTime, default=db.func.now())
+    additions = db.relationship("RecipeAddition", backref="recipe")
 
     def __init__(self, name, beer_type):
         self.name = name
@@ -41,33 +42,65 @@ class Recipe(db.Model):
 class Addition(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     addition_type = db.Column(db.String(50))
-    brew_stage = db.Column(db.Integer)
-    time = db.Column(db.Integer, default=0)
-    _amount = db.Column(INTEGER, default=0)  # Weight in mg
-    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'))
+
     __mapper_args__ = {'polymorphic_identity': 'addition',
                        'polymorphic_on': addition_type,
                        'with_polymorphic': '*'}
 
-    def __init__(self, brew_stage, time, amount, recipe_id):
-        self.brew_stage = brew_stage
-        self.time = time
+    def __repr__(self):
+        return '<%r %r>' % self.addition_type, self.name
+
+
+class Hop(Addition):
+    id = db.Column(db.Integer, db.ForeignKey('addition.id'), primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    __mapper_args__ = {'polymorphic_identity': 'hop'}
+
+    def __init__(self, name):
+        self.name = name
+
+
+class Grain(Addition):
+    id = db.Column(db.Integer, db.ForeignKey('addition.id'), primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    __mapper_args__ = {'polymorphic_identity': 'grain'}
+
+    def __init__(self, name):
+        self.name = name
+
+
+class RecipeAddition(db.Model):
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'),
+                          primary_key=True)
+    addition_id = db.Column(db.Integer, db.ForeignKey('addition.id'),
+                            primary_key=True)
+
+    time = db.Column(db.Integer, primary_key=True)
+    _amount = db.Column(INTEGER, primary_key=True)  # Weight in mg
+    addition_type = db.Column(db.String(50))
+    addition = db.relationship(Addition, lazy='joined')
+
+    brew_stage = db.Column(db.Integer, default=0)
+
+    def __init__(self, addition, amount, brew_stage, time):
+        self.addition = addition
+        self.addition_type = addition.addition_type
         self.amount = amount
-        self.recipe_id = recipe_id
+        self.time = time
+
+    def __repr__(self):
+        return '<%r %r %r>' % (self.addition_type, self.addition.name,
+                               self.amount)
 
     @hybrid_property
     def amount(self):
-        return self._amount
+        if self.addition_type == 'hop':
+            return self.mgToOunces(self._amount)
 
     @amount.setter
     def amount(self, value):
-        self._amount = value
-
-    def __repr__(self):
-        return '<Addition %r, %d %d %.2f>' % (self.addition_type,
-                                              self.brew_stage,
-                                              self.time,
-                                              self.amount)
+        if self.addition_type == 'hop':
+            self._amount = self.ouncesToMg(value)
 
     @hybrid_method
     def poundsToMg(self, value):
@@ -111,51 +144,3 @@ class Addition(db.Model):
         """
 
         return round(Decimal(value / Decimal(28350.5231)), 2)
-
-
-class Hop(Addition):
-    id = db.Column(db.Integer, db.ForeignKey('addition.id'), primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
-    __mapper_args__ = {'polymorphic_identity': 'hop'}
-
-    def __init__(self, name, brew_stage, time, amount, recipe_id):
-        self.name = name
-        self.brew_stage = brew_stage
-        self.time = time
-        self.amount = amount
-        self.recipe_id = recipe_id
-
-    @hybrid_property
-    def amount(self):
-        """Return the value of hops in ounces"""
-
-        amount = self.mgToOunces(self._amount)
-        return amount
-
-    @amount.setter
-    def amount(self, value):
-        self._amount = self.ouncesToMg(value)
-
-
-class Grain(Addition):
-    id = db.Column(db.Integer, db.ForeignKey('addition.id'), primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
-    __mapper_args__ = {'polymorphic_identity': 'grain'}
-
-    def __init__(self, name, brew_stage, time, amount, recipe_id):
-        self.name = name
-        self.brew_stage = brew_stage
-        self.time = time
-        self.amount = amount
-        self.recipe_id = recipe_id
-
-    @hybrid_property
-    def amount(self):
-        """Return the value of grain in lbs"""
-
-        amount = self.mgToPounds(self._amount)
-        return amount
-
-    @amount.setter
-    def amount(self, value):
-        self._amount = self.poundsToMg(value)

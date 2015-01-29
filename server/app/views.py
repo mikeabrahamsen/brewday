@@ -3,13 +3,14 @@ from flask.ext import restful
 from flask.ext.restful import fields, marshal_with
 
 from app import api, db, flask_bcrypt, auth
-from models import User, Recipe, Addition, Hop, Grain
+from models import User, Recipe, Hop, Grain, RecipeAddition
 from forms import (
     UserCreateForm,
     SessionCreateForm,
     RecipeCreateForm,
     HopCreateForm,
     GrainCreateForm,
+    RecipeAdditionCreateForm,
 )
 
 
@@ -109,30 +110,32 @@ addition_fields = {
 class AdditionListView(restful.Resource):
     @marshal_with(addition_fields)
     def get(self, recipe_id):
-        additions = Addition.query.filter_by(recipe_id=recipe_id).all()
-        return additions
+        recipe = Recipe.query.filter_by(id=recipe_id).one()
+        print recipe.additions
+        return recipe.additions
 
 
 class HopListView(restful.Resource):
     @marshal_with(addition_fields)
     def get(self, recipe_id):
-        hops = Hop.query.filter_by(recipe_id=recipe_id).all()
+        hops = RecipeAddition.query.filter_by(recipe_id=recipe_id,
+                                              addition_type='hop').all()
+        print hops
         return hops
 
     @auth.login_required
     @marshal_with(addition_fields)
     def post(self, recipe_id):
-        form = HopCreateForm()
+        form = RecipeAdditionCreateForm()
         if not form.validate_on_submit():
             return form.errors, 422
-        addition = Hop(
-            form.name.data,
-            form.brew_stage.data,
-            form.time.data,
-            form.amount.data,
-            recipe_id
-        )
-        db.session.add(addition)
+        # TODO Use select form to pass in hop id
+        hop = Hop.query.filter_by(name=form.name.data).one()
+        recipe = Recipe.query.filter_by(id=recipe_id).one()
+        ra = RecipeAddition(hop, form.amount.data,
+                            form.brew_stage.data, form.time.data)
+
+        addition = recipe.additions.append(ra)
         db.session.commit()
         return addition, 201
 

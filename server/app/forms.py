@@ -5,7 +5,7 @@ from wtforms import StringField, DecimalField
 from wtforms.validators import DataRequired
 
 from app import db
-from models import User, Recipe, Hop, Grain
+from models import User, Recipe, Hop, Grain, RecipeAddition
 
 BaseModelForm = model_form_factory(Form)
 
@@ -34,12 +34,16 @@ class RecipeCreateForm(ModelForm):
 class HopCreateForm(ModelForm):
     class Meta:
         model = Hop
-        include = ['recipe_id']
-    amount = DecimalField('amount')
 
 
 class GrainCreateForm(ModelForm):
     class Meta:
         model = Grain
-        include = ['recipe_id']
+
+
+class RecipeAdditionCreateForm(ModelForm):
+    class Meta:
+        model = RecipeAddition
+        include = ['time']
+    name = StringField('name')
     amount = DecimalField('amount')
