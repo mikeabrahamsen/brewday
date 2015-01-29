@@ -78,6 +78,7 @@ class RecipeAddition(db.Model):
     time = db.Column(db.Integer, primary_key=True)
     _amount = db.Column(INTEGER, primary_key=True)  # Weight in mg
     addition_type = db.Column(db.String(50))
+    name = db.Column(db.String(50))
     addition = db.relationship(Addition, lazy='joined')
 
     brew_stage = db.Column(db.Integer, default=0)
@@ -87,6 +88,7 @@ class RecipeAddition(db.Model):
         self.addition_type = addition.addition_type
         self.amount = amount
         self.time = time
+        self.name = addition.name
 
     def __repr__(self):
         return '<%r %r %r>' % (self.addition_type, self.addition.name,
