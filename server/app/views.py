@@ -1,6 +1,7 @@
 from flask import g
 from flask.ext import restful
 from flask.ext.restful import fields, marshal_with
+from sqlalchemy.orm.exc import NoResultFound, FlushError
 
 from app import api, db, flask_bcrypt, auth
 from models import User, Recipe, Hop, Grain, RecipeAddition
@@ -8,8 +9,6 @@ from forms import (
     UserCreateForm,
     SessionCreateForm,
     RecipeCreateForm,
-    HopCreateForm,
-    GrainCreateForm,
     RecipeAdditionCreateForm,
 )
 
@@ -114,12 +113,29 @@ class AdditionListView(restful.Resource):
         return additions
 
 
+def add_addition_to_recipe(addition_type, addition_name,
+                           recipe_id, amount, brew_stage, time):
+    try:
+        addition = addition_type.query.filter_by(name=addition_name).one()
+        recipe = Recipe.query.filter_by(id=recipe_id).one()
+        ra = RecipeAddition(addition, amount, brew_stage, time)
+
+        addition = recipe.additions.append(ra)
+        db.session.commit()
+        return addition, 201
+    except NoResultFound:
+        db.session.rollback()
+        return '%s does not exist' % addition_name, 400
+    except FlushError:
+        db.session.rollback()
+        return '%s already exist' % addition_name, 400
+
+
 class HopListView(restful.Resource):
     @marshal_with(addition_fields)
     def get(self, recipe_id):
         hops = RecipeAddition.query.filter_by(recipe_id=recipe_id,
                                               addition_type='hop').all()
-        print hops
         return hops
 
     @auth.login_required
@@ -128,18 +144,14 @@ class HopListView(restful.Resource):
         form = RecipeAdditionCreateForm()
         if not form.validate_on_submit():
             return form.errors, 422
-        # TODO Use select form to pass in hop id
-        hop = Hop.query.filter_by(name=form.name.data).first()
-        if not hop:
-            hop = Hop(name=form.name.data)
-            db.session.add(hop)
-        recipe = Recipe.query.filter_by(id=recipe_id).one()
-        ra = RecipeAddition(hop, form.amount.data,
-                            form.brew_stage.data, form.time.data)
 
-        addition = recipe.additions.append(ra)
-        db.session.commit()
-        return addition, 201
+        # TODO Use select form to pass in hop id
+        response, response_code = add_addition_to_recipe(
+            Hop, form.name.data, recipe_id, form.amount.data,
+            form.brew_stage.data, form.time.data
+        )
+
+        return response, response_code
 
 
 class GrainListView(restful.Resource):
@@ -155,17 +167,12 @@ class GrainListView(restful.Resource):
         form = RecipeAdditionCreateForm()
         if not form.validate_on_submit():
             return form.errors, 422
-        grain = Grain.query.filter_by(name=form.name.data).first()
-        if not grain:
-            grain = Grain(name=form.name.data)
-            db.session.add(grain)
-        recipe = Recipe.query.filter_by(id=recipe_id).one()
-        ra = RecipeAddition(grain, form.amount.data,
-                            form.brew_stage.data, form.time.data)
+        response, response_code = add_addition_to_recipe(
+            Grain, form.name.data, recipe_id, form.amount.data,
+            form.brew_stage.data, form.time.data
+        )
 
-        addition = recipe.additions.append(ra)
-        db.session.commit()
-        return addition, 201
+        return response, response_code
 
 api.add_resource(UserView, '/api/v1/users')
 api.add_resource(SessionView, '/api/v1/sessions')

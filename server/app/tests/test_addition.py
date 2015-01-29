@@ -30,12 +30,14 @@ class AdditionTests(TestCase):
         h3 = Hop('Centennial')
         g = Grain('2-Row')
         g2 = Grain('Pilsner')
+        g3 = Grain('Chocolate Malt')
         db.session.add(u)
         db.session.add(h)
         db.session.add(h2)
         db.session.add(h3)
         db.session.add(g)
         db.session.add(g2)
+        db.session.add(g3)
         db.session.commit()
 
         self.auth_headers = {'Authorization': 'Basic ' +
@@ -104,7 +106,7 @@ class AdditionTests(TestCase):
         self.assertEqual(len(response), 1)
 
     def test_multiple_hop_additions(self):
-        self.add_addition(self.hop_route, 'Cascades', 2, 45, 1)
+        self.add_addition(self.hop_route, 'Cascade', 2, 45, 1)
         self.add_addition(self.hop_route, 'Centennial', 2, 45, 1)
 
         rv = self.app.get(self.hop_route)
@@ -134,8 +136,8 @@ class AdditionTests(TestCase):
         # check that we now have a grain added
         self.assertEqual(len(response), 1)
 
-        self.add_addition(self.grain_route, '2-Row', 0, 60, 11)
-        self.add_addition(self.grain_route, '2-Rows', 0, 60, 12)
+        self.add_addition(self.grain_route, 'Chocolate Malt', 0, 60, 11)
+        self.add_addition(self.grain_route, 'Pilsner', 0, 60, 12)
 
         rv = self.app.get(self.grain_route)
         self.check_content_type(rv.headers)
@@ -168,6 +170,47 @@ class AdditionTests(TestCase):
         self.assertEqual(rv.status_code, 200)
         response = json.loads(rv.data)
 
+        self.assertEqual(len(response), 2)
+
+    def test_adding_duplicate_additions_fails(self):
+        rv = self.add_addition(self.grain_route, '2-Row', 0, 60, 1)
+        self.check_content_type(rv.headers)
+        self.assertEqual(rv.status_code, 201)
+
+        rv = self.add_addition(self.grain_route, '2-Row', 0, 60, 1)
+        self.check_content_type(rv.headers)
+        self.assertEqual(rv.status_code, 400)
+
+        self.add_addition(self.hop_route, 'Cascade', 2, 45, 1)
+
+        rv = self.app.get(self.grain_route)
+        self.check_content_type(rv.headers)
+        self.assertEqual(rv.status_code, 200)
+        response = json.loads(rv.data)
+
+        self.assertEqual(len(response), 1)
+
+        rv = self.app.get(self.hop_route)
+        self.check_content_type(rv.headers)
+        self.assertEqual(rv.status_code, 200)
+        response = json.loads(rv.data)
+        self.assertEqual(len(response), 1)
+
+        rv = self.add_addition(self.hop_route, 'Cascade', 2, 45, 1)
+        self.check_content_type(rv.headers)
+        self.assertEqual(rv.status_code, 400)
+
+        rv = self.app.get(self.hop_route)
+        response = json.loads(rv.data)
+        self.assertEqual(len(response), 1)
+
+        # Test with a different time
+        rv = self.add_addition(self.hop_route, 'Cascade', 2, 60, 1)
+        self.check_content_type(rv.headers)
+        self.assertEqual(rv.status_code, 201)
+
+        rv = self.app.get(self.hop_route)
+        response = json.loads(rv.data)
         self.assertEqual(len(response), 2)
 
     def test_using_different_recipes(self):

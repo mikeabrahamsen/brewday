@@ -76,7 +76,7 @@ class RecipeAddition(db.Model):
                             primary_key=True)
 
     time = db.Column(db.Integer, primary_key=True)
-    _amount = db.Column(INTEGER, primary_key=True)  # Weight in mg
+    _amount = db.Column(INTEGER)  # Weight in mg
     addition_type = db.Column(db.String(50))
     name = db.Column(db.String(50))
     addition = db.relationship(Addition, lazy='joined')
