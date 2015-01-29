@@ -3,7 +3,7 @@ from unittest import TestCase
 
 import json
 from app import app, db
-from app.models import User, Addition
+from app.models import User, Hop, Grain, RecipeAddition
 
 
 class AdditionTests(TestCase):
@@ -25,7 +25,17 @@ class AdditionTests(TestCase):
         self.email = 'test@test.com'
         self.password = 'admin'
         u = User(email=self.email, password=self.password)
+        h = Hop('Goldings')
+        h2 = Hop('Cascade')
+        h3 = Hop('Centennial')
+        g = Grain('2-Row')
+        g2 = Grain('Pilsner')
         db.session.add(u)
+        db.session.add(h)
+        db.session.add(h2)
+        db.session.add(h3)
+        db.session.add(g)
+        db.session.add(g2)
         db.session.commit()
 
         self.auth_headers = {'Authorization': 'Basic ' +
@@ -55,7 +65,7 @@ class AdditionTests(TestCase):
         hop = dict(name=name,
                    brew_stage=brew_stage,
                    time=time,
-                   amount=amount,
+                   amount=amount
                    )
 
         rv = self.app.post(
@@ -93,8 +103,9 @@ class AdditionTests(TestCase):
         # check that we now have a hop added
         self.assertEqual(len(response), 1)
 
-        self.add_addition(self.hop_route, 'Kent', 2, 45, 1)
-        self.add_addition(self.hop_route, 'Contennial', 2, 45, 1)
+    def test_multiple_hop_additions(self):
+        self.add_addition(self.hop_route, 'Cascades', 2, 45, 1)
+        self.add_addition(self.hop_route, 'Centennial', 2, 45, 1)
 
         rv = self.app.get(self.hop_route)
         self.check_content_type(rv.headers)
@@ -102,10 +113,10 @@ class AdditionTests(TestCase):
         response = json.loads(rv.data)
 
         # check that we now have more hops added
-        self.assertEqual(len(response), 3)
+        self.assertEqual(len(response), 2)
 
     def test_adding_grain(self):
-        self.add_addition(self.grain_route, 'American Two-Row', 0, 60, 1)
+        self.add_addition(self.grain_route, '2-Row', 0, 60, 1)
 
         rv = self.app.get(self.addition_route)
         self.check_content_type(rv.headers)
@@ -123,8 +134,8 @@ class AdditionTests(TestCase):
         # check that we now have a grain added
         self.assertEqual(len(response), 1)
 
-        self.add_addition(self.grain_route, 'Crystal 60', 0, 60, 1)
-        self.add_addition(self.grain_route, 'Crystal 120', 0, 60, 1)
+        self.add_addition(self.grain_route, '2-Row', 0, 60, 11)
+        self.add_addition(self.grain_route, '2-Rows', 0, 60, 12)
 
         rv = self.app.get(self.grain_route)
         self.check_content_type(rv.headers)
@@ -133,6 +144,31 @@ class AdditionTests(TestCase):
 
         # check that we now have more grains added
         self.assertEqual(len(response), 3)
+
+    def test_adding_grains_and_hops(self):
+        self.add_addition(self.grain_route, '2-Row', 0, 60, 1)
+        self.add_addition(self.hop_route, 'Cascade', 2, 45, 1)
+
+        rv = self.app.get(self.grain_route)
+        self.check_content_type(rv.headers)
+        self.assertEqual(rv.status_code, 200)
+        response = json.loads(rv.data)
+
+        self.assertEqual(len(response), 1)
+
+        rv = self.app.get(self.hop_route)
+        self.check_content_type(rv.headers)
+        self.assertEqual(rv.status_code, 200)
+        response = json.loads(rv.data)
+
+        self.assertEqual(len(response), 1)
+
+        rv = self.app.get(self.addition_route)
+        self.check_content_type(rv.headers)
+        self.assertEqual(rv.status_code, 200)
+        response = json.loads(rv.data)
+
+        self.assertEqual(len(response), 2)
 
     def test_using_different_recipes(self):
         recipe = {'name': 'Chocolate Stout', 'beer_type': 'Stout'}
@@ -147,8 +183,8 @@ class AdditionTests(TestCase):
         # check that we now have 2 recipes
         self.assertEqual(len(response), 2)
 
-        self.add_addition(self.grain_route, 'Crystal 60', 0, 60, 1, 2)
-        self.add_addition(self.grain_route, 'Crystal 40', 0, 40, 1, 2)
+        self.add_addition(self.grain_route, '2-Row', 0, 60, 1, 2)
+        self.add_addition(self.grain_route, 'Pilsner', 0, 40, 1, 2)
 
         rv = self.app.get(self.grain_route)
         self.check_content_type(rv.headers)
@@ -168,11 +204,11 @@ class AdditionTests(TestCase):
         self.assertEqual(len(response), 2)
 
     def test_grain_conversions(self):
-        self.add_addition(self.grain_route, 'Crystal 60', 0, 60, 1.5)
+        self.add_addition(self.grain_route, '2-Row', 0, 60, 1.5)
 
         # check the correct values are being stored in the database
         # and that getting the amount property does the conversion
-        addition = Addition.query.first()
+        addition = RecipeAddition.query.first()
         self.assertEqual(addition.amount, 1.5)
         self.assertEqual(addition._amount, 680389)
 
@@ -188,7 +224,7 @@ class AdditionTests(TestCase):
 
         # check the correct values are being stored in the database
         # and that getting the amount property does the conversion
-        addition = Addition.query.first()
+        addition = RecipeAddition.query.first()
         self.assertEqual(addition.amount, 1.75)
         self.assertEqual(addition._amount, 49612)
 

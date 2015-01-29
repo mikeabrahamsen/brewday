@@ -88,7 +88,7 @@ window.Brewday = angular.module('Brewday', ['ngRoute', 'restangular', 'LocalStor
         })
         .when('/recipes/:recipe_id/edit', {
             controller: 'RecipeEditCtrl',
-            templateUrl: partialsDir + '/recipes/edit.html'
+            templateUrl: partialsDir + '/recipes/edit.html',
             resolve: {
                 redirectIfNotAuthenticated: redirectIfNotAuthenticated('/sessions/create')
             }

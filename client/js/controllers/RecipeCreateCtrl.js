@@ -24,7 +24,7 @@ Brewday.controller('RecipeCreateCtrl',  ['$scope', '$location', '$window', 'Reci
                         g.amount = grain.amount;
                         g.recipe_id = id;
                         g.brew_stage = 0;
-                        g.time = 0;
+                        g.time = 1;
                         Grain.add(g).then(function(data){
                             console.log(data);
                         });
