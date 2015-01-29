@@ -129,7 +129,10 @@ class HopListView(restful.Resource):
         if not form.validate_on_submit():
             return form.errors, 422
         # TODO Use select form to pass in hop id
-        hop = Hop.query.filter_by(name=form.name.data).one()
+        hop = Hop.query.filter_by(name=form.name.data).first()
+        if not hop:
+            hop = Hop(name=form.name.data)
+            db.session.add(hop)
         recipe = Recipe.query.filter_by(id=recipe_id).one()
         ra = RecipeAddition(hop, form.amount.data,
                             form.brew_stage.data, form.time.data)
@@ -152,7 +155,10 @@ class GrainListView(restful.Resource):
         form = RecipeAdditionCreateForm()
         if not form.validate_on_submit():
             return form.errors, 422
-        grain = Grain.query.filter_by(name=form.name.data).one()
+        grain = Grain.query.filter_by(name=form.name.data).first()
+        if not grain:
+            grain = Grain(name=form.name.data)
+            db.session.add(grain)
         recipe = Recipe.query.filter_by(id=recipe_id).one()
         ra = RecipeAddition(grain, form.amount.data,
                             form.brew_stage.data, form.time.data)

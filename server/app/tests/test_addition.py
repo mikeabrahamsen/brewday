@@ -104,7 +104,7 @@ class AdditionTests(TestCase):
         self.assertEqual(len(response), 1)
 
     def test_multiple_hop_additions(self):
-        self.add_addition(self.hop_route, 'Cascade', 2, 45, 1)
+        self.add_addition(self.hop_route, 'Cascades', 2, 45, 1)
         self.add_addition(self.hop_route, 'Centennial', 2, 45, 1)
 
         rv = self.app.get(self.hop_route)
@@ -135,7 +135,7 @@ class AdditionTests(TestCase):
         self.assertEqual(len(response), 1)
 
         self.add_addition(self.grain_route, '2-Row', 0, 60, 11)
-        self.add_addition(self.grain_route, '2-Row', 0, 60, 12)
+        self.add_addition(self.grain_route, '2-Rows', 0, 60, 12)
 
         rv = self.app.get(self.grain_route)
         self.check_content_type(rv.headers)
