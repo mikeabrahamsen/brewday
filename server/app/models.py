@@ -96,11 +96,15 @@ class RecipeAddition(db.Model):
     def amount(self):
         if self.addition_type == 'hop':
             return self.mgToOunces(self._amount)
+        if self.addition_type == 'grain':
+            return self.mgToPounds(self._amount)
 
     @amount.setter
     def amount(self, value):
         if self.addition_type == 'hop':
             self._amount = self.ouncesToMg(value)
+        elif self.addition_type == 'grain':
+            self._amount = self.poundsToMg(value)
 
     @hybrid_method
     def poundsToMg(self, value):
