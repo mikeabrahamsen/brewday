@@ -6,5 +6,6 @@ Brewday.controller('RecipeEditCtrl',  ['$scope', '$location', '$window', '$route
         $scope.grains = {};
         $scope.recipe = Recipe.getOne(recipe_id).$object;
         $scope.grains = Grain.get(recipe_id).$object;
+        console.log($location.$$path)
     }
 ])

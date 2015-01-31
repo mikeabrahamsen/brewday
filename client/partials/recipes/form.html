@@ -1,0 +1,48 @@
+<form class="form-horizontal" name="postForm" ng-submit="submit_recipe(recipe.name, recipe.beer_type, grains)" novalidate>
+    <div class="form-group">
+        <div class="row">
+            <label class="col-md-1 control-label">Name</label>
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="name" placeholder="Recipe Name" ng-model="recipe.name" required>
+                <p ng-show="postForm.name.$invalid && !postForm.name.$pristine" class="help-block">Recipe Name Required.</p>
+            </div>
+            <label class="col-md-2 control-label">Beer Type</label>
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="beertype" placeholder="IPA" ng-model="recipe.beer_type" required>
+                <p ng-show="postForm.beer_type.$invalid && !postForm.beer_type.$pristine" class="help-block">Beer Type is required</p>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="form-group">
+    <h3>Add Grain Additions</h3>
+        <div class="row">
+            <div class="col-md-1">
+                <label for="weight">Weight</label>
+            </div>
+            <div class="col-md-2">
+                <label for="grain">Grain</label>
+            </div>
+        </div>
+    </div>
+    <ng-form name="grainForm" ng-model="grains">
+    <div class="form-group" data-ng-repeat="grain in grains">
+        <div class="row">
+            <div class="col-md-1">
+                <input type="text" class="form-control" ng-model="grain.amount" name="" placeholder="lbs">
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" ng-model="grain.name"  ng-options="g.name as g.name for g in grain_options"> </select>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="form-control" ng-show="$last" ng-click="addNewGrain()">Add More</button>
+            </div>
+        </div>
+    </div>
+    </ng-form>
+    <div class="form-group">
+        <div class="col-md-11">
+        <button type="submit" class="btn btn-primary pull-right">Save</button>
+    </div>
+</form>
+</div>

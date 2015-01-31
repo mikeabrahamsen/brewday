@@ -1,8 +1,21 @@
-Brewday.controller('RecipeCreateCtrl',  ['$scope', '$location', '$window', 'Recipe', 'Grain',
-    function($scope, $location, $window, Recipe, Grain){
-        $scope.grains = [{id: 'grain1'},{id: 'grain2'}];
-        $scope.grain_options = Grain.getAll().$object;
+Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routeParams', 'Recipe', 'Grain',
+    function($scope, $location, $window, $routeParams, Recipe, Grain){
+        $scope.recipe = {};
+        $scope.grains = {};
         $scope.data = {};
+        if ($routeParams.recipe_id)
+        {
+            factory_method = 'Update';
+            var recipe_id = $routeParams.recipe_id;
+            $scope.recipe = Recipe.getOne(recipe_id).$object;
+            $scope.grains = Grain.get(recipe_id).$object;
+        }
+        else
+        {
+            factory_method = 'Create';
+            $scope.grains = [{id: 'grain1'},{id: 'grain2'}];
+        }
+        $scope.grain_options = Grain.getAll().$object;
 
         $scope.addNewGrain= function() {
             var newItemNo = $scope.grains.length+1;
