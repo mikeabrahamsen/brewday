@@ -95,7 +95,7 @@ class RecipeView(restful.Resource):
         return recipes
 
 
-addition_fields = {
+recipe_addition_fields = {
     'id': fields.Integer,
     'name': fields.String,
     'addition_type': fields.String,
@@ -103,6 +103,11 @@ addition_fields = {
     'time': fields.Integer,
     'amount': fields.Fixed,  # so we can send decimals after conversions
     'recipe_id': fields.Integer,
+}
+
+addition_fields = {
+    'id': fields.Integer,
+    'name': fields.String
 }
 
 
@@ -148,14 +153,14 @@ class GrainListView(restful.Resource):
 
 
 class HopRecipeListView(restful.Resource):
-    @marshal_with(addition_fields)
+    @marshal_with(recipe_addition_fields)
     def get(self, recipe_id):
         hops = RecipeAddition.query.filter_by(recipe_id=recipe_id,
                                               addition_type='hop').all()
         return hops
 
     @auth.login_required
-    @marshal_with(addition_fields)
+    @marshal_with(recipe_addition_fields)
     def post(self, recipe_id):
         form = RecipeAdditionCreateForm()
         if not form.validate_on_submit():
@@ -171,14 +176,14 @@ class HopRecipeListView(restful.Resource):
 
 
 class GrainRecipeListView(restful.Resource):
-    @marshal_with(addition_fields)
+    @marshal_with(recipe_addition_fields)
     def get(self, recipe_id):
         grains = RecipeAddition.query.filter_by(recipe_id=recipe_id,
                                                 addition_type='grain').all()
         return grains
 
     @auth.login_required
-    @marshal_with(addition_fields)
+    @marshal_with(recipe_addition_fields)
     def post(self, recipe_id):
         form = RecipeAdditionCreateForm()
         if not form.validate_on_submit():

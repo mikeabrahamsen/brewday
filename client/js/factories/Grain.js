@@ -7,7 +7,10 @@ Brewday.factory('Grain', function(Restangular) {
         add: function(data) {
             var recipe = Restangular.one('recipes',data.recipe_id);
             return recipe.post("grains",data);
-        }
+        },
+        getAll: function() {
+            return Restangular.one('grains').getList();
+        },
     };
     return Grain;
 })

@@ -33,7 +33,9 @@
                 <input type="text" class="form-control" ng-model="grain.amount" name="" placeholder="lbs">
             </div>
             <div class="col-md-3">
-                <input type="text" class="form-control" ng-model="grain.name" name="" placeholder="Enter a grain type">
+                <select class="form-control" ng-model="grain.name">
+                    <option ng-repeat="item in grain_options" value="{{item.name}}">{{item.name}}</option>
+                </select>
             </div>
             <div class="col-md-2">
                 <button type="button" class="form-control" ng-show="$last" ng-click="addNewGrain()">Add More</button>
@@ -46,4 +48,5 @@
         <button type="submit" class="btn btn-primary pull-right">Save</button>
     </div>
 </form>
+{{ grain_options }}
 </div>
