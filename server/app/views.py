@@ -135,6 +135,7 @@ class HopListView(restful.Resource):
     @marshal_with(addition_fields)
     def get(self):
         hops = Hop.query.all()
+
         return hops
 
 
@@ -194,7 +195,7 @@ api.add_resource(SessionView, '/api/v1/sessions')
 api.add_resource(RecipeListView, '/api/v1/recipes')
 api.add_resource(RecipeView, '/api/v1/recipes/<int:id>')
 api.add_resource(GrainListView, '/api/v1/grains')
-api.add_resource(HopListView, '/api/v1/hop')
+api.add_resource(HopListView, '/api/v1/hops')
 api.add_resource(AdditionListView, '/api/v1/recipes/<int:recipe_id>/additions')
 api.add_resource(HopRecipeListView, '/api/v1/recipes/<int:recipe_id>/hops')
 api.add_resource(

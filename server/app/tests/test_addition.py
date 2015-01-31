@@ -3,8 +3,8 @@ from unittest import TestCase
 
 import json
 from app import app, db
-from app.models import User, Hop, Grain, RecipeAddition
-from app.tests import init_grain_db
+from app.models import User, RecipeAddition
+from app.tests import init_grain_db, init_hop_db
 
 
 class AdditionTests(TestCase):
@@ -28,14 +28,9 @@ class AdditionTests(TestCase):
         self.email = 'test@test.com'
         self.password = 'admin'
         u = User(email=self.email, password=self.password)
-        h = Hop('Goldings')
-        h2 = Hop('Cascade')
-        h3 = Hop('Centennial')
         init_grain_db()
+        init_hop_db()
         db.session.add(u)
-        db.session.add(h)
-        db.session.add(h2)
-        db.session.add(h3)
         db.session.commit()
 
         self.auth_headers = {'Authorization': 'Basic ' +
@@ -85,7 +80,7 @@ class AdditionTests(TestCase):
         self.assertEqual(len(response), 0)
 
     def test_adding_hop(self):
-        self.add_addition(self.hop_route, 'Goldings', 2, 60, 1)
+        self.add_addition(self.hop_route, 'Goldings East Kent(EK)', 2, 60, 1)
 
         rv = self.app.get(self.addition_route)
         self.check_content_type(rv.headers)
@@ -226,7 +221,8 @@ class AdditionTests(TestCase):
         # check that we now have 2 recipes
         self.assertEqual(len(response), 2)
 
-        self.add_addition(self.grain_route, 'American - Pale 2-Row', 0, 60, 1, 2)
+        self.add_addition(self.grain_route,
+                          'American - Pale 2-Row', 0, 60, 1, 2)
         self.add_addition(self.grain_route, 'American - Pilsner', 0, 40, 1, 2)
 
         rv = self.app.get(self.grain_route)
@@ -247,7 +243,8 @@ class AdditionTests(TestCase):
         self.assertEqual(len(response), 2)
 
     def test_grain_conversions(self):
-        self.add_addition(self.grain_route, 'American - Pale 2-Row', 0, 60, 1.5)
+        self.add_addition(self.grain_route,
+                          'American - Pale 2-Row', 0, 60, 1.5)
 
         # check the correct values are being stored in the database
         # and that getting the amount property does the conversion
@@ -263,7 +260,8 @@ class AdditionTests(TestCase):
         self.assertEqual(amount, 1.5)
 
     def test_hop_conversions(self):
-        self.add_addition(self.hop_route, 'Goldings', 2, 60, 1.75)
+        self.add_addition(self.hop_route,
+                          'Goldings East Kent(EK)', 2, 60, 1.75)
 
         # check the correct values are being stored in the database
         # and that getting the amount property does the conversion
@@ -284,3 +282,11 @@ class AdditionTests(TestCase):
         response = json.loads(rv.data)
 
         self.assertEqual(len(response), 141)
+
+    def test_getting_hops(self):
+        rv = self.app.get(self.all_hops_route)
+        self.check_content_type(rv.headers)
+        self.assertEqual(rv.status_code, 200)
+        response = json.loads(rv.data)
+
+        self.assertEqual(len(response), 66)
