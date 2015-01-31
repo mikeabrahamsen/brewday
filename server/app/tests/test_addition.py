@@ -4,6 +4,7 @@ from unittest import TestCase
 import json
 from app import app, db
 from app.models import User, Hop, Grain, RecipeAddition
+from app.tests import init_grain_db
 
 
 class AdditionTests(TestCase):
@@ -21,6 +22,8 @@ class AdditionTests(TestCase):
         self.addition_route = '/api/v1/recipes/1/additions'
         self.hop_route = '/api/v1/recipes/1/hops'
         self.grain_route = '/api/v1/recipes/1/grains'
+        self.all_grains_route = '/api/v1/grains'
+        self.all_hops_route = '/api/v1/hops'
 
         self.email = 'test@test.com'
         self.password = 'admin'
@@ -28,16 +31,11 @@ class AdditionTests(TestCase):
         h = Hop('Goldings')
         h2 = Hop('Cascade')
         h3 = Hop('Centennial')
-        g = Grain('2-Row')
-        g2 = Grain('Pilsner')
-        g3 = Grain('Chocolate Malt')
+        init_grain_db()
         db.session.add(u)
         db.session.add(h)
         db.session.add(h2)
         db.session.add(h3)
-        db.session.add(g)
-        db.session.add(g2)
-        db.session.add(g3)
         db.session.commit()
 
         self.auth_headers = {'Authorization': 'Basic ' +
@@ -118,7 +116,7 @@ class AdditionTests(TestCase):
         self.assertEqual(len(response), 2)
 
     def test_adding_grain(self):
-        self.add_addition(self.grain_route, '2-Row', 0, 60, 1)
+        self.add_addition(self.grain_route, 'American - Pale 2-Row', 0, 60, 1)
 
         rv = self.app.get(self.addition_route)
         self.check_content_type(rv.headers)
@@ -136,8 +134,8 @@ class AdditionTests(TestCase):
         # check that we now have a grain added
         self.assertEqual(len(response), 1)
 
-        self.add_addition(self.grain_route, 'Chocolate Malt', 0, 60, 11)
-        self.add_addition(self.grain_route, 'Pilsner', 0, 60, 12)
+        self.add_addition(self.grain_route, 'American - Chocolate', 0, 60, 11)
+        self.add_addition(self.grain_route, 'American - Pilsner', 0, 60, 12)
 
         rv = self.app.get(self.grain_route)
         self.check_content_type(rv.headers)
@@ -148,7 +146,7 @@ class AdditionTests(TestCase):
         self.assertEqual(len(response), 3)
 
     def test_adding_grains_and_hops(self):
-        self.add_addition(self.grain_route, '2-Row', 0, 60, 1)
+        self.add_addition(self.grain_route, 'American - Pale 2-Row', 0, 60, 1)
         self.add_addition(self.hop_route, 'Cascade', 2, 45, 1)
 
         rv = self.app.get(self.grain_route)
@@ -173,11 +171,13 @@ class AdditionTests(TestCase):
         self.assertEqual(len(response), 2)
 
     def test_adding_duplicate_additions_fails(self):
-        rv = self.add_addition(self.grain_route, '2-Row', 0, 60, 1)
+        rv = self.add_addition(self.grain_route,
+                               'American - Pale 2-Row', 0, 60, 1)
         self.check_content_type(rv.headers)
         self.assertEqual(rv.status_code, 201)
 
-        rv = self.add_addition(self.grain_route, '2-Row', 0, 60, 1)
+        rv = self.add_addition(self.grain_route,
+                               'American - Pale 2-Row', 0, 60, 1)
         self.check_content_type(rv.headers)
         self.assertEqual(rv.status_code, 400)
 
@@ -226,8 +226,8 @@ class AdditionTests(TestCase):
         # check that we now have 2 recipes
         self.assertEqual(len(response), 2)
 
-        self.add_addition(self.grain_route, '2-Row', 0, 60, 1, 2)
-        self.add_addition(self.grain_route, 'Pilsner', 0, 40, 1, 2)
+        self.add_addition(self.grain_route, 'American - Pale 2-Row', 0, 60, 1, 2)
+        self.add_addition(self.grain_route, 'American - Pilsner', 0, 40, 1, 2)
 
         rv = self.app.get(self.grain_route)
         self.check_content_type(rv.headers)
@@ -247,7 +247,7 @@ class AdditionTests(TestCase):
         self.assertEqual(len(response), 2)
 
     def test_grain_conversions(self):
-        self.add_addition(self.grain_route, '2-Row', 0, 60, 1.5)
+        self.add_addition(self.grain_route, 'American - Pale 2-Row', 0, 60, 1.5)
 
         # check the correct values are being stored in the database
         # and that getting the amount property does the conversion
@@ -276,3 +276,11 @@ class AdditionTests(TestCase):
         amount = float(response[0]['amount'])
 
         self.assertEqual(amount, 1.75)
+
+    def test_getting_grains(self):
+        rv = self.app.get(self.all_grains_route)
+        self.check_content_type(rv.headers)
+        self.assertEqual(rv.status_code, 200)
+        response = json.loads(rv.data)
+
+        self.assertEqual(len(response), 141)

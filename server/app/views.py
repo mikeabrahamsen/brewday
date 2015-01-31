@@ -133,6 +133,21 @@ def add_addition_to_recipe(addition_type, addition_name,
 
 class HopListView(restful.Resource):
     @marshal_with(addition_fields)
+    def get(self):
+        hops = Hop.query.all()
+        return hops
+
+
+class GrainListView(restful.Resource):
+    @marshal_with(addition_fields)
+    def get(self):
+        grains = Grain.query.all()
+
+        return grains
+
+
+class HopRecipeListView(restful.Resource):
+    @marshal_with(addition_fields)
     def get(self, recipe_id):
         hops = RecipeAddition.query.filter_by(recipe_id=recipe_id,
                                               addition_type='hop').all()
@@ -154,7 +169,7 @@ class HopListView(restful.Resource):
         return response, response_code
 
 
-class GrainListView(restful.Resource):
+class GrainRecipeListView(restful.Resource):
     @marshal_with(addition_fields)
     def get(self, recipe_id):
         grains = RecipeAddition.query.filter_by(recipe_id=recipe_id,
@@ -178,8 +193,10 @@ api.add_resource(UserView, '/api/v1/users')
 api.add_resource(SessionView, '/api/v1/sessions')
 api.add_resource(RecipeListView, '/api/v1/recipes')
 api.add_resource(RecipeView, '/api/v1/recipes/<int:id>')
+api.add_resource(GrainListView, '/api/v1/grains')
+api.add_resource(HopListView, '/api/v1/hop')
 api.add_resource(AdditionListView, '/api/v1/recipes/<int:recipe_id>/additions')
-api.add_resource(HopListView, '/api/v1/recipes/<int:recipe_id>/hops')
+api.add_resource(HopRecipeListView, '/api/v1/recipes/<int:recipe_id>/hops')
 api.add_resource(
-    GrainListView, '/api/v1/recipes/<int:recipe_id>/grains'
+    GrainRecipeListView, '/api/v1/recipes/<int:recipe_id>/grains'
 )
