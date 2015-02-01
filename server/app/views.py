@@ -125,13 +125,6 @@ addition_fields = {
 }
 
 
-class AdditionListView(restful.Resource):
-    @marshal_with(addition_fields)
-    def get(self, recipe_id):
-        additions = RecipeAddition.query.filter_by(recipe_id=recipe_id).all()
-        return additions
-
-
 def add_addition_to_recipe(addition_type, addition_name,
                            recipe_id, amount, brew_stage, time):
     try:
@@ -178,6 +171,31 @@ def update_recipe_addition(addition_type, addition_id, addition_name,
         return '%s already exist' % addition_name, 400
 
 
+class AdditionListView(restful.Resource):
+    @marshal_with(addition_fields)
+    def get(self, recipe_id):
+        additions = RecipeAddition.query.filter_by(recipe_id=recipe_id).all()
+        return additions
+
+    @auth.login_required
+    @marshal_with(recipe_addition_fields)
+    def post(self, recipe_id):
+        form = RecipeAdditionCreateForm()
+        if not form.validate_on_submit():
+            return form.errors, 422
+        if form.addition_type.data == 'grain':
+            addition_type = Grain
+        elif form.addition_type.data == 'hop':
+            addition_type = Hop
+
+        response, response_code = add_addition_to_recipe(
+            addition_type, form.name.data, recipe_id, form.amount.data,
+            form.brew_stage.data, form.time.data
+        )
+
+        return response, response_code
+
+
 class HopListView(restful.Resource):
     @marshal_with(addition_fields)
     def get(self):
@@ -201,21 +219,6 @@ class HopRecipeListView(restful.Resource):
                                               addition_type='hop').all()
         return hops
 
-    @auth.login_required
-    @marshal_with(recipe_addition_fields)
-    def post(self, recipe_id):
-        form = RecipeAdditionCreateForm()
-        if not form.validate_on_submit():
-            return form.errors, 422
-
-        # TODO Use select form to pass in hop id
-        response, response_code = add_addition_to_recipe(
-            Hop, form.name.data, recipe_id, form.amount.data,
-            form.brew_stage.data, form.time.data
-        )
-
-        return response, response_code
-
 
 class GrainRecipeListView(restful.Resource):
     @marshal_with(recipe_addition_fields)
@@ -223,19 +226,6 @@ class GrainRecipeListView(restful.Resource):
         grains = RecipeAddition.query.filter_by(recipe_id=recipe_id,
                                                 addition_type='grain').all()
         return grains
-
-    @auth.login_required
-    @marshal_with(recipe_addition_fields)
-    def post(self, recipe_id):
-        form = RecipeAdditionCreateForm()
-        if not form.validate_on_submit():
-            return form.errors, 422
-        response, response_code = add_addition_to_recipe(
-            Grain, form.name.data, recipe_id, form.amount.data,
-            form.brew_stage.data, form.time.data
-        )
-
-        return response, response_code
 
 
 class RecipeAdditionView(restful.Resource):
@@ -245,7 +235,6 @@ class RecipeAdditionView(restful.Resource):
         addition = RecipeAddition.query.filter_by(
             recipe_id=recipe_id, addition_id=addition_id
         ).one()
-        print addition
         return addition
 
     @auth.login_required
@@ -262,6 +251,30 @@ class RecipeAdditionView(restful.Resource):
 
         return response, response_code
 
+    @auth.login_required
+    @marshal_with(recipe_addition_fields)
+    def delete(self, recipe_id, addition_id):
+        try:
+            old_ra = RecipeAddition.query.filter_by(
+                recipe_id=recipe_id, addition_id=addition_id
+            ).one()
+
+            print old_ra
+            recipe = Recipe.query.filter_by(id=recipe_id).one()
+
+            # delete the recipe addition
+            recipe.additions.remove(old_ra)
+            db.session.commit()
+
+            return '', 204
+        except NoResultFound:
+            db.session.rollback()
+            print "nothing here"
+            return '%s does not exist' % recipe, 400
+        except FlushError:
+            db.session.rollback()
+            print "already here"
+            return '%s already exist' % recipe, 400
 
 api.add_resource(UserView, '/api/v1/users')
 api.add_resource(SessionView, '/api/v1/sessions')
