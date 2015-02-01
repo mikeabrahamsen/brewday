@@ -34,7 +34,6 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
                     if (grain.name && grain.amount)
                     {
                         g = {}
-                        console.log(grain);
                         g.name = grain.name;
                         g.amount = grain.amount;
                         g.recipe_id = id;

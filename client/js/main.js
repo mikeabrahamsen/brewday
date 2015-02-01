@@ -17,9 +17,6 @@ window.Brewday = angular.module('Brewday', ['ngRoute', 'restangular', 'LocalStor
                     AuthService.logout();
                     $location.path('/sessions/create');
                     break;
-                case 422:
-                    console.log(response.data);
-                    break;
                 default:
                     throw new Error('No handler for status code ' + response.status);
             }

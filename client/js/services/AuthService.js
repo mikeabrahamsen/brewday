@@ -3,14 +3,11 @@ Brewday.service('AuthService', AuthService = function($q, localStorageService, S
     this.login = function(credentials) {
         var me = this;
         deferred = $q.defer()
-        console.log(credentials);
         Session.create(credentials, true).then(function(user) {
-            console.log(user);
             me.setToken(credentials);
             return deferred.resolve(user);
         }, function(response) {
             if (response.status == 401) {
-                console.log(response.data);
                 return deferred.reject(false);
             }
             throw new Error('No handler for status code ' + response.status);
