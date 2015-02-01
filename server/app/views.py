@@ -125,24 +125,6 @@ addition_fields = {
 }
 
 
-def add_addition_to_recipe(addition_type, addition_name,
-                           recipe_id, amount, brew_stage, time):
-    try:
-        addition = addition_type.query.filter_by(name=addition_name).one()
-        recipe = Recipe.query.filter_by(id=recipe_id).one()
-        ra = RecipeAddition(addition, amount, brew_stage, time)
-
-        addition = recipe.additions.append(ra)
-        db.session.commit()
-        return addition, 201
-    except NoResultFound:
-        db.session.rollback()
-        return '%s does not exist' % addition_name, 400
-    except FlushError:
-        db.session.rollback()
-        return '%s already exist' % addition_name, 400
-
-
 def update_recipe_addition(addition_type, addition_id, addition_name,
                            recipe_id, amount, brew_stage, time):
     try:
@@ -169,31 +151,6 @@ def update_recipe_addition(addition_type, addition_id, addition_name,
         db.session.rollback()
         print "already here"
         return '%s already exist' % addition_name, 400
-
-
-class AdditionListView(restful.Resource):
-    @marshal_with(addition_fields)
-    def get(self, recipe_id):
-        additions = RecipeAddition.query.filter_by(recipe_id=recipe_id).all()
-        return additions
-
-    @auth.login_required
-    @marshal_with(recipe_addition_fields)
-    def post(self, recipe_id):
-        form = RecipeAdditionCreateForm()
-        if not form.validate_on_submit():
-            return form.errors, 422
-        if form.addition_type.data == 'grain':
-            addition_type = Grain
-        elif form.addition_type.data == 'hop':
-            addition_type = Hop
-
-        response, response_code = add_addition_to_recipe(
-            addition_type, form.name.data, recipe_id, form.amount.data,
-            form.brew_stage.data, form.time.data
-        )
-
-        return response, response_code
 
 
 class HopListView(restful.Resource):
@@ -228,6 +185,40 @@ class GrainRecipeListView(restful.Resource):
         return grains
 
 
+class AdditionListView(restful.Resource):
+    @marshal_with(addition_fields)
+    def get(self, recipe_id):
+        additions = RecipeAddition.query.filter_by(recipe_id=recipe_id).all()
+        return additions
+
+    @auth.login_required
+    @marshal_with(recipe_addition_fields)
+    def post(self, recipe_id):
+        form = RecipeAdditionCreateForm()
+        if not form.validate_on_submit():
+            return form.errors, 422
+        if form.addition_type.data == 'grain':
+            addition_type = Grain
+        elif form.addition_type.data == 'hop':
+            addition_type = Hop
+
+        try:
+            addition = addition_type.query.filter_by(name=form.name.data).one()
+            recipe = Recipe.query.filter_by(id=recipe_id).one()
+            ra = RecipeAddition(addition, form.amount.data,
+                                form.brew_stage.data, form.time.data)
+
+            addition = recipe.additions.append(ra)
+            db.session.commit()
+            return addition, 201
+        except NoResultFound:
+            db.session.rollback()
+            return 'Addition does not exist', 400
+        except FlushError:
+            db.session.rollback()
+            return 'Addition already exist', 400
+
+
 class RecipeAdditionView(restful.Resource):
 
     @marshal_with(recipe_addition_fields)
@@ -259,7 +250,6 @@ class RecipeAdditionView(restful.Resource):
                 recipe_id=recipe_id, addition_id=addition_id
             ).one()
 
-            print old_ra
             recipe = Recipe.query.filter_by(id=recipe_id).one()
 
             # delete the recipe addition

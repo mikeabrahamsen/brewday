@@ -1,5 +1,5 @@
-Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routeParams', 'Recipe', 'Grain',
-    function($scope, $location, $window, $routeParams, Recipe, Grain){
+Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routeParams', 'Recipe', 'Grain', 'Addition',
+    function($scope, $location, $window, $routeParams, Recipe, Grain, Addition){
         $scope.recipe = {};
         $scope.grains = {};
         $scope.data = {};
@@ -46,11 +46,12 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
             Recipe[factory_method](recipe).then(function(data){
                 id = data.id;
                 toDelete.forEach(function(grain){
-                    Grain.remove(grain);
+                    Addition.remove(grain);
                 });
                 grains.forEach(function(grain,i){
                     if (grain.name && grain.amount)
                     {
+                        console.log(grain);
                         g = {}
                         g.name = grain.name;
                         g.amount = grain.amount;
@@ -60,7 +61,7 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
                         g.brew_stage = 0;
                         g.time = 1;
 
-                        Grain[factory_method](g);
+                        Addition[factory_method](g);
                     }
                 });
             $location.path('/recipes/'+ id + '/edit');
