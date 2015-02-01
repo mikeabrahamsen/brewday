@@ -28,7 +28,7 @@ class Recipe(db.Model):
     beer_type = db.Column(db.String(120), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     created_at = db.Column(db.DateTime, default=db.func.now())
-    additions = db.relationship("RecipeAddition", backref="recipe")
+    additions = db.relationship("RecipeAddition", backref="recipe", cascade='all, delete-orphan')
 
     def __init__(self, name, beer_type):
         self.name = name

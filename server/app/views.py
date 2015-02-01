@@ -10,6 +10,7 @@ from forms import (
     SessionCreateForm,
     RecipeCreateForm,
     RecipeAdditionCreateForm,
+    RecipeUpdateForm
 )
 
 
@@ -94,9 +95,22 @@ class RecipeView(restful.Resource):
         recipes = Recipe.query.filter_by(user_id=g.user.id, id=id).one()
         return recipes
 
+    @auth.login_required
+    @marshal_with(recipe_fields)
+    def put(self, id):
+        form = RecipeUpdateForm()
+        if not form.validate_on_submit():
+            return form.errors, 422
+        recipe = Recipe.query.filter_by(user_id=g.user.id, id=id).one()
+        recipe.name = form.name.data
+        recipe.beer_type = form.beer_type.data
+        db.session.commit()
+
+        return recipe, 201
+
 
 recipe_addition_fields = {
-    'id': fields.Integer,
+    'addition_id': fields.Integer,
     'name': fields.String,
     'addition_type': fields.String,
     'brew_stage': fields.Integer,
@@ -133,6 +147,34 @@ def add_addition_to_recipe(addition_type, addition_name,
         return '%s does not exist' % addition_name, 400
     except FlushError:
         db.session.rollback()
+        return '%s already exist' % addition_name, 400
+
+
+def update_recipe_addition(addition_type, addition_id, addition_name,
+                           recipe_id, amount, brew_stage, time):
+    try:
+        old_ra = RecipeAddition.query.filter_by(recipe_id=recipe_id,
+                                                addition_id=addition_id).one()
+        addition = addition_type.query.filter_by(name=addition_name).one()
+
+        # create the new recipe addition
+        ra = RecipeAddition(addition, amount, brew_stage, time)
+
+        recipe = Recipe.query.filter_by(id=recipe_id).one()
+
+        # delete the old recipe addition and append the new one
+        recipe.additions.remove(old_ra)
+        recipe.additions.append(ra)
+        db.session.commit()
+
+        return ra, 201
+    except NoResultFound:
+        db.session.rollback()
+        print "nothing here"
+        return '%s does not exist' % addition_name, 400
+    except FlushError:
+        db.session.rollback()
+        print "already here"
         return '%s already exist' % addition_name, 400
 
 
@@ -195,6 +237,32 @@ class GrainRecipeListView(restful.Resource):
 
         return response, response_code
 
+
+class RecipeAdditionView(restful.Resource):
+
+    @marshal_with(recipe_addition_fields)
+    def get(self, recipe_id, addition_id):
+        addition = RecipeAddition.query.filter_by(
+            recipe_id=recipe_id, addition_id=addition_id
+        ).one()
+        print addition
+        return addition
+
+    @auth.login_required
+    @marshal_with(recipe_addition_fields)
+    def put(self, recipe_id, addition_id):
+        form = RecipeAdditionCreateForm()
+        if not form.validate_on_submit():
+            print form.errors
+            return form.errors, 422
+        response, response_code = update_recipe_addition(
+            Grain, addition_id, form.name.data, recipe_id, form.amount.data,
+            form.brew_stage.data, form.time.data
+        )
+
+        return response, response_code
+
+
 api.add_resource(UserView, '/api/v1/users')
 api.add_resource(SessionView, '/api/v1/sessions')
 api.add_resource(RecipeListView, '/api/v1/recipes')
@@ -205,4 +273,8 @@ api.add_resource(AdditionListView, '/api/v1/recipes/<int:recipe_id>/additions')
 api.add_resource(HopRecipeListView, '/api/v1/recipes/<int:recipe_id>/hops')
 api.add_resource(
     GrainRecipeListView, '/api/v1/recipes/<int:recipe_id>/grains'
+)
+api.add_resource(
+    RecipeAdditionView,
+    '/api/v1/recipes/<int:recipe_id>/additions/<int:addition_id>'
 )

@@ -3,16 +3,17 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
         $scope.recipe = {};
         $scope.grains = {};
         $scope.data = {};
+        factory_method = '';
         if ($routeParams.recipe_id)
         {
-            factory_method = 'Update';
+            factory_method = 'update';
             var recipe_id = $routeParams.recipe_id;
             $scope.recipe = Recipe.getOne(recipe_id).$object;
             $scope.grains = Grain.get(recipe_id).$object;
         }
         else
         {
-            factory_method = 'Create';
+            factory_method = 'create';
             $scope.grains = [{id: 'grain1'},{id: 'grain2'}];
         }
         $scope.grain_options = Grain.getAll().$object;
@@ -24,14 +25,12 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
 
         $scope.submit_recipe =
             function submit_recipe(name,beertype,grains){
-            var recipe = {};
-            var id = 0;
-            recipe.name= name;
+            recipe = $scope.recipe;
+            recipe.name = name;
             recipe.beer_type = beertype;
-            Recipe.create(recipe).then(function(data){
+            Recipe[factory_method](recipe).then(function(data){
                 id = data.id;
-                console.log(id);
-                grains.forEach(function(grain){
+                grains.forEach(function(grain,i){
                     if (grain.name && grain.amount)
                     {
                         g = {}
@@ -39,12 +38,11 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
                         g.name = grain.name;
                         g.amount = grain.amount;
                         g.recipe_id = id;
+                        g.addition_id = grain.addition_id;
                         g.brew_stage = 0;
                         g.time = 1;
-                        Grain.add(g).then(function(data){
-                            console.log(data);
-                        });
 
+                        Grain[factory_method](g);
                     }
                 });
             $location.path('/recipes/'+ id + '/edit');

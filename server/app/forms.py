@@ -31,6 +31,12 @@ class RecipeCreateForm(ModelForm):
         model = Recipe
 
 
+class RecipeUpdateForm(ModelForm):
+    class Meta:
+        model = Recipe
+        include = ['id']
+
+
 class HopCreateForm(ModelForm):
     class Meta:
         model = Hop
