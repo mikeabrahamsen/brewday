@@ -144,8 +144,13 @@ class AdditionTests(TestCase):
         self.assertEqual(len(response), 3)
 
     def test_adding_grains_and_hops(self):
-        self.add_addition('grain', 'American - Pale 2-Row', 0, 60, 1)
-        self.add_addition('hop', 'Cascade', 2, 45, 1)
+        rv = self.add_addition('grain', 'American - Pale 2-Row', 0, 60, 1)
+        rv1 = self.add_addition('hop', 'Cascade', 2, 45, 1)
+
+        self.check_content_type(rv.headers)
+        self.assertEqual(rv.status_code, 201)
+        self.check_content_type(rv1.headers)
+        self.assertEqual(rv1.status_code, 201)
 
         rv = self.app.get(self.grain_route)
         self.check_content_type(rv.headers)
