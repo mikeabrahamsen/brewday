@@ -1,4 +1,4 @@
-<form class="form-horizontal" name="postForm" ng-submit="submit_recipe(recipe.name, recipe.beer_type, grains)" novalidate>
+<form class="form-horizontal" name="postForm" ng-submit="submit_recipe(recipe.name, recipe.beer_type, grains, hops)" novalidate>
     <div class="form-group">
         <div class="row">
             <label class="col-md-1 control-label">Name</label>
@@ -18,13 +18,14 @@
     <h3>Add Grain Additions</h3>
         <div class="row">
             <div class="col-md-2">
-                <label for="weight">Weight</label>
+                <label for="weight">Weight(lbs)</label>
             </div>
             <div class="col-md-2">
                 <label for="grain">Grain</label>
             </div>
         </div>
     </div>
+    <div class="row">
     <ng-form name="grainForm" ng-model="grains">
     <div class="form-group" data-ng-repeat="grain in grains">
         <div class="row">
@@ -46,8 +47,47 @@
     </div>
     </ng-form>
     <div class="form-group">
+    <h3>Add Hop Additions</h3>
+        <div class="row">
+            <div class="col-md-2">
+                <label for="weight">Time(min)</label>
+            </div>
+            <div class="col-md-2">
+                <label for="weight">Weight(oz)</label>
+            </div>
+            <div class="col-md-2">
+                <label for="hops">Hops</label>
+            </div>
+        </div>
+    </div>
+    <ng-form name="hopForm" ng-model="hops">
+    <div class="form-group" data-ng-repeat="hop in hops">
+        <div class="row">
+            <div class="col-md-2">
+                <input type="number" class="form-control" ng-model="hop.time" name="time" placeholder="min">
+            </div>
+            <div class="col-md-2">
+                <input type="number" class="form-control" ng-model="hop.amount" name="amount" placeholder="oz">
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" ng-model="hop.name"  ng-options="h.name as h.name for h in hop_options"> </select>
+            </div>
+            <div class="col-md-1">
+                <button type="button" ng-show="hops.length > 1" class="btn btn-danger" ng-click="removeHop(hop)">X</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5" style="padding-top: 15px">
+                <button type="button" class="btn pull-right" ng-show="$last" ng-click="addNewHop()">Add More</button>
+            </div>
+        </div>
+    </div>
+    </ng-form>
+    </div>
+    <div class="form-group">
         <div class="col-md-11">
-        <button type="submit" class="btn btn-primary pull-right">Save</button>
+            <button type="submit" class="btn btn-primary pull-right">Save</button>
+        </div>
     </div>
 </form>
 </div>

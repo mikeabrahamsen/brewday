@@ -6,6 +6,7 @@ Brewday.factory('Addition', function(Restangular) {
         },
         create: function(data) {
             var recipe = Restangular.one('recipes',data.recipe_id);
+            console.log(recipe);
             return recipe.post("additions",data);
         },
         remove: function(data) {

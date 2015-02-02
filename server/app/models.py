@@ -28,7 +28,8 @@ class Recipe(db.Model):
     beer_type = db.Column(db.String(120), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     created_at = db.Column(db.DateTime, default=db.func.now())
-    additions = db.relationship("RecipeAddition", backref="recipe", cascade='all, delete-orphan')
+    additions = db.relationship("RecipeAddition", backref="recipe",
+                                cascade='all, delete-orphan')
 
     def __init__(self, name, beer_type):
         self.name = name
@@ -41,6 +42,7 @@ class Recipe(db.Model):
 
 class Addition(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
     addition_type = db.Column(db.String(50))
 
     __mapper_args__ = {'polymorphic_identity': 'addition',
@@ -48,12 +50,14 @@ class Addition(db.Model):
                        'with_polymorphic': '*'}
 
     def __repr__(self):
-        return '<%r %r>' % self.addition_type, self.name
+        return '<%r %r>' % (self.addition_type, self.name)
+
+    def __init__(self, name):
+        self.name = name
 
 
 class Hop(Addition):
     id = db.Column(db.Integer, db.ForeignKey('addition.id'), primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
     __mapper_args__ = {'polymorphic_identity': 'hop'}
 
     def __init__(self, name):
@@ -62,7 +66,6 @@ class Hop(Addition):
 
 class Grain(Addition):
     id = db.Column(db.Integer, db.ForeignKey('addition.id'), primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
     __mapper_args__ = {'polymorphic_identity': 'grain'}
 
     def __init__(self, name):

@@ -145,11 +145,9 @@ def update_recipe_addition(addition_type, addition_id, addition_name,
         return ra, 201
     except NoResultFound:
         db.session.rollback()
-        print "nothing here"
         return '%s does not exist' % addition_name, 400
     except FlushError:
         db.session.rollback()
-        print "already here"
         return '%s already exist' % addition_name, 400
 
 
@@ -233,10 +231,14 @@ class RecipeAdditionView(restful.Resource):
     def put(self, recipe_id, addition_id):
         form = RecipeAdditionCreateForm()
         if not form.validate_on_submit():
-            print form.errors
             return form.errors, 422
+        if form.addition_type.data == 'grain':
+            addition_type = Grain
+        elif form.addition_type.data == 'hop':
+            addition_type = Hop
         response, response_code = update_recipe_addition(
-            Grain, addition_id, form.name.data, recipe_id, form.amount.data,
+            addition_type, addition_id, form.name.data,
+            recipe_id, form.amount.data,
             form.brew_stage.data, form.time.data
         )
 
@@ -259,11 +261,9 @@ class RecipeAdditionView(restful.Resource):
             return '', 204
         except NoResultFound:
             db.session.rollback()
-            print "nothing here"
             return '%s does not exist' % recipe, 400
         except FlushError:
             db.session.rollback()
-            print "already here"
             return '%s already exist' % recipe, 400
 
 api.add_resource(UserView, '/api/v1/users')
