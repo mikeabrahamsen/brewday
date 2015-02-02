@@ -4,7 +4,13 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
         $scope.grains = {};
         $scope.hops = {};
         $scope.data = {};
+        $scope.readOnly = false;
         factory_method = '';
+
+        url = $location.$$url.split('/');
+        if (url[url.length-1]  === 'view')
+            $scope.readOnly = true;
+
         var toDelete = []
         var original_grains = []
         var original_hops = []
