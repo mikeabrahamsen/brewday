@@ -113,5 +113,14 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
             $location.path('/recipes/'+ id + '/edit');
             });
         }
+        function calculateWaterVol(){}
+        function grainAbsorbtion(){}
+        function preBoilVol(){}
+        function boilTimeLoss(){}
+        function wortShrinkage(){}
+        function totalVol(){}
+        function mashVol(){}
+        function spargeVol(){}
+
     }
 ])
