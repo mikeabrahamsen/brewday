@@ -84,7 +84,6 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
                 grains.forEach(function(grain,i){
                     if (grain.name && grain.amount)
                     {
-                        console.log(grain);
                         g = {}
                         g.name = grain.name;
                         g.amount = grain.amount;
