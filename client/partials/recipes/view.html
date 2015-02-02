@@ -7,3 +7,9 @@
         <a href="#/recipes/{{recipe.id}}/edit" role="button" class="btn btn-primary pull-right">Edit Recipe</a>
     </div>
 </div>
+<div class="col-md-12">
+    <h3>Grain Bill: {{getGrainBill()}}</h3>
+    <h3>Total Vol: {{totalVol | number }}</h3>
+    <h3>Mash Vol: {{mashVol | number }}</h3>
+    <h3>Sparge Vol: {{spargeVol | number }}</h3>
+</div>
