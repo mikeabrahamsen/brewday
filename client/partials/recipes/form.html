@@ -3,91 +3,81 @@
         <div class="row">
             <label class="col-md-1 control-label">Name</label>
             <div class="col-md-4">
-                <input type="text" class="form-control" name="name" placeholder="Recipe Name" ng-model="recipe.name" required>
+                <input type="text" class="form-control" ng-disabled="{{readOnly}}" name="name" placeholder="Recipe Name" ng-model="recipe.name" required>
                 <p ng-show="postForm.name.$invalid && !postForm.name.$pristine" class="help-block">Recipe Name Required.</p>
             </div>
             <label class="col-md-2 control-label">Beer Type</label>
             <div class="col-md-4">
-                <input type="text" class="form-control" name="beertype" placeholder="IPA" ng-model="recipe.beer_type" required>
+                <input type="text" class="form-control" ng-disabled="{{readOnly}}" name="beertype" placeholder="IPA" ng-model="recipe.beer_type" required>
                 <p ng-show="postForm.beer_type.$invalid && !postForm.beer_type.$pristine" class="help-block">Beer Type is required</p>
             </div>
         </div>
     </div>
     <hr />
-    <div class="form-group">
-    <h3>Add Grain Additions</h3>
-        <div class="row">
-            <div class="col-md-2">
-                <label for="weight">Weight(lbs)</label>
+    <div class="col-md-6">
+        <ng-form name="grainForm" ng-model="grains">
+            <h3>Add Grain Additions</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="weight">Weight(lbs)</label>
+                </div>
+                <div class="col-md-6">
+                    <label for="grain">Grain</label>
+                </div>
             </div>
-            <div class="col-md-2">
-                <label for="grain">Grain</label>
+            <div class="form-group" data-ng-repeat="grain in grains">
+                <div class="col-md-3">
+                    <input type="number" class="form-control" ng-disabled="{{readOnly}}" ng-model="grain.amount" name="amount" placeholder="lbs">
+                </div>
+                <div class="col-md-6">
+                    <select class="form-control" ng-model="grain.name" ng-disabled="{{readOnly}}"  ng-options="g.name as g.name for g in grain_options"> </select>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" ng-show="grains.length > 1 && !readOnly" class="btn btn-danger" ng-click="removeGrain(grain)">X</button>
+                </div>
+                <div class="col-md-9" style="padding-top: 15px">
+                    <button type="button" class="btn pull-right" ng-show="$last && !readOnly" ng-click="addNewGrain()">Add More</button>
+                </div>
             </div>
-        </div>
+        </ng-form>
     </div>
-    <div class="row">
-    <ng-form name="grainForm" ng-model="grains">
-    <div class="form-group" data-ng-repeat="grain in grains">
-        <div class="row">
-            <div class="col-md-2">
-                <input type="number" class="form-control" ng-model="grain.amount" name="amount" placeholder="lbs">
+
+    <div class="col-md-6">
+        <ng-form name="hopForm" ng-model="hops">
+            <h3>Add Hop Additions</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="weight">Time(min)</label>
+                </div>
+                <div class="col-md-3">
+                    <label for="weight">Weight(oz)</label>
+                </div>
+                <div class="col-md-5">
+                    <label for="hops">Hops</label>
+                </div>
             </div>
-            <div class="col-md-3">
-                <select class="form-control" ng-model="grain.name"  ng-options="g.name as g.name for g in grain_options"> </select>
+
+            <div class="form-group" data-ng-repeat="hop in hops">
+                <div class="col-md-3">
+                    <input type="number" class="form-control" ng-disabled="{{readOnly}}" ng-model="hop.time" name="time" placeholder="min">
+                </div>
+                <div class="col-md-3">
+                    <input type="number" class="form-control" ng-disabled="{{readOnly}}" ng-model="hop.amount" name="amount" placeholder="oz">
+                </div>
+                <div class="col-md-5">
+                    <select class="form-control" ng-model="hop.name" ng-disabled="{{readOnly}}" ng-options="h.name as h.name for h in hop_options"> </select>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" ng-show="hops.length > 1 && !readOnly" class="btn btn-danger" ng-click="removeHop(hop)">X</button>
+                </div>
+                <div class="col-md-11" style="padding-top: 15px">
+                    <button type="button" class="btn pull-right" ng-show="$last && !readOnly" ng-click="addNewHop()">Add More</button>
+                </div>
             </div>
-            <div class="col-md-1">
-                <button type="button" ng-show="grains.length > 1" class="btn btn-danger" ng-click="removeGrain(grain)">X</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-5" style="padding-top: 15px">
-                <button type="button" class="btn pull-right" ng-show="$last" ng-click="addNewGrain()">Add More</button>
-            </div>
-        </div>
+        </ng-form>
     </div>
-    </ng-form>
-    <div class="form-group">
-    <h3>Add Hop Additions</h3>
-        <div class="row">
-            <div class="col-md-2">
-                <label for="weight">Time(min)</label>
-            </div>
-            <div class="col-md-2">
-                <label for="weight">Weight(oz)</label>
-            </div>
-            <div class="col-md-2">
-                <label for="hops">Hops</label>
-            </div>
-        </div>
-    </div>
-    <ng-form name="hopForm" ng-model="hops">
-    <div class="form-group" data-ng-repeat="hop in hops">
-        <div class="row">
-            <div class="col-md-2">
-                <input type="number" class="form-control" ng-model="hop.time" name="time" placeholder="min">
-            </div>
-            <div class="col-md-2">
-                <input type="number" class="form-control" ng-model="hop.amount" name="amount" placeholder="oz">
-            </div>
-            <div class="col-md-3">
-                <select class="form-control" ng-model="hop.name"  ng-options="h.name as h.name for h in hop_options"> </select>
-            </div>
-            <div class="col-md-1">
-                <button type="button" ng-show="hops.length > 1" class="btn btn-danger" ng-click="removeHop(hop)">X</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-5" style="padding-top: 15px">
-                <button type="button" class="btn pull-right" ng-show="$last" ng-click="addNewHop()">Add More</button>
-            </div>
-        </div>
-    </div>
-    </ng-form>
-    </div>
-    <div class="form-group">
-        <div class="col-md-11">
-            <button type="submit" class="btn btn-primary pull-right">Save</button>
-        </div>
+    <div class="col-md-12">
+        <hr style="padding-bottom: 40px"/>
+        <button type="submit" ng-show="!readOnly" class="btn btn-success pull-right">Save Recipe</button>
     </div>
 </form>
-</div>

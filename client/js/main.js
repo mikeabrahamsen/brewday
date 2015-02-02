@@ -90,6 +90,13 @@ window.Brewday = angular.module('Brewday', ['ngRoute', 'restangular', 'LocalStor
                 redirectIfNotAuthenticated: redirectIfNotAuthenticated('/sessions/create')
             }
         })
+        .when('/recipes/:recipe_id/view', {
+            controller: 'RecipeCtrl',
+            templateUrl: partialsDir + '/recipes/view.html',
+            resolve: {
+                redirectIfNotAuthenticated: redirectIfNotAuthenticated('/sessions/create')
+            }
+        })
         .when('/recipes/create', {
             controller: 'RecipeCtrl',
             templateUrl: partialsDir + '/recipes/create.html',
