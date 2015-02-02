@@ -1,11 +1,11 @@
 Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routeParams', 'Recipe', 'Grain', 'Hop', 'Addition',
     function($scope, $location, $window, $routeParams, Recipe, Grain, Hop, Addition){
         $scope.recipe = {};
-        $scope.grains = {};
-        $scope.hops = {};
         $scope.data = {};
         $scope.readOnly = false;
         factory_method = '';
+        $scope.grains = [{id: 'grain1'},{id: 'grain2'}];
+        $scope.hops = [{id: 'hop1'},{id: 'hop2'}];
 
         url = $location.$$url.split('/');
         if (url[url.length-1]  === 'view')
@@ -20,28 +20,25 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
             var recipe_id = $routeParams.recipe_id;
             $scope.recipe = Recipe.getOne(recipe_id).$object;
             Grain.get(recipe_id).then(function(grains){
-                if(grains.length < 1)
-                    $scope.grains = [{id: 'grain1'},{id: 'grain2'}];
-                else
+                if(grains.length > 0)
+                {
                     $scope.grains = grains
-                // copy the array to so we can do a comparison later
-                original_grains = grains.slice(0);
+                    // copy the array to so we can do a comparison later
+                    original_grains = grains.slice(0);
+                }
             });
             Hop.get(recipe_id).then(function(hops){
-                if(hops.length < 1)
-                    $scope.hops = [{id: 'hop1'},{id: 'hop2'}];
-                else
+                if(hops.length > 0)
+                {
                     $scope.hops = hops
-                // copy the array to so we can do a comparison later
-                original_hops = hops.slice(0);
+                    original_hops = hops.slice(0);
+                }
             });
 
         }
         else
         {
             factory_method = 'create';
-            $scope.hops = [{id: 'hop1'},{id: 'hop2'}];
-            $scope.grains = [{id: 'grain1'},{id: 'grain2'}];
         }
 
         $scope.grain_options = Grain.getAll().$object;
