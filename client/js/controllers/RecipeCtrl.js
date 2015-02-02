@@ -6,7 +6,10 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
         factory_method = '';
         $scope.grains = [{id: 'grain1'},{id: 'grain2'}];
         $scope.hops = [{id: 'hop1'},{id: 'hop2'}];
-        $scope.grainBill, $scope.totalVol, $scope.mashVol, $scope.spargeVol = 0
+        $scope.grainBill = 0;
+        $scope.totalVol = 0;
+        $scope.mashVol = 0;
+        $scope.spargeVol = 0;
 
 
         url = $location.$$url.split('/');
