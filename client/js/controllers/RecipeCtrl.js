@@ -6,6 +6,11 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
         factory_method = '';
         $scope.grains = [{id: 'grain1'},{id: 'grain2'}];
         $scope.hops = [{id: 'hop1'},{id: 'hop2'}];
+        $scope.grainBill = 0;
+        $scope.totalVol = 0;
+        $scope.mashVol = 0;
+        $scope.spargeVol = 0;
+
 
         url = $location.$$url.split('/');
         if (url[url.length-1]  === 'view')
@@ -113,5 +118,59 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
             $location.path('/recipes/'+ id + '/edit');
             });
         }
+        $scope.getGrainBill = function(){
+            var total = 0;
+            for(var i = 0; i < $scope.grains.length; i++){
+                var grain = $scope.grains[i];
+                total += grain.amount;
+            }
+            $scope.grainBill = total;
+            return total;
+        }
+
+        calculateWaterVol = function(){
+            var batchSize = 5;
+            var grainBill = $scope.grainBill;
+            var boilTime = 60;
+            var trubLoss = 0.5;
+            var equipmentLoss = 1;
+            var mashThickness = 1.33;
+
+            var grainAbsorbtion = grainAbsorbtion(grainBill);
+            var preBoilVol = preBoilVol(batchSize, trubLoss);
+            var totalVol = totalVol(preBoilVol, grainAbsorbtion, equipmentLoss);
+            var mashVol = mashVol(mashThickness, grainBill);
+            var spargeVol = spargeVol(totalVol, mashVol);
+
+            $scope.totalVol = totalVol;
+            $scope.mashVol = mashVol;
+            $scope.spargeVol = spargeVol;
+
+
+            function grainAbsorbtion(grainBill){
+                return .13 * grainBill;
+            }
+            function preBoilVol(batchSize, trubLoss){
+                return ((batchSize + trubLoss) / .96) /.90;
+            }
+            function boilTimeLoss(boilTime, preBoilVol){
+                return boilTime / 60 * preBoilVol * .10;
+            }
+            function wortShrinkage(preBoilVol, boilTimeLoss){
+                return (preBoilVol + boilTimeLoss) * .04;
+            }
+            function totalVol(preBoilVol, grainAbsorbtion, equipmentLoss){
+                return preBoilVol + grainAbsorbtion + equipmentLoss;
+            }
+            function mashVol(mashThickness, grainBill){
+
+                return mashThickness * grainBill * .25;
+            }
+            function spargeVol(totalVol, mashVol){
+                return totalVol - mashVol;
+            }
+        }
+        $scope.$watch('grainBill', calculateWaterVol);
+
     }
 ])
