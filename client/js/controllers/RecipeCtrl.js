@@ -113,14 +113,35 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
             $location.path('/recipes/'+ id + '/edit');
             });
         }
-        function calculateWaterVol(){}
-        function grainAbsorbtion(){}
-        function preBoilVol(){}
-        function boilTimeLoss(){}
-        function wortShrinkage(){}
-        function totalVol(){}
-        function mashVol(){}
-        function spargeVol(){}
+        function calculateWaterVol(batchSize, grainBill, boilTime, trubLoss, equipmentLoss, mashThickness){
+            var grainAbsorbtion = grainAbsorbtion(grainBill);
+            var preBoilVol = preBoilVol(batchSize, trubLoss);
+            var totalVol = totalVol(preBoilVol, grainAbsorbtion, equipmentLoss);
+            var mashVol = mashVol(mashThickness, grainBill);
+            var spargeVol = spargeVol(totalVol, mashVol);
+
+        }
+        function grainAbsorbtion(grainBill){
+            return .13 * grainBill;
+        }
+        function preBoilVol(batchSize, trubLoss){
+            return ((batchSize + trubLoss) / .96 /.90;
+        }
+        function boilTimeLoss(boilTime, preBoilVol){
+            return boilTime / 60 * preBoilVol * .10;
+        }
+        function wortShrinkage(preBoilVol, boilTimeLoss){
+            return (preBoilVol + boilTimeLoss) * .04;
+        }
+        function totalVol(preBoilVol, grainAbsorbtion, equipmentLoss){
+            return preBoilVol + grainAbsorbtion + equipmentLoss;
+        }
+        function mashVol(mashThickness, grainBill){
+            return mashThicknesss * grainBill * .25;
+        }
+        function spargeVol(totalVol, mashVol){
+            return totolVol - mashVol;
+        }
 
     }
 ])
