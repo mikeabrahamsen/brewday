@@ -104,7 +104,7 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
                         h.addition_id = hop.addition_id;
                         h.addition_type = 'hop';
                         h.brew_stage = 0;
-                        h.time = 1;
+                        h.time = hop.time;
                         Addition[factory_method](h);
                     }
                 });
