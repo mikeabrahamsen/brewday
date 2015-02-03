@@ -29,13 +29,13 @@
                 <div class="col-md-3">
                     <input type="number" class="form-control" ng-disabled="{{readOnly}}" ng-model="grain.amount" name="amount" placeholder="lbs">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-7">
                     <select class="form-control" ng-model="grain.name" ng-disabled="{{readOnly}}"  ng-options="g.name as g.name for g in grain_options"> </select>
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-2">
                     <button type="button" ng-show="grains.length > 1 && !readOnly" class="btn btn-danger" ng-click="removeGrain(grain)">X</button>
                 </div>
-                <div class="col-md-9" style="padding-top: 15px">
+                <div class="col-md-10" style="padding-top: 15px">
                     <button type="button" class="btn pull-right" ng-show="$last && !readOnly" ng-click="addNewGrain()">Add More</button>
                 </div>
             </div>
