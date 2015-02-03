@@ -72,7 +72,7 @@ window.Brewday = angular.module('Brewday', ['ngRoute', 'restangular', 'LocalStor
             controller: 'SessionCreateCtrl',
             templateUrl: partialsDir + '/session/create.html',
             resolve: {
-                redirectIfAuthenticated: redirectIfAuthenticated('/posts/create')
+                redirectIfAuthenticated: redirectIfAuthenticated('/home/detail.html')
             }
         })
         .when('/sessions/destroy', {

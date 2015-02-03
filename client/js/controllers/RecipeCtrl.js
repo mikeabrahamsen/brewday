@@ -86,7 +86,7 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
                 toDelete.forEach(function(addition){
                     Addition.remove(addition);
                 });
-                grains.forEach(function(grain,i){
+                grains.forEach(function(grain){
                     if (grain.name && grain.amount)
                     {
                         g = {};
@@ -101,7 +101,7 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
                         Addition[factory_method](g);
                     }
                 });
-                hops.forEach(function(hop,i){
+                hops.forEach(function(hop){
                     if (hop.name && hop.amount)
                     {
                         h = {};
@@ -131,33 +131,42 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
         calculateWaterVol = function(){
             var batchSize = 5;
             var grainBill = $scope.grainBill;
-            var boilTime = 60;
+            var bt = 120;
             var trubLoss = 0.5;
             var equipmentLoss = 1;
             var mashThickness = 1.33;
 
-            var grainAbsorbtion = grainAbsorbtion(grainBill);
-            var preBoilVol = preBoilVol(batchSize, trubLoss);
-            var totalVol = totalVol(preBoilVol, grainAbsorbtion, equipmentLoss);
-            var mashVol = mashVol(mashThickness, grainBill);
-            var spargeVol = spargeVol(totalVol, mashVol);
+            var ga = grainAbsorbtion(grainBill);
+            var pv = preBoilVol(bt, batchSize, trubLoss);
+            var tv = totalVol(pv, ga, equipmentLoss);
+            var mv = mashVol(mashThickness, grainBill);
+            var sv = spargeVol(tv, mv);
 
-            $scope.totalVol = totalVol;
-            $scope.mashVol = mashVol;
-            $scope.spargeVol = spargeVol;
+            $scope.totalVol = tv;
+            $scope.mashVol = mv;
+            $scope.spargeVol = sv;
 
 
             function grainAbsorbtion(grainBill){
                 return 0.13 * grainBill;
             }
-            function preBoilVol(batchSize, trubLoss){
-                return ((batchSize + trubLoss) / 0.96) / 0.90;
+            function preBoilVol(boilTime, batchSize, trubLoss){
+                wsFactor = shrinkageFactor(0.04)
+                ev = evaporateFactor(boilTime)
+                return ((batchSize + trubLoss) / wsFactor) / ev;
+            }
+            function evaporateFactor(boilTime){
+                return 1-(0.10 * (boilTime / 60))
+            }
+            function shrinkageFactor(percent){
+                return 1-percent
             }
             function boilTimeLoss(boilTime, preBoilVol){
                 return boilTime / 60 * preBoilVol * 0.10;
             }
-            function wortShrinkage(preBoilVol, boilTimeLoss){
-                return (preBoilVol + boilTimeLoss) * 0.04;
+            function wortShrinkage(preBoilVol){
+                btl = boilTimeLoss(boilTime, preBoilVol);
+                return (preBoilVol + btl) * 0.04;
             }
             function totalVol(preBoilVol, grainAbsorbtion, equipmentLoss){
                 return preBoilVol + grainAbsorbtion + equipmentLoss;
