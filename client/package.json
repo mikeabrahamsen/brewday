@@ -1,0 +1,10 @@
+{
+  "name": "client",
+  "version": "0.0.0",
+  "authors": [
+    "Michael Abrahamsen <mail@michaelabrahamsen.com>"
+  ],
+  "devDependencies": {
+    "gulp": "^3.8.10"
+  }
+}
