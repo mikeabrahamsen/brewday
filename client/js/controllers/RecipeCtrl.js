@@ -16,9 +16,9 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
         if (url[url.length-1]  === 'view')
             $scope.readOnly = true;
 
-        var toDelete = []
-        var original_grains = []
-        var original_hops = []
+        var toDelete = [];
+        var original_grains = [];
+        var original_hops = [];
         if ($routeParams.recipe_id)
         {
             factory_method = 'update';
@@ -27,7 +27,7 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
             Grain.get(recipe_id).then(function(grains){
                 if(grains.length > 0)
                 {
-                    $scope.grains = grains
+                    $scope.grains = grains;
                     // copy the array to so we can do a comparison later
                     original_grains = grains.slice(0);
                 }
@@ -35,7 +35,7 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
             Hop.get(recipe_id).then(function(hops){
                 if(hops.length > 0)
                 {
-                    $scope.hops = hops
+                    $scope.hops = hops;
                     original_hops = hops.slice(0);
                 }
             });
@@ -89,7 +89,7 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
                 grains.forEach(function(grain,i){
                     if (grain.name && grain.amount)
                     {
-                        g = {}
+                        g = {};
                         g.name = grain.name;
                         g.amount = grain.amount;
                         g.recipe_id = id;
@@ -104,7 +104,7 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
                 hops.forEach(function(hop,i){
                     if (hop.name && hop.amount)
                     {
-                        h = {}
+                        h = {};
                         h.name = hop.name;
                         h.amount = hop.amount;
                         h.recipe_id = id;
@@ -117,7 +117,7 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
                 });
             $location.path('/recipes/'+ id + '/edit');
             });
-        }
+        };
         $scope.getGrainBill = function(){
             var total = 0;
             for(var i = 0; i < $scope.grains.length; i++){
@@ -126,7 +126,7 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
             }
             $scope.grainBill = total;
             return total;
-        }
+        };
 
         calculateWaterVol = function(){
             var batchSize = 5;
@@ -148,29 +148,29 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
 
 
             function grainAbsorbtion(grainBill){
-                return .13 * grainBill;
+                return 0.13 * grainBill;
             }
             function preBoilVol(batchSize, trubLoss){
-                return ((batchSize + trubLoss) / .96) /.90;
+                return ((batchSize + trubLoss) / 0.96) / 0.90;
             }
             function boilTimeLoss(boilTime, preBoilVol){
-                return boilTime / 60 * preBoilVol * .10;
+                return boilTime / 60 * preBoilVol * 0.10;
             }
             function wortShrinkage(preBoilVol, boilTimeLoss){
-                return (preBoilVol + boilTimeLoss) * .04;
+                return (preBoilVol + boilTimeLoss) * 0.04;
             }
             function totalVol(preBoilVol, grainAbsorbtion, equipmentLoss){
                 return preBoilVol + grainAbsorbtion + equipmentLoss;
             }
             function mashVol(mashThickness, grainBill){
 
-                return mashThickness * grainBill * .25;
+                return mashThickness * grainBill * 0.25;
             }
             function spargeVol(totalVol, mashVol){
                 return totalVol - mashVol;
             }
-        }
+        };
         $scope.$watch('grainBill', calculateWaterVol);
 
     }
-])
+]);
