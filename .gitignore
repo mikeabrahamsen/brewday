@@ -1,6 +1,7 @@
 *.py[co]
 
 /client/bower_components/
+/client/node_modules/
 
 server/app.sqlite
 server/app.db
