@@ -5,6 +5,7 @@
     "Michael Abrahamsen <mail@michaelabrahamsen.com>"
   ],
   "devDependencies": {
+    "browser-sync": "^2.0.0-rc5",
     "gulp": "^3.8.10"
   }
 }
