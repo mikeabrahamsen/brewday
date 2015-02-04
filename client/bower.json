@@ -14,9 +14,9 @@
   ],
   "dependencies": {
     "angular-route": "~1.2.21",
-    "bootstrap": "~3.2.0",
     "restangular": "~1.4.0",
     "angularjs": "~1.2.21",
-    "angular-local-storage": "~0.0.7"
+    "angular-local-storage": "~0.0.7",
+    "bootstrap-sass-official": "~3.3.3"
   }
 }

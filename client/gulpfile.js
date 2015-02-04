@@ -1,12 +1,16 @@
 var gulp = require('gulp');
 var browserSync = require('browser-sync');
+var sass = require('gulp-sass');
+var notify = require('gulp-notify');
+
+var config = {
+    sassPath: './sass',
+    bowerDir: './bower_components'
+}
 
 // use default task to launch BrowserSync and watch JS files
-gulp.task('default', ['browser-sync'], function () {
-
-    // add browserSync.reload to the tasks array to make
-    // all browsers reload after tasks are complete.
-    // gulp.watch("js/*.js", ['js', browserSync.reload]);
+gulp.task('default', ['browser-sync', 'sass'], function () {
+    gulp.watch("sass/*.scss", ['sass']);
 });
 
 gulp.task('browser-sync', function() {
@@ -16,4 +20,18 @@ gulp.task('browser-sync', function() {
         },
         files: ["css/*.css", "js/**/*.js", "partials/**"]
     });
+});
+
+gulp.task('sass', function() { 
+    return gulp.src('./sass/styles.scss').pipe(sass(
+            { style: 'expanded',
+                includePaths: [
+                    './sass',
+                    './bower_components/bootstrap-sass-official/assets/stylesheets',
+                ]
+            })
+    .on('error', function (err) {
+        console.error('Error!', err.message);
+    }))
+    .pipe(gulp.dest('./css'));
 });

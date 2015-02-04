@@ -2,8 +2,12 @@
 
 /client/bower_components/
 /client/node_modules/
+/client/css/
 
 server/app.sqlite
 server/app.db
 server/test.db
 server/app/config.py
+
+.sass-cache
+*.css.map
