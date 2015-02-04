@@ -1,51 +1,22 @@
-Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$stateParams', 'Recipe', 'Grain', 'Hop', 'Addition', 'recipes',
-    function($scope, $location, $window, $stateParams, Recipe, Grain, Hop, Addition, recipes){
-        $scope.recipes = recipes;
-        $scope.recipe = recipes;
+Brewday.controller('RecipeCtrl',  ['$scope', '$state', '$window', '$stateParams', 'Recipe', 'Grain', 'Hop', 'Addition', 'recipe','grains', 'hops',
+    function($scope, $state, $window, $stateParams, Recipe, Grain, Hop, Addition, recipe, grains, hops){
+        $scope.recipe = recipe;
         $scope.data = {};
         $scope.readOnly = false;
-        factory_method = '';
-        $scope.grains = [{id: 'grain1'},{id: 'grain2'}];
-        $scope.hops = [{id: 'hop1'},{id: 'hop2'}];
+        $scope.grains = grains;
+        $scope.hops = hops;
+        if(grains.length < 1)
+            $scope.grains = [{id: 'grain1'}];
+        if(hops.length < 1)
+            $scope.hops = [{id: 'hop1'}];
         $scope.grainBill = 0;
         $scope.totalVol = 0;
         $scope.mashVol = 0;
         $scope.spargeVol = 0;
 
-
-        url = $location.$$url.split('/');
-        if (url[url.length-1]  === 'view')
-            $scope.readOnly = true;
-
         var toDelete = [];
-        var original_grains = [];
-        var original_hops = [];
-        if ($stateParams.recipe_id)
-        {
-            factory_method = 'update';
-            var recipe_id = $stateParams.recipe_id;
-            $scope.recipe = Recipe.getOne(recipe_id).$object;
-            Grain.get(recipe_id).then(function(grains){
-                if(grains.length > 0)
-                {
-                    $scope.grains = grains;
-                    // copy the array to so we can do a comparison later
-                    original_grains = grains.slice(0);
-                }
-            });
-            Hop.get(recipe_id).then(function(hops){
-                if(hops.length > 0)
-                {
-                    $scope.hops = hops;
-                    original_hops = hops.slice(0);
-                }
-            });
-
-        }
-        else
-        {
-            factory_method = 'create';
-        }
+        var original_grains = grains.slice(0);
+        var original_hops = hops.slice(0);
 
         $scope.grain_options = Grain.getAll().$object;
         $scope.hop_options = Hop.getAll().$object;
@@ -82,15 +53,15 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$statePara
             recipe = $scope.recipe;
             recipe.name = name;
             recipe.beer_type = beertype;
-            Recipe[factory_method](recipe).then(function(data){
-                id = data.id;
+            Recipe.update(recipe).then(function(data){
+                var id = data.id;
                 toDelete.forEach(function(addition){
                     Addition.remove(addition);
                 });
                 grains.forEach(function(grain){
                     if (grain.name && grain.amount)
                     {
-                        g = {};
+                        var g = {};
                         g.name = grain.name;
                         g.amount = grain.amount;
                         g.recipe_id = id;
@@ -99,13 +70,13 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$statePara
                         g.brew_stage = 0;
                         g.time = 1;
 
-                        Addition[factory_method](g);
+                        Addition.update(g);
                     }
                 });
                 hops.forEach(function(hop){
                     if (hop.name && hop.amount)
                     {
-                        h = {};
+                        var h = {};
                         h.name = hop.name;
                         h.amount = hop.amount;
                         h.recipe_id = id;
@@ -113,10 +84,10 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$statePara
                         h.addition_type = 'hop';
                         h.brew_stage = 0;
                         h.time = hop.time;
-                        Addition[factory_method](h);
+                        Addition.update(h);
                     }
                 });
-            $location.path('/recipes/'+ id + '/edit');
+                $state.go('recipes.view', {recipe_id: recipe.id})
             });
         };
         $scope.getGrainBill = function(){
