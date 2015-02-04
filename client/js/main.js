@@ -105,13 +105,26 @@ window.Brewday = angular.module('Brewday', ['ngRoute', 'restangular', 'LocalStor
         .state('recipes.view',{
             url: '/:recipe_id',
             templateUrl: partialsDir + '/recipes/view.html',
-            controller: 'RecipeCtrl',
+            controller: 'RecipeViewCtrl',
             resolve: {
-                recipes: ['$stateParams', 'Recipe',
-                function($stateParams, recipes){
-                    return recipes.getOne($stateParams.recipe_id)
+                recipe: ['$stateParams', 'Recipe',
+                function($stateParams, recipe){
+                    return recipe.getOne($stateParams.recipe_id)
+                }],
+                hops: ['$stateParams', 'Hop',
+                function($stateParams, hop){
+                    return hop.get($stateParams.recipe_id)
+                }],
+                grains: ['$stateParams', 'Grain',
+                function($stateParams, grain){
+                    return grain.get($stateParams.recipe_id)
                 }]
             }
+        })
+        .state('recipes.edit',{
+            url: ':recipe_id/edit',
+            controller: 'RecipeCtrl',
+            templateUrl: partialsDir + '/recipes/edit.html',
         })
         .state('recipes.create',{
             url: '/create',

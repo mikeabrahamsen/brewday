@@ -1,10 +1,75 @@
 <div class="row">
-    <h1>View Recipe</h1>
+    <h1>{{recipe.name}}</h1>
+    <h3>{{recipe.beer_type}}</h3>
 </div>
-<ng-include src="'partials/recipes/form.html'"></ng-include>
+<div class="col-md-6">
+    <ng-form name="grainForm" ng-model="grains">
+        <h3>Grain Additions</h3>
+        <div class="row">
+            <div class="col-md-3">
+                <label for="weight">Weight(lbs)</label>
+            </div>
+            <div class="col-md-6">
+                <label for="grain">Grain</label>
+            </div>
+        </div>
+        <div class="form-group" data-ng-repeat="grain in grains | orderBy: 'amount': true" >
+            <div class="col-md-3">
+                <input type="number" class="form-control" ng-disabled="{{readOnly}}" ng-model="grain.amount" name="amount" placeholder="lbs">
+            </div>
+            <div class="col-md-7">
+                <input type="text" class="form-control" ng-disabled="{{readOnly}}" ng-model="grain.name" name="amount" placeholder="lbs">
+            </div>
+            <div class="col-md-2">
+                <button type="button" ng-show="!$first && !readOnly" class="btn btn-danger" ng-click="removeGrain(grain)">X</button>
+            </div>
+            <div class="col-md-10" style="padding-top: 15px">
+                <button type="button" class="btn pull-right" ng-show="$last && !readOnly" ng-click="addNewGrain()">Add More</button>
+            </div>
+        </div>
+        <div class="col-md-9" style="padding-top: 15px">
+            <h3>Grain Bill: {{getGrainBill()}}</h3>
+
+        </div>
+    </ng-form>
+</div>
+<div class="col-md-6">
+    <ng-form name="hopForm" ng-model="hops">
+    <h3>Hop Additions</h3>
+    <div class="row">
+        <div class="col-md-3">
+            <label for="weight">Time(min)</label>
+        </div>
+        <div class="col-md-3">
+            <label for="weight">Weight(oz)</label>
+        </div>
+        <div class="col-md-5">
+            <label for="hops">Hops</label>
+        </div>
+    </div>
+
+    <div class="form-group" data-ng-repeat="hop in hops | orderBy: 'time': true">
+        <div class="col-md-3">
+            <input type="number" class="form-control" ng-disabled="{{readOnly}}" ng-model="hop.time" name="time" placeholder="min">
+        </div>
+        <div class="col-md-3">
+            <input type="number" class="form-control" ng-disabled="{{readOnly}}" ng-model="hop.amount" name="amount" placeholder="oz">
+        </div>
+        <div class="col-md-5">
+            <input type="text" class="form-control" ng-disabled="{{readOnly}}" ng-model="hop.name" name="amount" placeholder="oz">
+        </div>
+        <div class="col-md-1">
+            <button type="button" ng-show="!$first && !readOnly" class="btn btn-danger" ng-click="removeHop(hop)">X</button>
+        </div>
+        <div class="col-md-11" style="padding-top: 15px">
+            <button type="button" class="btn pull-right" ng-show="$last && !readOnly" ng-click="addNewHop()">Add More</button>
+        </div>
+    </div>
+    </ng-form>
+</div>
 <div class="form-group">
     <div class="col-md-11">
-        <a href="#/recipes/{{recipe.id}}/edit" role="button" class="btn btn-primary pull-right">Edit Recipe</a>
+        <a ui-sref="recipes.edit({recipe_id: recipe.id})" role="button" class="btn btn-primary pull-right">Edit Recipe</a>
     </div>
 </div>
 <div class="col-md-12">
