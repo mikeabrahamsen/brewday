@@ -1,7 +1,7 @@
-Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routeParams', 'Recipe', 'Grain', 'Hop', 'Addition', 'recipes',
-    function($scope, $location, $window, $routeParams, Recipe, Grain, Hop, Addition, recipes){
-        $scope.recipe = {};
+Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$stateParams', 'Recipe', 'Grain', 'Hop', 'Addition', 'recipes',
+    function($scope, $location, $window, $stateParams, Recipe, Grain, Hop, Addition, recipes){
         $scope.recipes = recipes;
+        $scope.recipe = recipes;
         $scope.data = {};
         $scope.readOnly = false;
         factory_method = '';
@@ -20,10 +20,10 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
         var toDelete = [];
         var original_grains = [];
         var original_hops = [];
-        if ($routeParams.recipe_id)
+        if ($stateParams.recipe_id)
         {
             factory_method = 'update';
-            var recipe_id = $routeParams.recipe_id;
+            var recipe_id = $stateParams.recipe_id;
             $scope.recipe = Recipe.getOne(recipe_id).$object;
             Grain.get(recipe_id).then(function(grains){
                 if(grains.length > 0)
