@@ -12,7 +12,7 @@ gulp.task('browser-sync', function() {
         server: {
             baseDir: "./"
         },
-        files: ["css/*.css", "js/**/*.js", "partials/**"]
+        files: ["index.html", "css/*.css", "js/**/*.js", "partials/**"]
     });
 });
 

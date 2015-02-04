@@ -1,4 +1,4 @@
-window.Brewday = angular.module('Brewday', ['ngRoute', 'restangular', 'LocalStorageModule'])
+window.Brewday = angular.module('Brewday', ['ngRoute', 'restangular', 'LocalStorageModule', 'ui.router'])
 
 .run(function($location, Restangular, AuthService) {
     Restangular.setFullRequestInterceptor(function(element, operation, route, url, headers, params, httpConfig) {
@@ -25,7 +25,7 @@ window.Brewday = angular.module('Brewday', ['ngRoute', 'restangular', 'LocalStor
     });
 })
 
-.config(function($routeProvider, RestangularProvider) {
+.config(function($stateProvider, $urlRouterProvider, RestangularProvider) {
 
     RestangularProvider.setBaseUrl('http://localhost:5000/api/v1');
 
@@ -62,6 +62,91 @@ window.Brewday = angular.module('Brewday', ['ngRoute', 'restangular', 'LocalStor
             return deferred.promise;
         }
     }
+
+    $urlRouterProvider.otherwise('/');
+
+    $stateProvider
+        .state('home', {
+            url: '/',
+            templateUrl: partialsDir + '/home/detail.html'
+        })
+        .state('login',{
+            url: 'sessions/create',
+            controller: 'SessionCreateCtrl',
+            templateUrl: partialsDir + '/session/create.html',
+        })
+        .state('logout',{
+            url: 'sessions/destroy',
+            controller: 'SessionDestroyCtrl',
+            templateUrl: partialsDir + '/session/destroy.html'
+        })
+        .state('register',{
+            url: 'users/create',
+            controller: 'UserCreateCtrl',
+            templateUrl: partialsDir + '/user/create.html'
+        })
+        .state('recipes',{
+            abstract: true,
+            url: '/recipes',
+            controller: 'RecipeListCtrl',
+            templateUrl: partialsDir + '/recipes/index.html',
+            resolve: {
+                recipes: ['Recipe',
+                function(recipes){
+                    return recipes.get();
+                }],
+            }
+        })
+        .state('recipes.list',{
+            url: '',
+            controller: 'RecipeListCtrl',
+            templateUrl: partialsDir + '/recipes/list.html',
+        })
+        .state('recipes.view',{
+            url: '/:recipe_id',
+            templateUrl: partialsDir + '/recipes/view.html',
+            controller: 'RecipeViewCtrl',
+            resolve: {
+                recipe: ['$stateParams', 'Recipe',
+                function($stateParams, recipe){
+                    return recipe.getOne($stateParams.recipe_id)
+                }],
+                hops: ['$stateParams', 'Hop',
+                function($stateParams, hop){
+                    return hop.get($stateParams.recipe_id)
+                }],
+                grains: ['$stateParams', 'Grain',
+                function($stateParams, grain){
+                    return grain.get($stateParams.recipe_id)
+                }]
+            }
+        })
+        .state('recipes.edit',{
+            url: '/:recipe_id/edit',
+            controller: 'RecipeCtrl',
+            templateUrl: partialsDir + '/recipes/edit.html',
+            resolve: {
+                recipe: ['$stateParams', 'Recipe',
+                function($stateParams, recipe){
+                    return recipe.getOne($stateParams.recipe_id)
+                }],
+                hops: ['$stateParams', 'Hop',
+                function($stateParams, hop){
+                    return hop.get($stateParams.recipe_id)
+                }],
+                grains: ['$stateParams', 'Grain',
+                function($stateParams, grain){
+                    return grain.get($stateParams.recipe_id)
+                }]
+            }
+        })
+        .state('recipes.create',{
+            url: '/create',
+            controller: 'RecipeCtrl',
+            templateUrl: partialsDir + '/recipes/create.html',
+        });
+
+/*
 
     $routeProvider
         .when('/', {
@@ -104,4 +189,5 @@ window.Brewday = angular.module('Brewday', ['ngRoute', 'restangular', 'LocalStor
                 redirectIfNotAuthenticated: redirectIfNotAuthenticated('/sessions/create')
             }
         });
+        */
 })

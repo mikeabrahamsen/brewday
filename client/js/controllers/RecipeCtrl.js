@@ -1,50 +1,22 @@
-Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routeParams', 'Recipe', 'Grain', 'Hop', 'Addition',
-    function($scope, $location, $window, $routeParams, Recipe, Grain, Hop, Addition){
-        $scope.recipe = {};
+Brewday.controller('RecipeCtrl',  ['$scope', '$state', '$window', '$stateParams', 'Recipe', 'Grain', 'Hop', 'Addition', 'recipe','grains', 'hops',
+    function($scope, $state, $window, $stateParams, Recipe, Grain, Hop, Addition, recipe, grains, hops){
+        $scope.recipe = recipe;
         $scope.data = {};
         $scope.readOnly = false;
-        factory_method = '';
-        $scope.grains = [{id: 'grain1'},{id: 'grain2'}];
-        $scope.hops = [{id: 'hop1'},{id: 'hop2'}];
+        $scope.grains = grains;
+        $scope.hops = hops;
+        if(grains.length < 1)
+            $scope.grains = [{id: 'grain1'}];
+        if(hops.length < 1)
+            $scope.hops = [{id: 'hop1'}];
         $scope.grainBill = 0;
         $scope.totalVol = 0;
         $scope.mashVol = 0;
         $scope.spargeVol = 0;
 
-
-        url = $location.$$url.split('/');
-        if (url[url.length-1]  === 'view')
-            $scope.readOnly = true;
-
         var toDelete = [];
-        var original_grains = [];
-        var original_hops = [];
-        if ($routeParams.recipe_id)
-        {
-            factory_method = 'update';
-            var recipe_id = $routeParams.recipe_id;
-            $scope.recipe = Recipe.getOne(recipe_id).$object;
-            Grain.get(recipe_id).then(function(grains){
-                if(grains.length > 0)
-                {
-                    $scope.grains = grains;
-                    // copy the array to so we can do a comparison later
-                    original_grains = grains.slice(0);
-                }
-            });
-            Hop.get(recipe_id).then(function(hops){
-                if(hops.length > 0)
-                {
-                    $scope.hops = hops;
-                    original_hops = hops.slice(0);
-                }
-            });
-
-        }
-        else
-        {
-            factory_method = 'create';
-        }
+        var original_grains = grains.slice(0);
+        var original_hops = hops.slice(0);
 
         $scope.grain_options = Grain.getAll().$object;
         $scope.hop_options = Hop.getAll().$object;
@@ -81,15 +53,15 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
             recipe = $scope.recipe;
             recipe.name = name;
             recipe.beer_type = beertype;
-            Recipe[factory_method](recipe).then(function(data){
-                id = data.id;
+            Recipe.update(recipe).then(function(data){
+                var id = data.id;
                 toDelete.forEach(function(addition){
                     Addition.remove(addition);
                 });
                 grains.forEach(function(grain){
                     if (grain.name && grain.amount)
                     {
-                        g = {};
+                        var g = {};
                         g.name = grain.name;
                         g.amount = grain.amount;
                         g.recipe_id = id;
@@ -98,13 +70,13 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
                         g.brew_stage = 0;
                         g.time = 1;
 
-                        Addition[factory_method](g);
+                        Addition.update(g);
                     }
                 });
                 hops.forEach(function(hop){
                     if (hop.name && hop.amount)
                     {
-                        h = {};
+                        var h = {};
                         h.name = hop.name;
                         h.amount = hop.amount;
                         h.recipe_id = id;
@@ -112,74 +84,12 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routePara
                         h.addition_type = 'hop';
                         h.brew_stage = 0;
                         h.time = hop.time;
-                        Addition[factory_method](h);
+                        Addition.update(h);
                     }
                 });
-            $location.path('/recipes/'+ id + '/edit');
+                $state.go('recipes.view', {recipe_id: recipe.id})
             });
         };
-        $scope.getGrainBill = function(){
-            var total = 0;
-            for(var i = 0; i < $scope.grains.length; i++){
-                var grain = $scope.grains[i];
-                total += grain.amount;
-            }
-            $scope.grainBill = total;
-            return total;
-        };
-
-        calculateWaterVol = function(){
-            var batchSize = 5;
-            var grainBill = $scope.grainBill;
-            var bt = 120;
-            var trubLoss = 0.5;
-            var equipmentLoss = 1;
-            var mashThickness = 1.33;
-
-            var ga = grainAbsorbtion(grainBill);
-            var pv = preBoilVol(bt, batchSize, trubLoss);
-            var tv = totalVol(pv, ga, equipmentLoss);
-            var mv = mashVol(mashThickness, grainBill);
-            var sv = spargeVol(tv, mv);
-
-            $scope.totalVol = tv;
-            $scope.mashVol = mv;
-            $scope.spargeVol = sv;
-
-
-            function grainAbsorbtion(grainBill){
-                return 0.13 * grainBill;
-            }
-            function preBoilVol(boilTime, batchSize, trubLoss){
-                wsFactor = shrinkageFactor(0.04)
-                ev = evaporateFactor(boilTime)
-                return ((batchSize + trubLoss) / wsFactor) / ev;
-            }
-            function evaporateFactor(boilTime){
-                return 1-(0.10 * (boilTime / 60))
-            }
-            function shrinkageFactor(percent){
-                return 1-percent
-            }
-            function boilTimeLoss(boilTime, preBoilVol){
-                return boilTime / 60 * preBoilVol * 0.10;
-            }
-            function wortShrinkage(preBoilVol){
-                btl = boilTimeLoss(boilTime, preBoilVol);
-                return (preBoilVol + btl) * 0.04;
-            }
-            function totalVol(preBoilVol, grainAbsorbtion, equipmentLoss){
-                return preBoilVol + grainAbsorbtion + equipmentLoss;
-            }
-            function mashVol(mashThickness, grainBill){
-
-                return mashThickness * grainBill * 0.25;
-            }
-            function spargeVol(totalVol, mashVol){
-                return totalVol - mashVol;
-            }
-        };
-        $scope.$watch('grainBill', calculateWaterVol);
 
     }
 ]);
