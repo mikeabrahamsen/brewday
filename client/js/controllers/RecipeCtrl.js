@@ -1,6 +1,7 @@
-Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routeParams', 'Recipe', 'Grain', 'Hop', 'Addition',
-    function($scope, $location, $window, $routeParams, Recipe, Grain, Hop, Addition){
+Brewday.controller('RecipeCtrl',  ['$scope', '$location', '$window', '$routeParams', 'Recipe', 'Grain', 'Hop', 'Addition', 'recipes',
+    function($scope, $location, $window, $routeParams, Recipe, Grain, Hop, Addition, recipes){
         $scope.recipe = {};
+        $scope.recipes = recipes;
         $scope.data = {};
         $scope.readOnly = false;
         factory_method = '';

@@ -11,17 +11,18 @@
         <div class="brewday-masthead">
             <div class="container">
                 <nav class="brewday-nav">
-                    <a class="brewday-nav-item" href="#" ng-class="{active: isActive('/')}">Home</a>
-                    <a class="brewday-nav-item" href="#/sessions/create" ng-hide="isLoggedIn" ng-class="{active: isActive('/sessions/create')}">Login</a>
-                    <a class="brewday-nav-item" href="#/sessions/destroy" ng-show="isLoggedIn">Logout</a>
-                    <a class="brewday-nav-item" href="#/users/create" ng-class="{active: isActive('/users/create')}">Register</a>
-                    <a class="brewday-nav-item" href="#/recipes/create" ng-show="isLoggedIn" ng-class="{active: isActive('/recipes/create')}">Create a recipe</a>
+                    <a class="brewday-nav-item" ui-sref="home" ng-class="{active: isActive('/')}">Home</a>
+                    <a class="brewday-nav-item" href="#/recipes" ng-class="{active: isActive('/')}">Recipes</a>
+                    <a class="brewday-nav-item" ui-sref="login" ng-hide="isLoggedIn" ng-class="{active: isActive('/sessions/create')}">Login</a>
+                    <a class="brewday-nav-item" ui-sref="logout" ng-show="isLoggedIn">Logout</a>
+                    <a class="brewday-nav-item" ui-sref="register" ng-class="{active: isActive('/users/create')}">Register</a>
+                    <a class="brewday-nav-item" ui-sref="create" ng-show="isLoggedIn" ng-class="{active: isActive('/recipes/create')}">Create a recipe</a>
                 </nav>
             </div>
         </div>
 
         <div class="container main-view">
-            <div ng-view></div>
+            <div ui-view></div>
 
         </div><!-- /.container -->
 
@@ -30,6 +31,7 @@
 
         <script type="text/javascript" src="./bower_components/angularjs/angular.js"></script>
         <script type="text/javascript" src="./bower_components/angular-route/angular-route.js"></script>
+        <script type="text/javascript" src="./bower_components/angular-ui-router/release/angular-ui-router.js"></script>
         <script type="text/javascript" src="./bower_components/lodash/dist/lodash.js"></script>
         <script type="text/javascript" src="./bower_components/restangular/dist/restangular.js"></script>
         <script type="text/javascript" src="./bower_components/angular-local-storage/angular-local-storage.js"></script>
