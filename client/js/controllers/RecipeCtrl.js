@@ -1,18 +1,16 @@
-Brewday.controller('RecipeCtrl',  ['$scope', '$state', '$window', '$stateParams', 'Recipe', 'Grain', 'Hop', 'Addition', 'recipe','grains', 'hops',
-    function($scope, $state, $window, $stateParams, Recipe, Grain, Hop, Addition, recipe, grains, hops){
+Brewday.controller('RecipeCtrl',  ['$scope', '$state', '$window', '$stateParams', 'Recipe', 'Grain', 'Hop', 'Addition', 'recipe','grains', 'hops','additions',
+    function($scope, $state, $window, $stateParams, Recipe, Grain, Hop, Addition, recipe, grains, hops, additions){
         $scope.recipe = recipe;
         $scope.data = {};
         $scope.readOnly = false;
         $scope.grains = grains;
+        $scope.additions = additions;
         $scope.hops = hops;
+
         if(grains.length < 1)
             $scope.grains = [{id: 'grain1'}];
         if(hops.length < 1)
             $scope.hops = [{id: 'hop1'}];
-        $scope.grainBill = 0;
-        $scope.totalVol = 0;
-        $scope.mashVol = 0;
-        $scope.spargeVol = 0;
 
         var toDelete = [];
         var original_grains = grains.slice(0);
@@ -50,46 +48,28 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$state', '$window', '$stateParams'
         };
         $scope.submit_recipe =
             function submit_recipe(name,beertype,grains,hops){
-            recipe = $scope.recipe;
-            recipe.name = name;
-            recipe.beer_type = beertype;
-            Recipe.update(recipe).then(function(data){
-                var id = data.id;
+                Recipe.update(recipe)
+
                 toDelete.forEach(function(addition){
                     Addition.remove(addition);
-                });
-                grains.forEach(function(grain){
-                    if (grain.name && grain.amount)
-                    {
-                        var g = {};
-                        g.name = grain.name;
-                        g.amount = grain.amount;
-                        g.recipe_id = id;
-                        g.addition_id = grain.addition_id;
-                        g.addition_type = 'grain';
-                        g.brew_stage = 0;
-                        g.time = 1;
+                })
 
-                        Addition.update(g);
-                    }
+                grains.forEach(function(grain){
+                    grain.brew_stage = 0;
+                    grain.time = 1;
+                    grain.recipe_id = recipe.id;
+                    grain.addition_type = 'grain';
+
+                    Addition.update(grain);
                 });
                 hops.forEach(function(hop){
-                    if (hop.name && hop.amount)
-                    {
-                        var h = {};
-                        h.name = hop.name;
-                        h.amount = hop.amount;
-                        h.recipe_id = id;
-                        h.addition_id = hop.addition_id;
-                        h.addition_type = 'hop';
-                        h.brew_stage = 0;
-                        h.time = hop.time;
-                        Addition.update(h);
-                    }
+                    hop.recipe_id = recipe.id;
+                    hop.addition_type = 'hop';
+                    hop.brew_stage = 0;
+
+                    Addition.update(hop);
                 });
                 $state.go('recipes.view', {recipe_id: recipe.id})
-            });
-        };
-
+            }
     }
 ]);

@@ -33,7 +33,7 @@
                     <select class="form-control" ng-model="grain.name" ng-disabled="{{readOnly}}"  ng-options="g.name as g.name for g in grain_options"> </select>
                 </div>
                 <div class="col-md-2">
-                    <button type="button" ng-show="!$first && !readOnly" class="btn btn-danger" ng-click="removeGrain(grain)">X</button>
+                    <button type="button" ng-show="grains.length > 1 && !readOnly" class="btn btn-danger" ng-click="removeGrain(grain)">X</button>
                 </div>
                 <div class="col-md-10" style="padding-top: 15px">
                     <button type="button" class="btn pull-right" ng-show="$last && !readOnly" ng-click="addNewGrain()">Add More</button>
@@ -72,7 +72,7 @@
                     <select class="form-control" ng-model="hop.name" ng-disabled="{{readOnly}}" ng-options="h.name as h.name for h in hop_options"> </select>
                 </div>
                 <div class="col-md-1">
-                    <button type="button" ng-show="!$first && !readOnly" class="btn btn-danger" ng-click="removeHop(hop)">X</button>
+                    <button type="button" ng-show="hops.length > 1 && !readOnly" class="btn btn-danger" ng-click="removeHop(hop)">X</button>
                 </div>
                 <div class="col-md-11" style="padding-top: 15px">
                     <button type="button" class="btn pull-right" ng-show="$last && !readOnly" ng-click="addNewHop()">Add More</button>
