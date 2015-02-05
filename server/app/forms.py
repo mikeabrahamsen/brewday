@@ -53,3 +53,11 @@ class RecipeAdditionCreateForm(ModelForm):
         include = ['time']
     name = StringField('name')
     amount = DecimalField('amount')
+
+
+class RecipeAdditionUpdateForm(ModelForm):
+    class Meta:
+        model = RecipeAddition
+        include = ['time', 'addition_id']
+    name = StringField('name')
+    amount = DecimalField('amount')

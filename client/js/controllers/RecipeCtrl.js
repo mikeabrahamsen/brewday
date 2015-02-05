@@ -55,12 +55,15 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$state', '$window', '$stateParams'
                 })
 
                 grains.forEach(function(grain){
+                    console.log(grain);
                     grain.brew_stage = 0;
                     grain.time = 1;
                     grain.recipe_id = recipe.id;
-                    grain.addition_type = 'grain';
+                    if (typeof(grain.put) == 'function' )
+                        grain.put();
+                    else
+                        Grain.add(grain);
 
-                    Addition.update(grain);
                 });
                 hops.forEach(function(hop){
                     hop.recipe_id = recipe.id;

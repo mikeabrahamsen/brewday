@@ -25,7 +25,7 @@
                     <label for="grain">Grain</label>
                 </div>
             </div>
-            <div class="form-group" data-ng-repeat="grain in grains | orderBy: 'amount': true" >
+            <div class="form-group" data-ng-repeat="grain in grains" >
                 <div class="col-md-3">
                     <input type="number" class="form-control" ng-disabled="{{readOnly}}" ng-model="grain.amount" name="amount" placeholder="lbs">
                 </div>
@@ -61,7 +61,7 @@
                 </div>
             </div>
 
-            <div class="form-group" data-ng-repeat="hop in hops | orderBy: 'time': true">
+            <div class="form-group" data-ng-repeat="hop in hops">
                 <div class="col-md-3">
                     <input type="number" class="form-control" ng-disabled="{{readOnly}}" ng-model="hop.time" name="time" placeholder="min">
                 </div>
