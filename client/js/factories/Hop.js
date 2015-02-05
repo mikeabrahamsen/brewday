@@ -7,6 +7,9 @@ Brewday.factory('Hop', function(Restangular) {
         getAll: function() {
             return Restangular.one('hops').getList();
         },
+        add: function(data){
+            return Restangular.one('recipes', data.recipe_id).post('hops', data);
+        }
     };
     return Hop;
 })
