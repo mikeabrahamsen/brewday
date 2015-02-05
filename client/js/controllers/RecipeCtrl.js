@@ -6,6 +6,7 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$state', '$window', '$stateParams'
         $scope.grains = grains;
         $scope.additions = additions;
         $scope.hops = hops;
+        console.log(grains);
 
         if(grains.length < 1)
             $scope.grains = [{id: 'grain1'}];
@@ -51,7 +52,7 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$state', '$window', '$stateParams'
                 Recipe.update(recipe)
 
                 toDelete.forEach(function(addition){
-                    Addition.remove(addition);
+                    addition.remove();
                 })
 
                 grains.forEach(function(grain){

@@ -111,6 +111,7 @@ class RecipeView(restful.Resource):
 
 
 recipe_addition_fields = {
+    'id': fields.Integer,
     'addition_id': fields.Integer,
     'name': fields.String,
     'addition_type': fields.String,
@@ -126,7 +127,7 @@ addition_fields = {
 }
 
 
-def delete_recipe_addition(recipe_id, addition_id):
+def delete_recipe_addition(recipe_id, ra_id):
     """Remove an addition from a recipe
 
     :param recipe_id: recipe id that the addition is part of
@@ -135,8 +136,7 @@ def delete_recipe_addition(recipe_id, addition_id):
 
     """
     try:
-        old_ra = RecipeAddition.query.filter_by(
-            recipe_id=recipe_id, addition_id=addition_id).one()
+        old_ra = RecipeAddition.query.filter_by(id=ra_id).one()
 
         recipe = Recipe.query.filter_by(id=recipe_id).one()
 
@@ -153,13 +153,10 @@ def delete_recipe_addition(recipe_id, addition_id):
         return '%s already exist' % recipe, 400
 
 
-def update_recipe_addition(addition_type, addition_id, addition_name,
+def update_recipe_addition(addition_type, ra_id, addition_name,
                            recipe_id, amount, brew_stage, time):
     try:
-        old_ra = RecipeAddition.query.filter_by(recipe_id=recipe_id,
-                                                addition_id=addition_id,
-                                                time=time
-                                                ).one()
+        old_ra = RecipeAddition.query.filter_by(id=ra_id).one()
         addition = addition_type.query.filter_by(name=addition_name).one()
 
         # create the new recipe addition
@@ -272,19 +269,6 @@ class GrainRecipeListView(restful.Resource):
                                                 addition_type='grain').all()
         return grains
 
-    @marshal_with(recipe_addition_fields)
-    def put(self, recipe_id):
-        form = RecipeAdditionUpdateForm()
-        if not form.validate_on_submit():
-            return form.errors, 422
-        response, response_code = update_recipe_addition(
-            Grain, form.addition_id.data, form.name.data,
-            recipe_id, form.amount.data,
-            form.brew_stage.data, form.time.data
-        )
-
-        return response, response_code
-
     @auth.login_required
     @marshal_with(recipe_addition_fields)
     def post(self, recipe_id):
@@ -300,6 +284,48 @@ class GrainRecipeListView(restful.Resource):
             form.time.data
         )
 
+        return response, response_code
+
+
+class GrainRecipeView(restful.Resource):
+    @marshal_with(recipe_addition_fields)
+    def put(self, recipe_id, ra_id):
+        form = RecipeAdditionUpdateForm()
+        if not form.validate_on_submit():
+            return form.errors, 422
+        response, response_code = update_recipe_addition(
+            Grain, ra_id, form.name.data,
+            recipe_id, form.amount.data,
+            form.brew_stage.data, form.time.data
+        )
+
+        return response, response_code
+
+    @auth.login_required
+    @marshal_with(recipe_addition_fields)
+    def delete(self, recipe_id, ra_id):
+        response, response_code = delete_recipe_addition(recipe_id, ra_id)
+        return response, response_code
+
+
+class HopRecipeView(restful.Resource):
+    @marshal_with(recipe_addition_fields)
+    def put(self, recipe_id, ra_id):
+        form = RecipeAdditionUpdateForm()
+        if not form.validate_on_submit():
+            return form.errors, 422
+        response, response_code = update_recipe_addition(
+            Hop, ra_id, form.name.data,
+            recipe_id, form.amount.data,
+            form.brew_stage.data, form.time.data
+        )
+
+        return response, response_code
+
+    @auth.login_required
+    @marshal_with(recipe_addition_fields)
+    def delete(self, recipe_id, ra_id):
+        response, response_code = delete_recipe_addition(recipe_id, ra_id)
         return response, response_code
 
 
@@ -338,7 +364,7 @@ class RecipeAdditionView(restful.Resource):
 
     @auth.login_required
     @marshal_with(recipe_addition_fields)
-    def put(self, recipe_id, addition_id):
+    def put(self, recipe_id, ra_id):
         form = RecipeAdditionCreateForm()
         if not form.validate_on_submit():
             return form.errors, 422
@@ -347,7 +373,7 @@ class RecipeAdditionView(restful.Resource):
         elif form.addition_type.data == 'hop':
             addition_type = Hop
         response, response_code = update_recipe_addition(
-            addition_type, addition_id, form.name.data,
+            addition_type, ra_id, form.name.data,
             recipe_id, form.amount.data,
             form.brew_stage.data, form.time.data
         )
@@ -388,6 +414,12 @@ api.add_resource(
     GrainRecipeListView, '/api/v1/recipes/<int:recipe_id>/grains'
 )
 api.add_resource(
+    GrainRecipeView, '/api/v1/recipes/<int:recipe_id>/grains/<int:ra_id>'
+)
+api.add_resource(
+    HopRecipeView, '/api/v1/recipes/<int:recipe_id>/hops/<int:ra_id>'
+)
+api.add_resource(
     RecipeAdditionView,
-    '/api/v1/recipes/<int:recipe_id>/additions/<int:addition_id>'
+    '/api/v1/recipes/<int:recipe_id>/additions/<int:id>'
 )

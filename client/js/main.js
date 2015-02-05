@@ -146,7 +146,7 @@ window.Brewday = angular.module('Brewday', ['ngRoute', 'restangular', 'LocalStor
         })
         .state('recipes.create',{
             url: '/create',
-            controller: 'RecipeCtrl',
+            controller: 'RecipeCreateCtrl',
             templateUrl: partialsDir + '/recipes/create.html',
         });
 
