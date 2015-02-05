@@ -73,12 +73,12 @@ class Grain(Addition):
 
 
 class RecipeAddition(db.Model):
-    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'),
-                          primary_key=True)
-    addition_id = db.Column(db.Integer, db.ForeignKey('addition.id'),
-                            primary_key=True)
+    __tablename__ = 'recipeaddition'
+    id = db.Column(db.Integer, primary_key=True)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'))
+    addition_id = db.Column(db.Integer, db.ForeignKey('addition.id'))
 
-    time = db.Column(db.Integer, primary_key=True)
+    time = db.Column(db.Integer)
     _amount = db.Column(INTEGER)  # Weight in mg
     addition_type = db.Column(db.String(50))
     name = db.Column(db.String(50))
