@@ -58,16 +58,26 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$state', '$window', '$stateParams'
                     grain.brew_stage = 0;
                     grain.time = 1;
                     grain.recipe_id = recipe.id;
-                    grain.addition_type = 'grain';
+                    if (typeof(grain.put) == 'function' )
+                        grain.put();
+                    else
+                        Grain.add(grain);
 
-                    Addition.update(grain);
                 });
                 hops.forEach(function(hop){
                     hop.recipe_id = recipe.id;
-                    hop.addition_type = 'hop';
                     hop.brew_stage = 0;
 
-                    Addition.update(hop);
+                    // check if it is a restangular object
+                    if (typeof(hop.put) == 'function' )
+                    {
+                        console.log(hop);
+                        hop.put();
+                    }
+                    else
+                    {
+                        Hop.add(hop);
+                    }
                 });
                 $state.go('recipes.view', {recipe_id: recipe.id})
             }
