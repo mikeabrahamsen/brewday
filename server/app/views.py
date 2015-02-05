@@ -347,8 +347,8 @@ class AdditionListView(restful.Resource):
             addition_type = Hop
 
         response, response_code = add_recipe_addition(
-            addition_type, form.name.data, recipe_id, form.brew_stage.data,
-            form.time.data
+            addition_type, form.name.data, recipe_id, form.amount.data,
+            form.brew_stage.data, form.time.data
         )
         return response, response_code
 
