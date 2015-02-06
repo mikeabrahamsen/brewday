@@ -106,6 +106,7 @@ window.Brewday = angular.module('Brewday', ['ui.router', 'restangular', 'LocalSt
             url: '/:recipe_id',
             templateUrl: partialsDir + '/recipes/view.html',
             controller: 'RecipeViewCtrl',
+            controllerAs: 'recipes',
             resolve: {
                 recipe: ['$stateParams', 'Recipe',
                 function($stateParams, recipe){

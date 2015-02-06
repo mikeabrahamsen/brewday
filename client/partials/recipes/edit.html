@@ -1,2 +1,8 @@
 <h1>Edit Recipe</h1>
 <ng-include src="'partials/recipes/form.html'"></ng-include>
+<div class="col-md-12">
+    <h3>Grain Bill:{{ grainService.total_grain }}</h3>
+    <h3>Total Vol: {{ totalVol | number }}</h3>
+    <h3>Mash Vol: {{ mashVol | number }}</h3>
+    <h3>Sparge Vol: {{ spargeVol | number }}</h3>
+</div>
