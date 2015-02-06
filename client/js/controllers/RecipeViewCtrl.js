@@ -1,5 +1,5 @@
-Brewday.controller('RecipeViewCtrl',  ['$scope', '$location', '$window','recipe', 'grains', 'hops',
-        function($scope, $location, $window, recipe, grains, hops){
+Brewday.controller('RecipeViewCtrl',  ['$scope', 'recipe', 'grains', 'hops',
+        function($scope, recipe, grains, hops){
             $scope.recipe = recipe;
             $scope.grains = grains;
             $scope.hops = hops;
@@ -19,7 +19,7 @@ Brewday.controller('RecipeViewCtrl',  ['$scope', '$location', '$window','recipe'
             };
 
 
-            calculateWaterVol = function(){
+            var calculateWaterVol = function(){
                 var batchSize = 5;
                 var grainBill = $scope.grainBill;
                 var bt = 120;
@@ -42,22 +42,15 @@ Brewday.controller('RecipeViewCtrl',  ['$scope', '$location', '$window','recipe'
                     return 0.13 * grainBill;
                 }
                 function preBoilVol(boilTime, batchSize, trubLoss){
-                    wsFactor = shrinkageFactor(0.04)
-                        ev = evaporateFactor(boilTime)
-                        return ((batchSize + trubLoss) / wsFactor) / ev;
+                    var wsFactor = shrinkageFactor(0.04)
+                    var ev = evaporateFactor(boilTime)
+                    return ((batchSize + trubLoss) / wsFactor) / ev;
                 }
                 function evaporateFactor(boilTime){
                     return 1-(0.10 * (boilTime / 60))
                 }
                 function shrinkageFactor(percent){
                     return 1-percent
-                }
-                function boilTimeLoss(boilTime, preBoilVol){
-                    return boilTime / 60 * preBoilVol * 0.10;
-                }
-                function wortShrinkage(preBoilVol){
-                    btl = boilTimeLoss(boilTime, preBoilVol);
-                    return (preBoilVol + btl) * 0.04;
                 }
                 function totalVol(preBoilVol, grainAbsorbtion, equipmentLoss){
                     return preBoilVol + grainAbsorbtion + equipmentLoss;

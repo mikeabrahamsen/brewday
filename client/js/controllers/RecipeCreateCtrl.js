@@ -1,5 +1,5 @@
-Brewday.controller('RecipeCreateCtrl',  ['$scope', '$state', '$window', '$stateParams', 'Recipe', 'Grain', 'Hop', 'Addition',
-        function($scope, $state, $window, $stateParams, Recipe, Grain, Hop, Addition){
+Brewday.controller('RecipeCreateCtrl',  ['$scope', '$state', 'Recipe', 'Grain', 'Hop',
+        function($scope, $state, Recipe, Grain, Hop){
 
         $scope.grains = [{id: 'grain1'}];
         $scope.hops = [{id: 'hop1'}];
@@ -8,7 +8,7 @@ Brewday.controller('RecipeCreateCtrl',  ['$scope', '$state', '$window', '$stateP
         $scope.recipe = {};
         $scope.submit_recipe =
             function submit_recipe(name,beertype,grains,hops){
-                recipe = $scope.recipe;
+                var recipe = $scope.recipe;
                 recipe.name = name;
                 recipe.beer_type = beertype;
 
@@ -16,7 +16,6 @@ Brewday.controller('RecipeCreateCtrl',  ['$scope', '$state', '$window', '$stateP
                     $scope.recipe_id = data.id
                     var id = data.id;
                     grains.forEach(function(grain){
-                        console.log(id);
                         grain.brew_stage = 0;
                         grain.time = 1;
                         grain.recipe_id = id;

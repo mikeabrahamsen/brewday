@@ -1,12 +1,11 @@
-Brewday.controller('RecipeCtrl',  ['$scope', '$state', '$window', '$stateParams', 'Recipe', 'Grain', 'Hop', 'Addition', 'recipe','grains', 'hops','additions',
-    function($scope, $state, $window, $stateParams, Recipe, Grain, Hop, Addition, recipe, grains, hops, additions){
+Brewday.controller('RecipeCtrl',  ['$scope', '$state', 'Recipe', 'Grain', 'Hop', 'Addition', 'recipe','grains', 'hops','additions',
+    function($scope, $state, Recipe, Grain, Hop, Addition, recipe, grains, hops, additions){
         $scope.recipe = recipe;
         $scope.data = {};
         $scope.readOnly = false;
         $scope.grains = grains;
         $scope.additions = additions;
         $scope.hops = hops;
-        console.log(grains);
 
         if(grains.length < 1)
             $scope.grains = [{id: 'grain1'}];
@@ -49,7 +48,7 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$state', '$window', '$stateParams'
         };
         $scope.submit_recipe =
             function submit_recipe(name,beertype,grains,hops){
-                Recipe.update(recipe)
+                recipe.put()
 
                 toDelete.forEach(function(addition){
                     addition.remove();
@@ -72,7 +71,6 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$state', '$window', '$stateParams'
                     // check if it is a restangular object
                     if (typeof(hop.put) == 'function' )
                     {
-                        console.log(hop);
                         hop.put();
                     }
                     else
