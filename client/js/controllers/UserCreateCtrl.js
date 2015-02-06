@@ -1,5 +1,5 @@
-Brewday.controller('UserCreateCtrl',  ['$scope', '$location', '$window', 'User',
-    function($scope, $location, $window, User){
+Brewday.controller('UserCreateCtrl',  ['$scope', '$state', 'User',
+    function($scope, $state, User){
         $scope.data = {};
         $scope.register = function register(formIsValid, email, password){
 
@@ -7,8 +7,8 @@ Brewday.controller('UserCreateCtrl',  ['$scope', '$location', '$window', 'User',
             user.email = email;
             user.password = password;
 
-            var u = User.create(user).then(function(data) {
-                $location.path('/sessions/create');
+            User.create(user).then(function() {
+                $state.go('login')
             });
         }
     }

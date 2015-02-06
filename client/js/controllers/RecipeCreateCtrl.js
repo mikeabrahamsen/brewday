@@ -29,7 +29,6 @@ Brewday.controller('RecipeCreateCtrl',  ['$scope', '$state', 'Recipe', 'Grain', 
                     });
                 $state.go('recipes.view', {recipe_id: id})
                 })
-
             }
         }
 ]);

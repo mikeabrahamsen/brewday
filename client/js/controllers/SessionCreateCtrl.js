@@ -1,5 +1,5 @@
-Brewday.controller('SessionCreateCtrl',  ['$scope', '$location', '$window', 'AuthService',
-    function($scope, $location, $window, AuthService ){
+Brewday.controller('SessionCreateCtrl',  ['$scope', '$state', 'AuthService',
+    function($scope, $state, AuthService ){
         $scope.data = {};
         $scope.login = function login(email, password){
 
@@ -7,9 +7,8 @@ Brewday.controller('SessionCreateCtrl',  ['$scope', '$location', '$window', 'Aut
             user.email = email;
             user.password = password;
 
-             AuthService.login(user).then(function(data) {
-                 success = true;
-                $location.path('/recipes/create');
+             AuthService.login(user).then(function() {
+                $state.go('recipes.list')
             });
         }
     }

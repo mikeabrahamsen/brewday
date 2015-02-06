@@ -1,7 +1,7 @@
-window.Brewday = angular.module('Brewday', ['ngRoute', 'restangular', 'LocalStorageModule', 'ui.router'])
+window.Brewday = angular.module('Brewday', ['ui.router', 'restangular', 'LocalStorageModule'])
 
 .run(function($location, Restangular, AuthService) {
-    Restangular.setFullRequestInterceptor(function(element, operation, route, url, headers, params, httpConfig) {
+    Restangular.addFullRequestInterceptor(function(element, operation, route, url, headers, params, httpConfig) {
         headers['Authorization'] = 'Basic ' + AuthService.getToken();
         return {
             headers: headers

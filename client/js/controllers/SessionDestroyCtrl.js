@@ -1,7 +1,7 @@
-Brewday.controller('SessionDestroyCtrl',  ['$scope', '$location', '$window', 'AuthService',
-    function($scope, $location, $window, AuthService ){
+Brewday.controller('SessionDestroyCtrl',  ['$scope', '$state', 'AuthService',
+    function($scope, $state, AuthService ){
             AuthService.logout();
             $scope.isLoggedIn = false;
-            $location.path('/sessions/create');
+            $state.go('home')
         }
 ])
