@@ -60,3 +60,10 @@ Brewday.service('WaterService', function(){
             return totalVol - mashVol;
         }
 })
+
+Brewday.directive('waterCalculations', function(){
+    return {
+        restrict: "E",
+        template:' <div class="col-md-12"> <h3>Total Vol: {{recipes.waterService.totalVol | number }}</h3> <h3>Mash Vol: {{recipes.waterService.mashVol | number }}</h3> <h3>Sparge Vol: {{recipes.waterService.spargeVol | number }}</h3> </div>'
+    }
+})
