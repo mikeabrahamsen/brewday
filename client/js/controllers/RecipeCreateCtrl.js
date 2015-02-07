@@ -1,6 +1,7 @@
-Brewday.controller('RecipeCreateCtrl',  ['$state', 'Recipe', 'Grain', 'Hop',
-        function($state, Recipe, Grain, Hop){
+Brewday.controller('RecipeCreateCtrl',  ['$state', 'WaterService', 'Recipe', 'Grain', 'Hop',
+        function($state, WaterService, Recipe, Grain, Hop){
 
+        this.waterService = WaterService
         this.grains = [{id: 'grain1'}];
         this.hops = [{id: 'hop1'}];
         this.grain_options = Grain.getAll().$object;

@@ -59,17 +59,9 @@ Brewday.directive('waterCalculations', function waterCalculations(){
         bindToController: true,
         controller: 'WaterVolumeCtrl as waterVol',
         link: function(scope,element,attrs, waterVolCtrl){
-            var grains = scope.recipes.grains;
-            var total = 0;
-            console.log(scope);
-            for(var i = 0; i < grains.length; i++){
-                var grain = grains[i];
-                total += grain.amount;
-            }
-            waterVolCtrl.waterService.calculateWaterVol(total);
-            waterVolCtrl.grainBill = total;
+            waterVolCtrl.grains = scope.recipes.grains;
         },
-        template:'<div class="col-md-12"> <h3>Grain Bill: {{waterVol.grainBill}}</h3><h3>Total Vol: {{waterVol.waterService.totalVol | number }}</h3> <h3>Mash Vol: {{waterVol.waterService.mashVol | number }}</h3> <h3>Sparge Vol: {{waterVol.waterService.spargeVol | number }}</h3> </div>'
+        template:'<div class="col-md-12"> <h3>Grain Bill: {{waterVol.grainTotal()}}</h3><h3>Total Vol: {{waterVol.waterService.totalVol | number }}</h3> <h3>Mash Vol: {{waterVol.waterService.mashVol | number }}</h3> <h3>Sparge Vol: {{waterVol.waterService.spargeVol | number }}</h3> </div>'
     }
 })
 
@@ -78,6 +70,16 @@ Brewday.controller('WaterVolumeCtrl',['WaterService',
             var waterVol = this;
             waterVol.waterService = WaterService;
 
+            this.grainTotal = function(){
+            var total = 0;
+            var grains = this.grains;
+            for(var i = 0; i < grains.length; i++){
+                var grain = grains[i];
+                total += grain.amount;
+            }
+            waterVol.waterService.calculateWaterVol(total);
+            return total
 
+        }
         }
 ])
