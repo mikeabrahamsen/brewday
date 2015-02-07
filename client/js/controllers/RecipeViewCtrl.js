@@ -6,10 +6,5 @@ Brewday.controller('RecipeViewCtrl',  ['$scope', 'WaterService', 'recipe', 'grai
             this.grains = grains;
             this.hops = hops;
             this.readOnly = true;
-
-            this.grainBill = function(grains){
-                return this.waterService.getGrainBill(grains);
-            }
-
         }
 ]);
