@@ -1,52 +1,52 @@
-Brewday.controller('RecipeCtrl',  ['$scope', '$state', 'Recipe', 'Grain', 'Hop', 'Addition', 'recipe','grains', 'hops','additions',
-    function($scope, $state, Recipe, Grain, Hop, Addition, recipe, grains, hops, additions){
-        $scope.recipe = recipe;
-        $scope.data = {};
-        $scope.readOnly = false;
-        $scope.grains = grains;
-        $scope.additions = additions;
-        $scope.hops = hops;
+Brewday.controller('RecipeCtrl',  ['$state', 'Recipe', 'Grain', 'Hop', 'Addition', 'recipe','grains', 'hops','additions',
+    function($state, Recipe, Grain, Hop, Addition, recipe, grains, hops, additions){
+        this.recipe = recipe;
+        this.data = {};
+        this.readOnly = false;
+        this.grains = grains;
+        this.additions = additions;
+        this.hops = hops;
 
         if(grains.length < 1)
-            $scope.grains = [{id: 'grain1'}];
+            this.grains = [{id: 'grain1'}];
         if(hops.length < 1)
-            $scope.hops = [{id: 'hop1'}];
+            this.hops = [{id: 'hop1'}];
 
         var toDelete = [];
         var original_grains = grains.slice(0);
         var original_hops = hops.slice(0);
 
-        $scope.grain_options = Grain.getAll().$object;
-        $scope.hop_options = Hop.getAll().$object;
+        this.grain_options = Grain.getAll().$object;
+        this.hop_options = Hop.getAll().$object;
 
-        $scope.addNewGrain= function() {
-            var newItemNo = $scope.grains.length+1;
-            $scope.grains.push({'id':'grain'+newItemNo});
+        this.addNewGrain= function() {
+            var newItemNo = this.grains.length+1;
+            this.grains.push({'id':'grain'+newItemNo});
         };
-        $scope.addNewHop= function() {
-            var newItemNo = $scope.hops.length+1;
-            $scope.hops.push({'id':'hop'+newItemNo});
+        this.addNewHop= function() {
+            var newItemNo = this.hops.length+1;
+            this.hops.push({'id':'hop'+newItemNo});
         };
-        $scope.removeGrain= function(grain) {
+        this.removeGrain= function(grain) {
             // if the grain to be deleted is part of the recipe
             // flag it for deletion
             if (original_grains.indexOf(grain) > -1)
             {
                 toDelete.push(grain);
             }
-            $scope.grains.splice( $scope.grains.indexOf(grain), 1 );
+            this.grains.splice( this.grains.indexOf(grain), 1 );
         };
 
-        $scope.removeHop = function(hop) {
+        this.removeHop = function(hop) {
             // if the grain to be deleted is part of the recipe
             // flag it for deletion
             if (original_hops.indexOf(hop) > -1)
             {
                 toDelete.push(hop);
             }
-            $scope.hops.splice( $scope.hops.indexOf(hop), 1 );
+            this.hops.splice( this.hops.indexOf(hop), 1 );
         };
-        $scope.submit_recipe =
+        this.submit_recipe =
             function submit_recipe(name,beertype,grains,hops){
                 recipe.put()
 
@@ -78,7 +78,7 @@ Brewday.controller('RecipeCtrl',  ['$scope', '$state', 'Recipe', 'Grain', 'Hop',
                         Hop.add(hop);
                     }
                 });
-                $state.go('recipes.view', {recipe_id: recipe.id})
+                $state.go('recipes.view', {recipe_id: this.recipe.id})
             }
     }
 ]);
