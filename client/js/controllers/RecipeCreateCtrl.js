@@ -1,19 +1,19 @@
-Brewday.controller('RecipeCreateCtrl',  ['$scope', '$state', 'Recipe', 'Grain', 'Hop',
-        function($scope, $state, Recipe, Grain, Hop){
+Brewday.controller('RecipeCreateCtrl',  ['$state', 'Recipe', 'Grain', 'Hop',
+        function($state, Recipe, Grain, Hop){
 
-        $scope.grains = [{id: 'grain1'}];
-        $scope.hops = [{id: 'hop1'}];
-        $scope.grain_options = Grain.getAll().$object;
-        $scope.hop_options = Hop.getAll().$object;
-        $scope.recipe = {};
-        $scope.submit_recipe =
+        this.grains = [{id: 'grain1'}];
+        this.hops = [{id: 'hop1'}];
+        this.grain_options = Grain.getAll().$object;
+        this.hop_options = Hop.getAll().$object;
+        this.recipe = {};
+        this.submit_recipe =
             function submit_recipe(name,beertype,grains,hops){
-                var recipe = $scope.recipe;
+                var recipe = this.recipe;
                 recipe.name = name;
                 recipe.beer_type = beertype;
 
                 Recipe.create(recipe).then(function(data){
-                    $scope.recipe_id = data.id
+                    this.recipe_id = data.id
                     var id = data.id;
                     grains.forEach(function(grain){
                         grain.brew_stage = 0;
