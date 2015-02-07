@@ -3,16 +3,8 @@ Brewday.service('WaterService', function(){
     waterService.totalVol = 0;
     waterService.mashVol = 0;
     waterService.spargeVol = 0;
+    waterService.grainBill = 0;
 
-    waterService.getGrainBill = function(grains){
-        var total = 0;
-        for(var i = 0; i < grains.length; i++){
-            var grain = grains[i];
-            total += grain.amount;
-        }
-        this.calculateWaterVol(total);
-        return total;
-    }
 
     waterService.calculateWaterVol = function(grainBill){
         var batchSize = 5;
@@ -61,9 +53,31 @@ Brewday.service('WaterService', function(){
         }
 })
 
-Brewday.directive('waterCalculations', function(){
+Brewday.directive('waterCalculations', function waterCalculations(){
     return {
         restrict: "E",
-        template:' <div class="col-md-12"> <h3>Total Vol: {{recipes.waterService.totalVol | number }}</h3> <h3>Mash Vol: {{recipes.waterService.mashVol | number }}</h3> <h3>Sparge Vol: {{recipes.waterService.spargeVol | number }}</h3> </div>'
+        bindToController: true,
+        controller: 'WaterVolumeCtrl as waterVol',
+        link: function(scope,element,attrs, waterVolCtrl){
+            var grains = scope.recipes.grains;
+            var total = 0;
+            console.log(scope);
+            for(var i = 0; i < grains.length; i++){
+                var grain = grains[i];
+                total += grain.amount;
+            }
+            waterVolCtrl.waterService.calculateWaterVol(total);
+            waterVolCtrl.grainBill = total;
+        },
+        template:'<div class="col-md-12"> <h3>Grain Bill: {{waterVol.grainBill}}</h3><h3>Total Vol: {{waterVol.waterService.totalVol | number }}</h3> <h3>Mash Vol: {{waterVol.waterService.mashVol | number }}</h3> <h3>Sparge Vol: {{waterVol.waterService.spargeVol | number }}</h3> </div>'
     }
 })
+
+Brewday.controller('WaterVolumeCtrl',['WaterService',
+        function(WaterService){
+            var waterVol = this;
+            waterVol.waterService = WaterService;
+
+
+        }
+])
