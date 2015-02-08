@@ -1,12 +1,20 @@
 window.Brewday = angular.module('Brewday', ['ui.router', 'restangular', 'LocalStorageModule'])
 
-.run(function($location, Restangular, AuthService) {
+.run(function($rootScope, $stateParams,  $location, Restangular, AuthService) {
     Restangular.addFullRequestInterceptor(function(element, operation, route, url, headers, params, httpConfig) {
         headers['Authorization'] = 'Basic ' + AuthService.getToken();
         return {
             headers: headers
         };
-    });
+    })
+
+    // Check to see if the user is authenticated - this is only used to update the
+    // navbar
+    $rootScope.$stateParams = $stateParams;;
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams
+                                                  , fromState, fromParams) {
+        toParams['isLoggedIn'] = AuthService.isAuthenticated();
+    })
 
     Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
         if (response.config.bypassErrorInterceptor) {
