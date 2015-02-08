@@ -1,6 +1,6 @@
 window.Brewday = angular.module('Brewday', ['ui.router', 'restangular', 'LocalStorageModule'])
 
-.run(function($rootScope, $stateParams,  $location, Restangular, AuthService) {
+.run(function($rootScope, $state, $stateParams,  $location, Restangular, AuthService) {
     Restangular.addFullRequestInterceptor(function(element, operation, route, url, headers, params, httpConfig) {
         headers['Authorization'] = 'Basic ' + AuthService.getToken();
         return {
@@ -13,9 +13,17 @@ window.Brewday = angular.module('Brewday', ['ui.router', 'restangular', 'LocalSt
     $rootScope.$stateParams = $stateParams;;
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams
                                                   , fromState, fromParams) {
-        toParams['isLoggedIn'] = AuthService.isAuthenticated();
+        loggedIn = AuthService.isAuthenticated();
+        toParams.isLoggedIn = loggedIn;
+        if( typeof(toState.data) != 'undefined'){
+            if( toState.data.authRequired && !AuthService.isAuthenticated()){
+                event.preventDefault();
+                $state.go('login')
+            }
+        }
     })
-
+    $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+    });
     Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
         if (response.config.bypassErrorInterceptor) {
             return true;
@@ -39,44 +47,15 @@ window.Brewday = angular.module('Brewday', ['ui.router', 'restangular', 'LocalSt
 
     var partialsDir = '../partials';
 
-    var redirectIfAuthenticated = function(route) {
-        return function($location, $q, AuthService) {
-
-            var deferred = $q.defer();
-
-            if (AuthService.isAuthenticated()) {
-                deferred.reject()
-                $location.path(route);
-            } else {
-                deferred.resolve()
-            }
-
-            return deferred.promise;
-        }
-    }
-
-    var redirectIfNotAuthenticated = function(route) {
-        return function($location, $q, AuthService) {
-
-            var deferred = $q.defer();
-
-            if (! AuthService.isAuthenticated()) {
-                deferred.reject()
-                $location.path(route);
-            } else {
-                deferred.resolve()
-            }
-
-            return deferred.promise;
-        }
-    }
-
     $urlRouterProvider.otherwise('/');
 
     $stateProvider
         .state('home', {
             url: '/',
-            templateUrl: partialsDir + '/home/detail.html'
+            templateUrl: partialsDir + '/home/detail.html',
+            data:{
+                authRequired: false,
+            }
         })
         .state('login',{
             url: 'sessions/create',
@@ -101,8 +80,11 @@ window.Brewday = angular.module('Brewday', ['ui.router', 'restangular', 'LocalSt
             resolve: {
                 recipes: ['Recipe',
                 function(recipes){
-                    return recipes.get();
+                        return recipes.get();
                 }],
+            },
+            data:{
+                authRequired: true,
             }
         })
         .state('recipes.create',{
