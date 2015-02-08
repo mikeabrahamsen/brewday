@@ -85,12 +85,6 @@ window.Brewday = angular.module('Brewday', ['ui.router', 'restangular', 'LocalSt
             controller: 'UserCreateCtrl',
             templateUrl: partialsDir + '/user/create.html'
         })
-        .state('create',{
-            url: '/create',
-            controllerAs: 'recipes',
-            controller: 'RecipeCreateCtrl',
-            templateUrl: partialsDir + '/recipes/create.html',
-        })
         .state('recipes',{
             abstract: true,
             url: '/recipes',
@@ -102,6 +96,12 @@ window.Brewday = angular.module('Brewday', ['ui.router', 'restangular', 'LocalSt
                     return recipes.get();
                 }],
             }
+        })
+        .state('recipes.create',{
+            url: '/create',
+            controllerAs: 'recipes',
+            controller: 'RecipeCreateCtrl',
+            templateUrl: partialsDir + '/recipes/create.html',
         })
         .state('recipes.list',{
             url: '',
