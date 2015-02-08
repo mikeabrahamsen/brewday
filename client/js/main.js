@@ -152,49 +152,4 @@ window.Brewday = angular.module('Brewday', ['ui.router', 'restangular', 'LocalSt
                 }]
             }
         });
-
-/*
-
-    $routeProvider
-        .when('/', {
-            controller: 'HomeDetailCtrl',
-            templateUrl: partialsDir + '/home/detail.html'
-        })
-        .when('/sessions/create', {
-            controller: 'SessionCreateCtrl',
-            templateUrl: partialsDir + '/session/create.html',
-            resolve: {
-                redirectIfAuthenticated: redirectIfAuthenticated('/home/detail.html')
-            }
-        })
-        .when('/sessions/destroy', {
-            controller: 'SessionDestroyCtrl',
-            templateUrl: partialsDir + '/session/destroy.html'
-        })
-        .when('/users/create', {
-            controller: 'UserCreateCtrl',
-            templateUrl: partialsDir + '/user/create.html'
-        })
-        .when('/recipes/:recipe_id/edit', {
-            controller: 'RecipeCtrl',
-            templateUrl: partialsDir + '/recipes/edit.html',
-            resolve: {
-                redirectIfNotAuthenticated: redirectIfNotAuthenticated('/sessions/create')
-            }
-        })
-        .when('/recipes/:recipe_id/view', {
-            controller: 'RecipeCtrl',
-            templateUrl: partialsDir + '/recipes/view.html',
-            resolve: {
-                redirectIfNotAuthenticated: redirectIfNotAuthenticated('/sessions/create')
-            }
-        })
-        .when('/recipes/create', {
-            controller: 'RecipeCtrl',
-            templateUrl: partialsDir + '/recipes/create.html',
-            resolve: {
-                redirectIfNotAuthenticated: redirectIfNotAuthenticated('/sessions/create')
-            }
-        });
-        */
 })
