@@ -109,6 +109,20 @@ class RecipeView(restful.Resource):
 
         return recipe, 201
 
+    @auth.login_required
+    @marshal_with(recipe_fields)
+    def delete(self, id):
+        try:
+            recipe = Recipe.query.filter_by(id=id).one()
+
+            # delete the recipe
+            db.session.delete(recipe)
+            db.session.commit()
+
+            return '', 204
+        except NoResultFound:
+            db.session.rollback()
+
 
 recipe_addition_fields = {
     'id': fields.Integer,

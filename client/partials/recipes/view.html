@@ -1,12 +1,15 @@
-<div class="row">
-    <h1>{{recipes.recipe.name}}</h1>
-    <h3>{{recipes.recipe.beer_type}}</h3>
-<div class="form-group">
-    <div class="col-md-11">
-        <a ui-sref="recipes.edit({recipe_id: recipes.recipe.id})" role="button" class="btn btn-primary pull-right">Edit Recipe</a>
+    <div class="form-group">
+        <div class="col-md-12">
+            <h1>{{recipes.recipe.name}}</h1>
+            <h3>{{recipes.recipe.beer_type}}</h3>
+        </div>
+            <div class="col-md-2">
+                <a ui-sref="recipes.edit({recipe_id: recipes.recipe.id})" role="button" class="btn btn-primary">Edit Recipe</a>
+            </div>
+        <div class="col-md-10">
+            <button type="button" class="btn btn-danger" ng-click="recipes.delete(recipes.recipe)">Delete</button>
+        </div>
     </div>
-</div>
-</div>
 <div class="col-md-6">
     <ng-form name="grainForm" ng-model="grains">
         <h3>Grain Additions</h3>
