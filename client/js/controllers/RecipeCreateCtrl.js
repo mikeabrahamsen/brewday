@@ -4,17 +4,7 @@ Brewday.controller('RecipeCreateCtrl',  ['$state', 'WaterService', 'Recipe', 'Gr
         this.toDelete = []
         this.waterService = WaterService
         this.grains = [];
-        this.hops = [{id: 'hop1'}];
-        this.grain_options = Grain.getAll().$object;
-        this.hop_options = Hop.getAll().$object;
-
-        this.addNewHop= function() {
-            var newItemNo = this.hops.length+1;
-            this.hops.push({'id':'hop'+newItemNo});
-        };
-        this.removeHop = function(hop) {
-            this.hops.splice( this.hops.indexOf(hop), 1 );
-        };
+        this.hops = [];
 
         this.recipe = {};
         this.submit_recipe =
