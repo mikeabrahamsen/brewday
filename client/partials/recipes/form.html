@@ -15,43 +15,8 @@
     </div>
     <hr />
     <grain-list-form grains="recipes.grains" to-delete="recipes.toDelete"></grain-list-form>
+    <hop-list-form hops="recipes.hops" to-delete="recipes.toDelete"></hop-list-form>
 
-    <div class="col-md-6">
-        <ng-form name="hopForm" ng-model="recipes.hops">
-            <h3>Add Hop Additions</h3>
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="weight">Time(min)</label>
-                </div>
-                <div class="col-md-3">
-                    <label for="weight">Weight(oz)</label>
-                </div>
-                <div class="col-md-5">
-                    <label for="hops">Hops</label>
-                </div>
-            </div>
-
-            <div class="form-group" data-ng-repeat="hop in recipes.hops">
-                <div class="col-md-3">
-                    <input type="number" class="form-control" ng-disabled="{{readOnly}}" ng-model="hop.time" name="time" placeholder="min">
-                </div>
-                <div class="col-md-3">
-                    <input type="number" class="form-control" ng-disabled="{{readOnly}}" ng-model="hop.amount" name="amount" placeholder="oz">
-                </div>
-                <div class="col-md-5">
-                <select class="form-control" ng-model="hop.name" ng-disabled="{{readOnly}}">
-                    <option ng-selected="h.name == hop.name" value="{{h.name}}" ng-repeat="h in recipes.hop_options"> {{h.name}} </option>
-                </select>
-                </div>
-                <div class="col-md-1">
-                    <button type="button" ng-show="recipes.hops.length > 1 && !readOnly" class="btn btn-danger" ng-click="recipes.removeHop(hop)">X</button>
-                </div>
-                <div class="col-md-11" style="padding-top: 15px">
-                    <button type="button" class="btn pull-right" ng-show="$last && !readOnly" ng-click="recipes.addNewHop()">Add More</button>
-                </div>
-            </div>
-        </ng-form>
-    </div>
     <div class="col-md-12">
         <hr style="padding-bottom: 40px"/>
         <button type="submit" ng-show="!readOnly" class="btn btn-success pull-right">Save Recipe</button>

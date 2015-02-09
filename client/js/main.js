@@ -128,10 +128,6 @@ window.Brewday = angular.module('Brewday', ['ui.router', 'restangular', 'LocalSt
                 function($stateParams, recipe){
                     return recipe.getOne($stateParams.recipe_id)
                 }],
-                additions: ['$stateParams', 'Addition',
-                function($stateParams, additions){
-                    return additions.get($stateParams.recipe_id)
-                }],
                 hops: ['$stateParams', 'Hop',
                 function($stateParams, hop){
                     return hop.get($stateParams.recipe_id)
