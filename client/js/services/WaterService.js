@@ -57,10 +57,11 @@ Brewday.directive('waterCalculations', function waterCalculations(){
     return {
         restrict: "E",
         bindToController: true,
-        controller: 'WaterVolumeCtrl as waterVol',
-        link: function(scope,element,attrs, waterVolCtrl){
-            waterVolCtrl.grains = scope.recipes.grains;
+        scope: {
+            grains: '='
         },
+        controller: 'WaterVolumeCtrl',
+        controllerAs: 'waterVol',
         templateUrl: '../../partials/recipes/waterVolume.html'
     }
 })
