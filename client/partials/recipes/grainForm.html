@@ -1,0 +1,30 @@
+<div class="col-md-6">
+    <ng-form name="grainForm" ng-model="grainform.grains">
+    <h3>Add Grain Additions</h3>
+    <div class="row">
+        <div class="col-md-3">
+            <label for="weight">Weight(lbs)</label>
+        </div>
+        <div class="col-md-6">
+            <label for="grain">Grain</label>
+        </div>
+    </div>
+    <div class="form-group" data-ng-repeat="grain in grainform.grains" >
+        <div class="col-md-3">
+            <input type="number" class="form-control" ng-model="grain.amount" name="amount" placeholder="lbs">
+        </div>
+        <div class="col-md-7">
+            <select class="form-control" ng-model="grain.name" ng-disabled="{{readOnly}}">
+                <option
+                        ng-selected="g.name == grain.name" value="{{g.name}}" ng-repeat="g in grainform.grain_options"> {{g.name}} </option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="button" ng-show="grainform.grains.length > 1 && !readOnly" class="btn btn-danger" ng-click="grainform.removeGrain(grain)">X</button>
+        </div>
+        <div class="col-md-10" style="padding-top: 15px">
+            <button type="button" class="btn pull-right" ng-show="$last && !readOnly" ng-click="grainform.addNewGrain()">Add More</button>
+        </div>
+    </div>
+    </ng-form>
+</div>
