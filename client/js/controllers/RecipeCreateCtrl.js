@@ -6,6 +6,22 @@ Brewday.controller('RecipeCreateCtrl',  ['$state', 'WaterService', 'Recipe', 'Gr
         this.hops = [{id: 'hop1'}];
         this.grain_options = Grain.getAll().$object;
         this.hop_options = Hop.getAll().$object;
+
+        this.addNewGrain= function() {
+            var newItemNo = this.grains.length+1;
+            this.grains.push({'id':'grain'+newItemNo});
+        };
+        this.addNewHop= function() {
+            var newItemNo = this.hops.length+1;
+            this.hops.push({'id':'hop'+newItemNo});
+        };
+        this.removeGrain= function(grain) {
+            this.grains.splice( this.grains.indexOf(grain), 1 );
+        };
+        this.removeHop = function(hop) {
+            this.hops.splice( this.hops.indexOf(hop), 1 );
+        };
+
         this.recipe = {};
         this.submit_recipe =
             function submit_recipe(name,beertype,grains,hops){
