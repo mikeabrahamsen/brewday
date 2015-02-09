@@ -15,8 +15,7 @@
         </div>
         <div class="col-md-7">
             <select class="form-control" ng-model="grain.name" ng-disabled="{{readOnly}}">
-                <option
-                        ng-selected="g.name == grain.name" value="{{g.name}}" ng-repeat="g in grainform.grain_options"> {{g.name}} </option>
+                <option ng-selected="g.name == grain.name" value="{{g.name}}" ng-repeat="g in grainform.grain_options"> {{g.name}} </option>
             </select>
         </div>
         <div class="col-md-2">

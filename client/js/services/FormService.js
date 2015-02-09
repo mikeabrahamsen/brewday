@@ -1,16 +1,3 @@
-Brewday.directive('hopListForm', function(){
-    return {
-        restrict: "E",
-        scope: {
-            hops: '=',
-            toDelete: '='
-        },
-        controller: "HopFormCtrl",
-        controllerAs: "hopform",
-        bindToController: true,
-        templateUrl: '../../partials/recipes/hopForm.html'
-    }
-})
 Brewday.controller('HopFormCtrl', ['Hop',
         function(Hop){
         var original_hops = []
@@ -37,19 +24,6 @@ Brewday.controller('HopFormCtrl', ['Hop',
         };
         }
 ])
-Brewday.directive('grainListForm', function(){
-    return {
-        restrict: "E",
-        scope: {
-            grains: '=',
-            toDelete: '='
-        },
-        controller: "GrainFormCtrl",
-        controllerAs: "grainform",
-        bindToController: true,
-        templateUrl: '../../partials/recipes/grainForm.html'
-    }
-})
 Brewday.controller('GrainFormCtrl', ['Grain',
         function(Grain){
 

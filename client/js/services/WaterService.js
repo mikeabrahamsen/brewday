@@ -52,20 +52,6 @@ Brewday.service('WaterService', function(){
             return totalVol - mashVol;
         }
 })
-
-Brewday.directive('waterCalculations', function waterCalculations(){
-    return {
-        restrict: "E",
-        bindToController: true,
-        scope: {
-            grains: '='
-        },
-        controller: 'WaterVolumeCtrl',
-        controllerAs: 'waterVol',
-        templateUrl: '../../partials/recipes/waterVolume.html'
-    }
-})
-
 Brewday.controller('WaterVolumeCtrl',['WaterService',
         function(WaterService){
             var waterVol = this;
