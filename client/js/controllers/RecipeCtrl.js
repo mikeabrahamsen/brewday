@@ -7,37 +7,18 @@ Brewday.controller('RecipeCtrl',  ['$state', 'Recipe', 'Grain', 'Hop', 'Addition
         this.additions = additions;
         this.hops = hops;
 
-        if(grains.length < 1)
-            this.grains = [{id: 'grain1'}];
+        this.toDelete = [];
+
         if(hops.length < 1)
             this.hops = [{id: 'hop1'}];
 
-        var toDelete = [];
-        var original_grains = grains.slice(0);
         var original_hops = hops.slice(0);
 
-        this.grain_options = Grain.getAll().$object;
         this.hop_options = Hop.getAll().$object;
 
-        /*
-        this.addNewGrain= function() {
-            var newItemNo = this.grains.length+1;
-            this.grains.push({'id':'grain'+newItemNo});
-        };
-        */
         this.addNewHop= function() {
             var newItemNo = this.hops.length+1;
             this.hops.push({'id':'hop'+newItemNo});
-        };
-
-        this.removeGrain= function(grain) {
-            // if the grain to be deleted is part of the recipe
-            // flag it for deletion
-            if (original_grains.indexOf(grain) > -1)
-            {
-                toDelete.push(grain);
-            }
-            this.grains.splice( this.grains.indexOf(grain), 1 );
         };
 
         this.removeHop = function(hop) {
@@ -45,7 +26,7 @@ Brewday.controller('RecipeCtrl',  ['$state', 'Recipe', 'Grain', 'Hop', 'Addition
             // flag it for deletion
             if (original_hops.indexOf(hop) > -1)
             {
-                toDelete.push(hop);
+                this.toDelete.push(hop);
             }
             this.hops.splice( this.hops.indexOf(hop), 1 );
         };
@@ -53,7 +34,7 @@ Brewday.controller('RecipeCtrl',  ['$state', 'Recipe', 'Grain', 'Hop', 'Addition
             function submit_recipe(name,beertype,grains,hops){
                 recipe.put()
 
-                toDelete.forEach(function(addition){
+                this.toDelete.forEach(function(addition){
                     addition.remove();
                 })
 

@@ -2,7 +2,8 @@ Brewday.directive('grainListForm', function waterCalculations(){
     return {
         restrict: "E",
         scope: {
-            grains: '=grains'
+            grains: '=',
+            toDelete: '='
         },
         controller: "GrainFormCtrl",
         controllerAs: "grainform",
@@ -11,13 +12,29 @@ Brewday.directive('grainListForm', function waterCalculations(){
     }
 })
 Brewday.controller('GrainFormCtrl', ['Grain',
-    function GrainFormCtrl(Grain){
+        function GrainFormCtrl(Grain){
 
-    this.grain_options = Grain.getAll().$object;
+        var original_grains =[]
 
-    this.addNewGrain= function() {
-        var newItemNo = this.grains.length+1;
-        this.grains.push({'id':'grain'+newItemNo});
-    };
-}
+        if(this.grains.length < 1)
+            this.grains = [{id: 'grain1'}];
+        else
+            original_grains = this.grains.slice(0);
+
+        this.grain_options = Grain.getAll().$object;
+
+        this.addNewGrain= function() {
+            var newItemNo = this.grains.length+1;
+            this.grains.push({'id':'grain'+newItemNo});
+        };
+        this.removeGrain= function(grain) {
+            // if the grain to be deleted is part of the recipe
+            // flag it for deletion
+            if (original_grains.indexOf(grain) > -1)
+            {
+                this.toDelete.push(grain);
+            }
+            this.grains.splice( this.grains.indexOf(grain), 1 );
+        };
+        }
 ])

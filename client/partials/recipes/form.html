@@ -14,7 +14,7 @@
         </div>
     </div>
     <hr />
-    <grain-list-form grains="recipes.grains"></grain-list-form>
+    <grain-list-form grains="recipes.grains" to-delete="recipes.toDelete"></grain-list-form>
 
     <div class="col-md-6">
         <ng-form name="hopForm" ng-model="recipes.hops">
@@ -39,7 +39,9 @@
                     <input type="number" class="form-control" ng-disabled="{{readOnly}}" ng-model="hop.amount" name="amount" placeholder="oz">
                 </div>
                 <div class="col-md-5">
-                    <select class="form-control" ng-model="hop.name" ng-disabled="{{readOnly}}" ng-options="h.name for h in recipes.hop_options track by h.name"> </select>
+                <select class="form-control" ng-model="hop.name" ng-disabled="{{readOnly}}">
+                    <option ng-selected="h.name == hop.name" value="{{h.name}}" ng-repeat="h in recipes.hop_options"> {{h.name}} </option>
+                </select>
                 </div>
                 <div class="col-md-1">
                     <button type="button" ng-show="recipes.hops.length > 1 && !readOnly" class="btn btn-danger" ng-click="recipes.removeHop(hop)">X</button>
