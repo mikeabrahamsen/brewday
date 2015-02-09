@@ -19,14 +19,17 @@ Brewday.controller('RecipeCtrl',  ['$state', 'Recipe', 'Grain', 'Hop', 'Addition
         this.grain_options = Grain.getAll().$object;
         this.hop_options = Hop.getAll().$object;
 
+        /*
         this.addNewGrain= function() {
             var newItemNo = this.grains.length+1;
             this.grains.push({'id':'grain'+newItemNo});
         };
+        */
         this.addNewHop= function() {
             var newItemNo = this.hops.length+1;
             this.hops.push({'id':'hop'+newItemNo});
         };
+
         this.removeGrain= function(grain) {
             // if the grain to be deleted is part of the recipe
             // flag it for deletion
