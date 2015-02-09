@@ -15,7 +15,7 @@ window.Brewday = angular.module('Brewday', ['ui.router', 'restangular', 'LocalSt
                                                   , fromState, fromParams) {
         loggedIn = AuthService.isAuthenticated();
         toParams.isLoggedIn = loggedIn;
-        if( typeof(toState.data) != 'undefined'){
+        if( angular.isDefined(toState.data)){
             if( toState.data.authRequired && !AuthService.isAuthenticated()){
                 event.preventDefault();
                 $state.go('login')
