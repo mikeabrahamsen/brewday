@@ -50,14 +50,12 @@ class GrainCreateForm(ModelForm):
 class RecipeAdditionCreateForm(ModelForm):
     class Meta:
         model = RecipeAddition
-        include = ['time']
-    name = StringField('name')
+        include = ['addition_id']
     amount = DecimalField('amount')
 
 
 class RecipeAdditionUpdateForm(ModelForm):
     class Meta:
         model = RecipeAddition
-        include = ['time', 'addition_id']
-    name = StringField('name')
+        include = ['addition_id']
     amount = DecimalField('amount')
