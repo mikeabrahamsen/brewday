@@ -1,4 +1,7 @@
-Brewday.factory('Grain', function(Restangular) {
+angular.module('brewday.models.grain',[
+
+])
+.factory('Grain', function(Restangular) {
     var Grain;
     Grain = {
         get: function(data) {

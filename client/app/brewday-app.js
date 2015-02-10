@@ -1,4 +1,11 @@
-window.Brewday = angular.module('Brewday', ['ui.router', 'restangular', 'LocalStorageModule'])
+angular.module('Brewday', [
+        'ui.router',
+        'restangular',
+        'LocalStorageModule',
+        'session',
+        'user',
+        'recipes',
+])
 
 .run(function($rootScope, $state, $stateParams,  $location, Restangular, AuthService) {
     Restangular.addFullRequestInterceptor(function(element, operation, route, url, headers, params, httpConfig) {
@@ -58,12 +65,12 @@ window.Brewday = angular.module('Brewday', ['ui.router', 'restangular', 'LocalSt
         .state('login',{
             url: 'sessions/create',
             controller: 'SessionCreateCtrl',
-            templateUrl: 'app/sessions/create.html',
+            templateUrl: 'app/session/create.html',
         })
         .state('logout',{
             url: 'sessions/destroy',
             controller: 'SessionDestroyCtrl',
-            templateUrl: 'app/sessions/destroy.html'
+            templateUrl: 'app/session/destroy.html'
         })
         .state('register',{
             url: 'users/create',

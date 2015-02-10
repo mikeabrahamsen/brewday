@@ -1,4 +1,7 @@
-Brewday.controller('UserCreateCtrl',  ['$scope', '$state', 'User',
+angular.module('user',[
+        'brewday.models.user'
+])
+.controller('UserCreateCtrl',  ['$scope', '$state', 'User',
     function($scope, $state, User){
         $scope.data = {};
         $scope.register = function register(formIsValid, email, password){

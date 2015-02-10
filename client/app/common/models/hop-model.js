@@ -1,4 +1,7 @@
-Brewday.factory('Hop', function(Restangular) {
+angular.module('brewday.models.hop',[
+
+])
+.factory('Hop', function(Restangular) {
     var Hop;
     Hop = {
         get: function(data) {

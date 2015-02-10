@@ -21,9 +21,7 @@
             <input type="number" class="form-control" ng-disabled="{{readOnly}}" ng-model="hop.amount" name="amount" placeholder="oz">
         </div>
         <div class="col-md-5">
-            <select class="form-control" ng-model="hop.name" ng-disabled="{{readOnly}}">
-                <option ng-selected="h.name == hop.name" value="{{h.name}}" ng-repeat="h in hopform.hop_options"> {{h.name}} </option>
-            </select>
+            <select class="form-control" ng-model="hop.addition_id" ng-options="h.id as h.name for h in hopform.hop_options" ng-disabled="{{readOnly}}"></select>
         </div>
         <div class="col-md-1">
             <button type="button" ng-show="hopform.hops.length > 1 && !readOnly" class="btn btn-danger" ng-click="hopform.removeHop(hop)">X</button>

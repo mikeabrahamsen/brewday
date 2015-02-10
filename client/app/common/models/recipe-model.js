@@ -1,4 +1,7 @@
-Brewday.factory('Recipe', function(Restangular) {
+angular.module('brewday.models.recipe',[
+
+])
+.factory('Recipe', function(Restangular) {
     var Recipe;
     Recipe = {
         get: function() {

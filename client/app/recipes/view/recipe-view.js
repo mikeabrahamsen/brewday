@@ -1,4 +1,6 @@
-Brewday.controller('RecipeViewCtrl',  ['$state', 'recipe', 'grains', 'hops',
+angular.module('recipes.view',[
+])
+.controller('RecipeViewCtrl',  ['$state', 'recipe', 'grains', 'hops',
         function($state, recipe, grains, hops){
             this.recipe = recipe;
             this.grains = grains;

@@ -1,8 +1,9 @@
-Brewday.controller('RecipeCreateCtrl',  ['$state', 'WaterService', 'Recipe', 'Grain', 'Hop',
-        function($state, WaterService, Recipe, Grain, Hop){
+angular.module('recipes.create',[
+])
+.controller('RecipeCreateCtrl',  ['$state', 'Recipe', 'Grain', 'Hop',
+        function($state, Recipe, Grain, Hop){
 
         this.toDelete = []
-        this.waterService = WaterService
         this.grains = [];
         this.hops = [];
 

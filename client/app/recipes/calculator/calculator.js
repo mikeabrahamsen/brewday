@@ -1,4 +1,7 @@
-Brewday.service('WaterService', function(){
+angular.module('recipes.calculator',[
+
+])
+.service('WaterService', function(){
     var waterService = this;
     waterService.totalVol = 0;
     waterService.mashVol = 0;
@@ -52,7 +55,7 @@ Brewday.service('WaterService', function(){
             return totalVol - mashVol;
         }
 })
-Brewday.controller('WaterVolumeCtrl',['WaterService',
+.controller('WaterVolumeCtrl',['WaterService',
         function(WaterService){
             var waterVol = this;
             waterVol.waterService = WaterService;
@@ -71,7 +74,7 @@ Brewday.controller('WaterVolumeCtrl',['WaterService',
         }
 ])
 
-Brewday.directive('waterCalculations', function waterCalculations(){
+.directive('waterCalculations', function waterCalculations(){
     return {
         restrict: "E",
         bindToController: true,

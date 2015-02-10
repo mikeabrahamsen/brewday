@@ -1,4 +1,7 @@
-Brewday.service('AuthService', AuthService = function($q, localStorageService, Session) {
+angular.module('session', [
+        'brewday.models.session'
+])
+.service('AuthService', function($q, localStorageService, Session) {
 
     this.login = function(credentials) {
         var me = this;
@@ -37,7 +40,7 @@ Brewday.service('AuthService', AuthService = function($q, localStorageService, S
 
     return this;
 })
-Brewday.controller('SessionCreateCtrl',  ['$scope', '$state', 'AuthService',
+.controller('SessionCreateCtrl',  ['$scope', '$state', 'AuthService',
     function($scope, $state, AuthService ){
         $scope.data = {};
         $scope.login = function login(email, password){
@@ -52,7 +55,7 @@ Brewday.controller('SessionCreateCtrl',  ['$scope', '$state', 'AuthService',
         }
     }
 ])
-Brewday.controller('SessionDestroyCtrl',  ['$scope', '$state', 'AuthService',
+.controller('SessionDestroyCtrl',  ['$scope', '$state', 'AuthService',
     function($scope, $state, AuthService ){
             AuthService.logout();
             $scope.isLoggedIn = false;

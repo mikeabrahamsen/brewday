@@ -14,9 +14,7 @@
             <input type="number" class="form-control" ng-model="grain.amount" name="amount" placeholder="lbs">
         </div>
         <div class="col-md-7">
-            <select class="form-control" ng-model="grain.name" ng-disabled="{{readOnly}}">
-                <option ng-selected="g.name == grain.name" value="{{g.name}}" ng-repeat="g in grainform.grain_options"> {{g.name}} </option>
-            </select>
+            <select class="form-control" ng-model="grain.addition_id" ng-options="g.id as g.name for g in grainform.grain_options" ng-disabled="{{readOnly}}"></select>
         </div>
         <div class="col-md-2">
             <button type="button" ng-show="grainform.grains.length > 1 && !readOnly" class="btn btn-danger" ng-click="grainform.removeGrain(grain)">X</button>

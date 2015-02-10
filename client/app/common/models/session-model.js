@@ -1,4 +1,7 @@
-Brewday.factory('Session', function(Restangular) {
+angular.module('brewday.models.session', [
+
+])
+.factory('Session', function(Restangular) {
     var Session;
     Session = {
         create: function(data, bypassErrorInterceptor) {

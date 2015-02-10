@@ -1,4 +1,6 @@
-Brewday.controller('RecipeCtrl',  ['$state', 'Recipe', 'Grain', 'Hop', 'recipe','grains', 'hops',
+angular.module('recipes.edit',[
+])
+.controller('RecipeCtrl',  ['$state', 'Recipe', 'Grain', 'Hop', 'recipe','grains', 'hops',
     function($state, Recipe, Grain, Hop, recipe, grains, hops){
         this.recipe = recipe;
         this.data = {};

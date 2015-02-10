@@ -1,4 +1,7 @@
-Brewday.directive('hopListForm', function(){
+angular.module('recipes.hops',[
+
+])
+.directive('hopListForm', function(){
     return {
         restrict: "E",
         scope: {
@@ -11,7 +14,7 @@ Brewday.directive('hopListForm', function(){
         templateUrl: 'app/recipes/hops/hopForm.html'
     }
 })
-Brewday.controller('HopFormCtrl', ['Hop',
+.controller('HopFormCtrl', ['Hop',
         function(Hop){
         var original_hops = []
         if(this.hops.length < 1)

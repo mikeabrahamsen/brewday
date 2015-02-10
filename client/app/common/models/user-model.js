@@ -1,4 +1,7 @@
-Brewday.factory('User', function(Restangular) {
+angular.module('brewday.models.user',[
+
+])
+.factory('User', function(Restangular) {
     var User;
     User = {
         create: function(user) {

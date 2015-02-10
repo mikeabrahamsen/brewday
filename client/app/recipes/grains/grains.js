@@ -1,4 +1,6 @@
-Brewday.directive('grainListForm', function(){
+angular.module('recipes.grains',[
+])
+.directive('grainListForm', function(){
     return {
         restrict: "E",
         scope: {
@@ -11,7 +13,7 @@ Brewday.directive('grainListForm', function(){
         templateUrl: 'app/recipes/grains/grainForm.html'
     }
 })
-Brewday.controller('GrainFormCtrl', ['Grain',
+.controller('GrainFormCtrl', ['Grain',
         function(Grain){
 
         var original_grains =[]
