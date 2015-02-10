@@ -70,3 +70,16 @@ Brewday.controller('WaterVolumeCtrl',['WaterService',
             }
         }
 ])
+
+Brewday.directive('waterCalculations', function waterCalculations(){
+    return {
+        restrict: "E",
+        bindToController: true,
+        scope: {
+            grains: '='
+        },
+        controller: 'WaterVolumeCtrl',
+        controllerAs: 'waterVol',
+        templateUrl: 'app/recipes/calculator/calculator.html'
+    }
+})

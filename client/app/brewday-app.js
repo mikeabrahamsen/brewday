@@ -45,14 +45,12 @@ window.Brewday = angular.module('Brewday', ['ui.router', 'restangular', 'LocalSt
 
     RestangularProvider.setBaseUrl('http://localhost:5000/api/v1');
 
-    var partialsDir = '../partials';
-
     $urlRouterProvider.otherwise('/');
 
     $stateProvider
         .state('home', {
             url: '/',
-            templateUrl: partialsDir + '/home/detail.html',
+            templateUrl: 'app/home.html',
             data:{
                 authRequired: false,
             }
@@ -60,17 +58,17 @@ window.Brewday = angular.module('Brewday', ['ui.router', 'restangular', 'LocalSt
         .state('login',{
             url: 'sessions/create',
             controller: 'SessionCreateCtrl',
-            templateUrl: partialsDir + '/session/create.html',
+            templateUrl: 'app/sessions/create.html',
         })
         .state('logout',{
             url: 'sessions/destroy',
             controller: 'SessionDestroyCtrl',
-            templateUrl: partialsDir + '/session/destroy.html'
+            templateUrl: 'app/sessions/destroy.html'
         })
         .state('register',{
             url: 'users/create',
             controller: 'UserCreateCtrl',
-            templateUrl: partialsDir + '/user/create.html'
+            templateUrl: 'app/users/create.html'
         })
         .state('recipes',{
             abstract: true,
@@ -100,7 +98,7 @@ window.Brewday = angular.module('Brewday', ['ui.router', 'restangular', 'LocalSt
         })
         .state('recipes.view',{
             url: '/:recipe_id',
-            templateUrl: 'app/recipes/view.html',
+            templateUrl: 'app/recipes/view/view.html',
             controller: 'RecipeViewCtrl',
             controllerAs: 'recipes',
             resolve: {
