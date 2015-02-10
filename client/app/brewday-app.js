@@ -96,11 +96,11 @@ window.Brewday = angular.module('Brewday', ['ui.router', 'restangular', 'LocalSt
             url: '/create',
             controllerAs: 'recipes',
             controller: 'RecipeCreateCtrl',
-            templateUrl: partialsDir + '/recipes/create.html',
+            templateUrl: 'app/recipes/create/create.html',
         })
         .state('recipes.view',{
             url: '/:recipe_id',
-            templateUrl: partialsDir + '/recipes/view.html',
+            templateUrl: 'app/recipes/view.html',
             controller: 'RecipeViewCtrl',
             controllerAs: 'recipes',
             resolve: {
@@ -122,7 +122,7 @@ window.Brewday = angular.module('Brewday', ['ui.router', 'restangular', 'LocalSt
             url: '/:recipe_id/edit',
             controller: 'RecipeCtrl',
             controllerAs: 'recipes',
-            templateUrl: partialsDir + '/recipes/edit.html',
+            templateUrl: 'app/recipes/edit/edit.html',
             resolve: {
                 recipe: ['$stateParams', 'Recipe',
                 function($stateParams, recipe){
