@@ -5,7 +5,7 @@ angular.module('session', [
 
     this.login = function(credentials) {
         var me = this;
-        deferred = $q.defer()
+        var deferred = $q.defer()
         Session.create(credentials, true).then(function(user) {
             me.setToken(credentials);
             return deferred.resolve(user);
@@ -62,3 +62,16 @@ angular.module('session', [
             $state.go('home')
         }
 ])
+.config(function($stateProvider){
+    $stateProvider
+        .state('login',{
+            url: 'sessions/create',
+            controller: 'SessionCreateCtrl',
+            templateUrl: 'app/session/create.html',
+        })
+        .state('logout',{
+            url: 'sessions/destroy',
+            controller: 'SessionDestroyCtrl',
+            templateUrl: 'app/session/destroy.html'
+        })
+})

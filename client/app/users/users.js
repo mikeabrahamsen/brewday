@@ -16,3 +16,11 @@ angular.module('user',[
         }
     }
 ])
+.config(function($stateProvider){
+    $stateProvider
+        .state('register',{
+            url: 'users/create',
+            controller: 'UserCreateCtrl',
+            templateUrl: 'app/users/create.html'
+        })
+})

@@ -33,4 +33,13 @@ angular.module('recipes.create',[
                 })
             }
         }
-]);
+])
+.config(function($stateProvider){
+    $stateProvider
+        .state('recipes.create',{
+            url: '/create',
+            controllerAs: 'recipes',
+            controller: 'RecipeCreateCtrl',
+            templateUrl: 'app/recipes/create/create.html',
+        })
+});
