@@ -1,5 +1,5 @@
-Brewday.controller('RecipeCtrl',  ['$state', 'Recipe', 'Grain', 'Hop', 'Addition', 'recipe','grains', 'hops',
-    function($state, Recipe, Grain, Hop, Addition, recipe, grains, hops){
+Brewday.controller('RecipeCtrl',  ['$state', 'Recipe', 'Grain', 'Hop', 'recipe','grains', 'hops',
+    function($state, Recipe, Grain, Hop, recipe, grains, hops){
         this.recipe = recipe;
         this.data = {};
         this.readOnly = false;

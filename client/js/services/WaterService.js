@@ -58,18 +58,15 @@ Brewday.controller('WaterVolumeCtrl',['WaterService',
             waterVol.waterService = WaterService;
 
             this.grainTotal = function(){
-            var total = 0;
-            var grains = this.grains;
-            if( grains.length > 0){
-                for(var i = 0; i < grains.length; i++){
-                    var grain = grains[i];
-                    total += grain.amount || 0;
-                }
-                waterVol.waterService.calculateWaterVol(total);
-            }
-            waterVol.grainBill = total;
-            return total
+                var total =
+                _.chain(this.grains)
+                 .map(function(grain){ return grain.amount; })
+                 .inject(function(sum, value){ return sum + value; })
+                 .value()
 
+                waterVol.waterService.calculateWaterVol(total);
+                waterVol.grainBill = total;
+                return total
             }
         }
 ])
