@@ -1,10 +1,10 @@
 angular.module('Brewday', [
-        'ui.router',
-        'restangular',
-        'LocalStorageModule',
-        'session',
-        'user',
-        'recipes',
+    'ui.router',
+    'restangular',
+    'LocalStorageModule',
+    'session',
+    'user',
+    'recipes',
 ])
 
 .run(function($rootScope, $state, $stateParams,  $location, Restangular, AuthService) {
@@ -18,17 +18,17 @@ angular.module('Brewday', [
     // Check to see if the user is authenticated - this is only used to update the
     // navbar
     $rootScope.$stateParams = $stateParams;
-    $rootScope.$on('$stateChangeStart', function(event, toState, toParams,
-                                                 fromState, fromParams) {
-        var loggedIn = AuthService.isAuthenticated();
-        toParams.isLoggedIn = loggedIn;
-        if( angular.isDefined(toState.data)){
-            if( toState.data.authRequired && !AuthService.isAuthenticated()){
-                event.preventDefault();
-                $state.go('login')
-            }
-        }
-    })
+    $rootScope.$on('$stateChangeStart',
+                   function(event, toState, toParams, fromState, fromParams) {
+                       var loggedIn = AuthService.isAuthenticated();
+                       toParams.isLoggedIn = loggedIn;
+                       if( angular.isDefined(toState.data)){
+                           if( toState.data.authRequired && !AuthService.isAuthenticated()){
+                               event.preventDefault();
+                               $state.go('login')
+                           }
+                       }
+                   })
     Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
         if (response.config.bypassErrorInterceptor) {
             return true;
