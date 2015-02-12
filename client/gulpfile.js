@@ -1,9 +1,10 @@
 var gulp = require('gulp');
 var browserSync = require('browser-sync');
 var sass = require('gulp-sass');
+var karma = require('karma').server;
 
 // use default task to launch BrowserSync and watch JS files
-gulp.task('default', ['browser-sync', 'sass'], function () {
+gulp.task('default', ['browser-sync', 'sass', 'tdd'], function () {
     gulp.watch("sass/*.scss", ['sass']);
 });
 
@@ -25,4 +26,17 @@ gulp.task('sass', function(){
                     ]
                 }))
     .pipe(gulp.dest('./css'));
+});
+
+gulp.task('test', function (done) {
+  karma.start({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true
+  }, done);
+});
+
+gulp.task('tdd', function (done) {
+  karma.start({
+    configFile: __dirname + '/karma.conf.js'
+  }, done);
 });
