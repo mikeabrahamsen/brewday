@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('Brewday', [
     'ui.router',
     'restangular',
@@ -13,7 +15,7 @@ angular.module('Brewday', [
         return {
             headers: headers
         };
-    })
+    });
 
     // Check to see if the user is authenticated - this is only used to update the
     // navbar
@@ -25,10 +27,10 @@ angular.module('Brewday', [
                        if( angular.isDefined(toState.data)){
                            if( toState.data.authRequired && !AuthService.isAuthenticated()){
                                event.preventDefault();
-                               $state.go('login')
+                               $state.go('login');
                            }
                        }
-                   })
+                   });
     Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
         if (response.config.bypassErrorInterceptor) {
             return true;
@@ -59,5 +61,5 @@ angular.module('Brewday', [
             data:{
                 authRequired: false,
             }
-        })
-})
+        });
+});

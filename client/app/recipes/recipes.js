@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('recipes',[
         'brewday.models.recipe',
         'brewday.models.grain',
@@ -35,5 +37,5 @@ angular.module('recipes',[
         url: '',
         controller: 'RecipeListCtrl',
         templateUrl: 'app/recipes/list.html',
-    })
-})
+    });
+});
