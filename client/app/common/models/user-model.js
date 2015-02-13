@@ -11,4 +11,4 @@ angular.module('brewday.models.user',[
         }
     };
     return User;
-})
+});

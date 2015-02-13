@@ -11,11 +11,11 @@ angular.module('recipes.edit',[
 
         this.submit_recipe =
             function submit_recipe(name,beertype,grains,hops){
-                recipe.put()
+                recipe.put();
 
                 this.toDelete.forEach(function(addition){
                     addition.remove();
-                })
+                });
 
                 grains.forEach(function(grain){
                     grain.brew_stage = 0;
@@ -37,8 +37,8 @@ angular.module('recipes.edit',[
                     else
                         Hop.add(hop);
                 });
-                $state.go('recipes.view', {recipe_id: this.recipe.id})
-            }
+                $state.go('recipes.view', {recipe_id: this.recipe.id});
+            };
     }
 ])
 .config(function($stateProvider){
@@ -51,16 +51,16 @@ angular.module('recipes.edit',[
             resolve: {
                 recipe: ['$stateParams', 'Recipe',
                 function($stateParams, recipe){
-                    return recipe.getOne($stateParams.recipe_id)
+                    return recipe.getOne($stateParams.recipe_id);
                 }],
                 hops: ['$stateParams', 'Hop',
                 function($stateParams, hop){
-                    return hop.get($stateParams.recipe_id)
+                    return hop.get($stateParams.recipe_id);
                 }],
                 grains: ['$stateParams', 'Grain',
                 function($stateParams, grain){
-                    return grain.get($stateParams.recipe_id)
+                    return grain.get($stateParams.recipe_id);
                 }]
             }
-        })
-})
+        });
+});

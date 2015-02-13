@@ -15,4 +15,4 @@ angular.module('brewday.models.hop',[
         }
     };
     return Hop;
-})
+});

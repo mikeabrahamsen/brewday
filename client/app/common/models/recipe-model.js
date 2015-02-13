@@ -19,4 +19,4 @@ angular.module('brewday.models.recipe',[
         },
     };
     return Recipe;
-})
+});

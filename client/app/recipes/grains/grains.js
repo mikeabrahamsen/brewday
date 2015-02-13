@@ -11,12 +11,12 @@ angular.module('recipes.grains',[
         controllerAs: "grainform",
         bindToController: true,
         templateUrl: 'app/recipes/grains/grainForm.html'
-    }
+    };
 })
 .controller('GrainFormCtrl', ['Grain',
         function(Grain){
 
-        var original_grains =[]
+        var original_grains =[];
 
         if(this.grains.length < 1)
             this.grains = [{id: 'grain1'}];
@@ -39,4 +39,4 @@ angular.module('recipes.grains',[
             this.grains.splice( this.grains.indexOf(grain), 1 );
         };
         }
-])
+]);

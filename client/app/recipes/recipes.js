@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('recipes',[
         'brewday.models.recipe',
         'brewday.models.grain',

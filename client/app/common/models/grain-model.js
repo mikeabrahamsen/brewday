@@ -15,4 +15,4 @@ angular.module('brewday.models.grain',[
         }
     };
     return Grain;
-})
+});

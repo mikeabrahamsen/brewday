@@ -11,9 +11,9 @@ angular.module('user',[
             user.password = password;
 
             User.create(user).then(function() {
-                $state.go('login')
+                $state.go('login');
             });
-        }
+        };
     }
 ])
 .config(function($stateProvider){
@@ -22,5 +22,5 @@ angular.module('user',[
             url: 'users/create',
             controller: 'UserCreateCtrl',
             templateUrl: 'app/users/create.html'
-        })
-})
+        });
+});

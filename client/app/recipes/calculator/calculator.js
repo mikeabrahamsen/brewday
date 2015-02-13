@@ -26,23 +26,23 @@ angular.module('recipes.calculator',[
         this.mashVol = mv;
         this.spargeVol = sv;
 
-        return
+        return;
 
 
-    }
+    };
         function grainAbsorbtion(grainBill){
             return 0.13 * grainBill;
         }
         function preBoilVol(boilTime, batchSize, trubLoss){
-            var wsFactor = shrinkageFactor(0.04)
-                var ev = evaporateFactor(boilTime)
+            var wsFactor = shrinkageFactor(0.04);
+                var ev = evaporateFactor(boilTime);
                 return ((batchSize + trubLoss) / wsFactor) / ev;
         }
         function evaporateFactor(boilTime){
-            return 1-(0.10 * (boilTime / 60))
+            return 1-(0.10 * (boilTime / 60));
         }
         function shrinkageFactor(percent){
-            return 1-percent
+            return 1-percent;
         }
         function totalVol(preBoilVol, grainAbsorbtion, equipmentLoss){
             return preBoilVol + grainAbsorbtion + equipmentLoss;
@@ -65,12 +65,12 @@ angular.module('recipes.calculator',[
                 _.chain(this.grains)
                  .map(function(grain){ return grain.amount; })
                  .inject(function(sum, value){ return sum + value; })
-                 .value()
+                 .value();
 
                 waterVol.waterService.calculateWaterVol(total);
                 waterVol.grainBill = total;
-                return total
-            }
+                return total;
+            };
         }
 ])
 
@@ -84,5 +84,5 @@ angular.module('recipes.calculator',[
         controller: 'WaterVolumeCtrl',
         controllerAs: 'waterVol',
         templateUrl: 'app/recipes/calculator/calculator.html'
-    }
-})
+    };
+});

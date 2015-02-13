@@ -5,7 +5,7 @@ angular.module('session', [
 
     this.login = function(credentials) {
         var me = this;
-        var deferred = $q.defer()
+        var deferred = $q.defer();
         Session.create(credentials, true).then(function(user) {
             me.setToken(credentials);
             return deferred.resolve(user);
@@ -15,7 +15,7 @@ angular.module('session', [
             }
             throw new Error('No handler for status code ' + response.status);
         });
-        return deferred.promise
+        return deferred.promise;
     };
 
     this.logout = function() {
@@ -25,13 +25,13 @@ angular.module('session', [
     this.isAuthenticated = function() {
         var token = this.getToken();
         if (token) {
-            return true
+            return true;
         }
         return false;
     };
 
     this.setToken = function(credentials) {
-        localStorageService.set('token', btoa(credentials.email + ':' + credentials.password));
+        localStorageService.set('token', btoa(credentials.email + ':' + credentials.password)); // jshint ignore:line
     };
 
     this.getToken = function() {
@@ -50,16 +50,16 @@ angular.module('session', [
             user.password = password;
 
              AuthService.login(user).then(function() {
-                $state.go('recipes.list')
+                $state.go('recipes.list');
             });
-        }
+        };
     }
 ])
 .controller('SessionDestroyCtrl',  ['$scope', '$state', 'AuthService',
     function($scope, $state, AuthService ){
             AuthService.logout();
             $scope.isLoggedIn = false;
-            $state.go('home')
+            $state.go('home');
         }
 ])
 .config(function($stateProvider){
@@ -73,5 +73,5 @@ angular.module('session', [
             url: 'sessions/destroy',
             controller: 'SessionDestroyCtrl',
             templateUrl: 'app/session/destroy.html'
-        })
-})
+        });
+});

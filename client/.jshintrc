@@ -10,13 +10,14 @@
   "boss": true,
   "eqnull": true,
   "expr": true,
-  "globalstrict": true,
   "laxbreak": true,
   "loopfunc": true,
   "sub": true,
   "undef": true,
   "indent": 2,
+  "jasmine": true,
   "globals": {
-    "angular": false
+    "angular": false,
+    "_": false
   }
 }

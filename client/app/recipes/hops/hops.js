@@ -12,11 +12,11 @@ angular.module('recipes.hops',[
         controllerAs: "hopform",
         bindToController: true,
         templateUrl: 'app/recipes/hops/hopForm.html'
-    }
+    };
 })
 .controller('HopFormCtrl', ['Hop',
         function(Hop){
-        var original_hops = []
+        var original_hops = [];
         if(this.hops.length < 1)
             this.hops = [{id: 'hop1'}];
         else
@@ -39,4 +39,4 @@ angular.module('recipes.hops',[
             this.hops.splice( this.hops.indexOf(hop), 1 );
         };
         }
-])
+]);

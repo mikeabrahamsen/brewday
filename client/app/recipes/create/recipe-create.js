@@ -3,7 +3,7 @@ angular.module('recipes.create',[
 .controller('RecipeCreateCtrl',  ['$state', 'Recipe', 'Grain', 'Hop',
         function($state, Recipe, Grain, Hop){
 
-        this.toDelete = []
+        this.toDelete = [];
         this.grains = [];
         this.hops = [];
 
@@ -15,7 +15,7 @@ angular.module('recipes.create',[
                 recipe.beer_type = beertype;
 
                 Recipe.create(recipe).then(function(data){
-                    this.recipe_id = data.id
+                    this.recipe_id = data.id;
                     var id = data.id;
                     grains.forEach(function(grain){
                         grain.brew_stage = 0;
@@ -29,9 +29,9 @@ angular.module('recipes.create',[
                         hop.brew_stage = 0;
                         Hop.add(hop);
                     });
-                $state.go('recipes.view', {recipe_id: id})
-                })
-            }
+                $state.go('recipes.view', {recipe_id: id});
+                });
+            };
         }
 ])
 .config(function($stateProvider){
@@ -41,5 +41,5 @@ angular.module('recipes.create',[
             controllerAs: 'recipes',
             controller: 'RecipeCreateCtrl',
             templateUrl: 'app/recipes/create/create.html',
-        })
+        });
 });

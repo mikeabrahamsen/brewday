@@ -1,10 +1,13 @@
+'use strict';
+
 var gulp = require('gulp');
 var browserSync = require('browser-sync');
 var sass = require('gulp-sass');
+var jshint = require('gulp-jshint');
 var karma = require('karma').server;
 
 // use default task to launch BrowserSync and watch JS files
-gulp.task('default', ['browser-sync', 'sass', 'tdd'], function () {
+gulp.task('default', ['browser-sync', 'sass', 'tdd', 'lint'], function () {
     gulp.watch("sass/*.scss", ['sass']);
 });
 
@@ -39,4 +42,11 @@ gulp.task('tdd', function (done) {
   karma.start({
     configFile: __dirname + '/karma.conf.js'
   }, done);
+});
+
+gulp.task('lint', function() {
+    gulp.src('app/**/*.js')
+        .pipe(jshint('.jshintrc'))
+        .pipe(jshint.reporter('jshint-stylish'))
+        .pipe(jshint.reporter('fail'));
 });

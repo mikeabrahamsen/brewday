@@ -10,7 +10,7 @@ angular.module('recipes.view',[
             this.delete = function(recipe){
                 recipe.remove();
                 $state.go('recipes.list',{}, {reload: true});
-            }
+            };
         }
 ])
 .config(function($stateProvider){
@@ -23,16 +23,16 @@ angular.module('recipes.view',[
             resolve: {
                 recipe: ['$stateParams', 'Recipe',
                 function($stateParams, recipe){
-                    return recipe.getOne($stateParams.recipe_id)
+                    return recipe.getOne($stateParams.recipe_id);
                 }],
                 hops: ['$stateParams', 'Hop',
                 function($stateParams, hop){
-                    return hop.get($stateParams.recipe_id)
+                    return hop.get($stateParams.recipe_id);
                 }],
                 grains: ['$stateParams', 'Grain',
                 function($stateParams, grain){
-                    return grain.get($stateParams.recipe_id)
+                    return grain.get($stateParams.recipe_id);
                 }]
             }
-        })
-})
+        });
+});
