@@ -36,6 +36,7 @@ gulp.task('test', function (done) {
     configFile: __dirname + '/karma.conf.js',
     singleRun: true
   }, done);
+
 });
 
 gulp.task('tdd', function (done) {
