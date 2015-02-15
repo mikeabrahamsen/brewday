@@ -11,7 +11,7 @@ angular.module('recipes.calculator',[
 
     waterService.calculateWaterVol = function(grainBill){
         var batchSize = 5;
-        var bt = 120;
+        var bt = 60;
         var trubLoss = 0.5;
         var equipmentLoss = 1;
         var mashThickness = 1.33;
