@@ -6,15 +6,21 @@ angular.module('recipes.calculator',[
     waterService.totalVol = 0;
     waterService.mashVol = 0;
     waterService.spargeVol = 0;
+
     waterService.grainBill = 0;
+    waterService.batchSize = 5;
+    waterService.boilTime = 60;
+    waterService.trubLoss = 0.5;
+    waterService.equipmentLoss = 1;
+    waterService.mashThickness = 1.33;
 
 
     waterService.calculateWaterVol = function(grainBill){
-        var batchSize = 5;
-        var bt = 60;
-        var trubLoss = 0.5;
-        var equipmentLoss = 1;
-        var mashThickness = 1.33;
+        var batchSize = waterService.batchSize;
+        var bt = waterService.boilTime;
+        var trubLoss = waterService.trubLoss;
+        var equipmentLoss = waterService.equipmentLoss;
+        var mashThickness = waterService.mashThickness;
 
         var ga = grainAbsorbtion(grainBill);
         var pv = preBoilVol(bt, batchSize, trubLoss);
