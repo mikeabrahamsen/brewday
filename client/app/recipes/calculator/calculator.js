@@ -63,8 +63,7 @@ angular.module('recipes.calculator',[
 })
 .controller('CalculatorCtrl',['CalculatorService',
         function(CalculatorService){
-            var waterVol = this;
-            waterVol.calcService = CalculatorService;
+            this.calcService = CalculatorService;
 
             this.grainTotal = function(){
                 var total =
@@ -73,14 +72,14 @@ angular.module('recipes.calculator',[
                  .inject(function(sum, value){ return sum + value; })
                  .value();
 
-                waterVol.calcService.calculateWaterVol(total);
-                waterVol.grainBill = total;
+                this.calcService.calculateWaterVol(total);
+                this.grainBill = total;
                 return total;
             };
         }
 ])
 
-.directive('waterCalculations', function waterCalculations(){
+.directive('waterCalculations', function(){
     return {
         restrict: "E",
         bindToController: true,
@@ -88,7 +87,7 @@ angular.module('recipes.calculator',[
             grains: '='
         },
         controller: 'CalculatorCtrl',
-        controllerAs: 'waterVol',
+        controllerAs: 'calculator',
         templateUrl: 'app/recipes/calculator/calculator.html'
     };
 });
