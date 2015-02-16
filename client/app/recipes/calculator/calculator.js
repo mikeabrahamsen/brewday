@@ -1,26 +1,26 @@
 angular.module('recipes.calculator',[
 
 ])
-.service('WaterService', function(){
-    var waterService = this;
-    waterService.totalVol = 0;
-    waterService.mashVol = 0;
-    waterService.spargeVol = 0;
+.service('CalculatorService', function(){
+    var calculatorService = this;
+    calculatorService.totalVol = 0;
+    calculatorService.mashVol = 0;
+    calculatorService.spargeVol = 0;
 
-    waterService.grainBill = 0;
-    waterService.batchSize = 5;
-    waterService.boilTime = 60;
-    waterService.trubLoss = 0.5;
-    waterService.equipmentLoss = 1;
-    waterService.mashThickness = 1.33;
+    calculatorService.grainBill = 0;
+    calculatorService.batchSize = 5;
+    calculatorService.boilTime = 60;
+    calculatorService.trubLoss = 0.5;
+    calculatorService.equipmentLoss = 1;
+    calculatorService.mashThickness = 1.33;
 
 
-    waterService.calculateWaterVol = function(grainBill){
-        var batchSize = waterService.batchSize;
-        var bt = waterService.boilTime;
-        var trubLoss = waterService.trubLoss;
-        var equipmentLoss = waterService.equipmentLoss;
-        var mashThickness = waterService.mashThickness;
+    calculatorService.calculateWaterVol = function(grainBill){
+        var batchSize = calculatorService.batchSize;
+        var bt = calculatorService.boilTime;
+        var trubLoss = calculatorService.trubLoss;
+        var equipmentLoss = calculatorService.equipmentLoss;
+        var mashThickness = calculatorService.mashThickness;
 
         var ga = grainAbsorbtion(grainBill);
         var pv = preBoilVol(bt, batchSize, trubLoss);
@@ -61,10 +61,10 @@ angular.module('recipes.calculator',[
             return totalVol - mashVol;
         }
 })
-.controller('WaterVolumeCtrl',['WaterService',
-        function(WaterService){
+.controller('CalculatorCtrl',['CalculatorService',
+        function(CalculatorService){
             var waterVol = this;
-            waterVol.waterService = WaterService;
+            waterVol.calcService = CalculatorService;
 
             this.grainTotal = function(){
                 var total =
@@ -73,7 +73,7 @@ angular.module('recipes.calculator',[
                  .inject(function(sum, value){ return sum + value; })
                  .value();
 
-                waterVol.waterService.calculateWaterVol(total);
+                waterVol.calcService.calculateWaterVol(total);
                 waterVol.grainBill = total;
                 return total;
             };
@@ -87,7 +87,7 @@ angular.module('recipes.calculator',[
         scope: {
             grains: '='
         },
-        controller: 'WaterVolumeCtrl',
+        controller: 'CalculatorCtrl',
         controllerAs: 'waterVol',
         templateUrl: 'app/recipes/calculator/calculator.html'
     };
