@@ -18,35 +18,34 @@ describe("Grains", function() {
   }));
 
   describe("grainListForm directive", function() {
+    beforeEach(inject(function($httpBackend) {
+      $httpBackend.expect('GET', '/grains').respond('');
+    }));
+
     it("will always have a default grain", function() {
       expect(element.scope().data.grains.length).toBe(1);
       expect(element.isolateScope().grainform.grains.length).toBe(1);
     });
 
-    it('will take in grain data', inject(function($compile, $rootScope, $httpBackend) {
+    it('will take in grain data', function() {
       $scope.data = { grains: [{},{},{}]};
-      $compile(element)($rootScope);
-      $httpBackend.expect('GET', '/grains').respond('');
-      $rootScope.$digest();
+      $scope.$apply();
+
       expect(element.scope().data.grains.length).toBe(3);
       expect(element.isolateScope().grainform.grains.length).toBe(3);
-    }));
+    });
 
-    it('will take in toDelete data', inject(function($compile, $rootScope, $httpBackend) {
+    it('will take in toDelete data', function() {
       $scope.data = {toDelete: [{},{},{}], grains: []};
-      $compile(element)($rootScope);
-      $httpBackend.expect('GET', '/grains').respond('');
-      $rootScope.$digest();
+      $scope.$apply();
       expect(element.scope().data.toDelete.length).toBe(3);
       expect(element.isolateScope().grainform.toDelete.length).toBe(3);
-    }));
+    });
 
-    it('will have 2 way binding', inject(function($compile,$httpBackend, $rootScope) {
+    it('will have 2 way binding', function() {
       element.isolateScope().grainform.grains = [{},{}];
       element.isolateScope().grainform.toDelete = [{},{},{}];
-      $compile(element)($rootScope);
-      $httpBackend.expect('GET', '/grains').respond('');
-      $rootScope.$digest();
+      $scope.$apply();
 
       expect($scope.data.grains.length).toBe(2);
       expect(element.scope().data.grains.length).toBe(2);
@@ -55,7 +54,7 @@ describe("Grains", function() {
       expect($scope.data.toDelete.length).toBe(3);
       expect(element.scope().data.toDelete.length).toBe(3);
       expect(element.isolateScope().grainform.toDelete.length).toBe(3);
-    }));
+    });
   });
 });
 
