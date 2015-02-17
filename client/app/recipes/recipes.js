@@ -9,9 +9,9 @@ angular.module('recipes',[
         'recipes.create',
         'recipes.calculator'
 ])
-.controller('RecipeListCtrl',  ['$scope', 'recipes',
-        function($scope, recipes){
-            $scope.recipes = recipes;
+.controller('RecipeListCtrl',  ['recipes',
+        function(recipes){
+            this.recipes = recipes;
         }
 ])
 .config(function($stateProvider){
@@ -34,6 +34,7 @@ angular.module('recipes',[
     .state('recipes.list',{
         url: '',
         controller: 'RecipeListCtrl',
+        controllerAs: 'recipes',
         templateUrl: 'app/recipes/list.html',
     });
 });
