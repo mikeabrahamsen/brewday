@@ -19,6 +19,7 @@ module.exports = function(config) {
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/restangular/dist/restangular.js',
       'bower_components/lodash/dist/lodash.js',
+      'bower_components/angular-ui-router/release/angular-ui-router.js',
       'app/**/*.js',
       'app/**/*.html'
     ],
