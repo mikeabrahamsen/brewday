@@ -18,6 +18,7 @@
   "jasmine": true,
   "globals": {
     "angular": false,
-    "_": false
+    "_": false,
+    "inject": false
   }
 }
