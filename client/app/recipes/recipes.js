@@ -1,6 +1,7 @@
 angular.module('recipes',[
         'brewday.models.recipe',
         'brewday.models.grain',
+        'brewday.models.addition',
         'brewday.models.hop',
         'recipes.additions',
         'recipes.view',

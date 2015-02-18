@@ -7,7 +7,7 @@ var jshint = require('gulp-jshint');
 var karma = require('karma').server;
 
 // use default task to launch BrowserSync and watch JS files
-gulp.task('default', ['browser-sync', 'sass', 'tdd', 'lint'], function () {
+gulp.task('default', ['browser-sync', 'sass', 'lint'], function () {
     gulp.watch("sass/*.scss", ['sass']);
 });
 

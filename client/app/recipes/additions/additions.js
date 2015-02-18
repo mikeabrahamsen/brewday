@@ -1,6 +1,4 @@
 angular.module('recipes.additions',[
-  'recipes.additions.hops',
-  'recipes.additions.grains'
 ])
 .directive('additionsForm', function(){
   return {
@@ -23,8 +21,8 @@ angular.module('recipes.additions',[
       this.options = {grains: [], hops: []};
 
       AdditionService.setDefaultAdditions(this.additions, original_additions);
-      this.addNewAddition = function(additionType) {
-        return AdditionService.addNewAddition(additionType, this.additions);
+      this.addNewAddition = function(addition_type) {
+        return AdditionService.addNewAddition(addition_type, this.additions);
       };
       AdditionService.setOptions(this.additions, this.options);
 
@@ -42,27 +40,27 @@ angular.module('recipes.additions',[
   this.GrainModel = Grain;
   var addService = this;
 
-  this.getFunctionName = function(additionType) {
-    return additionType.charAt(0).toUpperCase() + additionType.substring(1).slice(0,-1) + 'Model';
+  this.getFunctionName = function(addition_type) {
+    return addition_type.charAt(0).toUpperCase() + addition_type.substring(1).slice(0,-1) + 'Model';
   };
-  this.addNewAddition = function(additionType,additions) {
-    var addType = additionType + 's';
+  this.addNewAddition = function(addition_type,additions) {
+    var addType = addition_type + 's';
     var newItemNo = additions[addType].length+1;
-    var newAddition = {'id': additionType + newItemNo, 'additionType': additionType};
+    var newAddition = {'id': addition_type + newItemNo, 'addition_type': addition_type};
     additions[addType].push(newAddition);
     return newAddition;
   };
   this.setOptions = function(additions,options) {
-    _.each(additions, function(addition, additionType) {
-      options[additionType] =
-        addService[addService.getFunctionName(additionType)].getAll().$object;
+    _.each(additions, function(addition, addition_type) {
+      options[addition_type] =
+        addService[addService.getFunctionName(addition_type)].getAll().$object;
     });
     return options;
   };
   this.setDefaultAdditions = function(additions, original_additions) {
-    _.each(additions, function(t, additionType) {
+    _.each(additions, function(t, addition_type) {
       if(t.length < 1)
-        additions[additionType] = [{id: additionType.slice(0,-1) + '1', additionType: additionType.slice(0,-1)}];
+        additions[addition_type] = [{id: addition_type.slice(0,-1) + '1', addition_type: addition_type.slice(0,-1)}];
       else{
         original_additions.push.apply(original_additions, t);
       }
@@ -74,7 +72,7 @@ angular.module('recipes.additions',[
     if (original_additions.indexOf(addition) > -1){
       toDelete.push(addition);
     }
-    var list = additions_list[addition.additionType + 's'];
+    var list = additions_list[addition.addition_type + 's'];
     list.splice(list.indexOf(addition), 1 );
   };
 }
