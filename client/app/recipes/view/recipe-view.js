@@ -5,6 +5,7 @@ angular.module('recipes.view',[
             this.recipe = recipe;
             this.grains = grains;
             this.hops = hops;
+            this.additions = {grains: this.grains, hops: this.hops};
             this.readOnly = true;
 
             this.delete = function(recipe){
@@ -32,7 +33,7 @@ angular.module('recipes.view',[
                 grains: ['$stateParams', 'Grain',
                 function($stateParams, grain){
                     return grain.get($stateParams.recipe_id);
-                }]
+                }],
             }
         });
 });

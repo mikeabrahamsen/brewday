@@ -16,7 +16,7 @@
                     <a class="brewday-nav-item" ui-sref="login" ng-hide="$stateParams.isLoggedIn" ng-class="{active: isActive('/sessions/create')}">Login</a>
                     <a class="brewday-nav-item" ui-sref="logout" ng-show="$stateParams.isLoggedIn">Logout</a>
                     <a class="brewday-nav-item" ui-sref="register" ng-class="{active: isActive('/users/create')}">Register</a>
-                    <a class="brewday-nav-item" ui-sref="recipes.create" ng-show="$stateParams.isLoggedIn" ng-class="{active: isActive('/recipes/create')}">Create a recipe</a>
+                    <a class="brewday-nav-item" ui-sref="create" ng-show="$stateParams.isLoggedIn" ng-class="{active: isActive('/recipes/create')}">Create a recipe</a>
                 </nav>
             </div>
         </div>
@@ -42,8 +42,9 @@
         <script type="text/javascript" src="./app/recipes/view/recipe-view.js"></script>
         <script type="text/javascript" src="./app/recipes/edit/recipe-edit.js"></script>
         <script type="text/javascript" src="./app/recipes/create/recipe-create.js"></script>
-        <script type="text/javascript" src="./app/recipes/grains/grains.js"></script>
-        <script type="text/javascript" src="./app/recipes/hops/hops.js"></script>
+        <script type="text/javascript" src="./app/recipes/additions/grains/grains.js"></script>
+        <script type="text/javascript" src="./app/recipes/additions/hops/hops.js"></script>
+        <script type="text/javascript" src="./app/recipes/additions/additions.js"></script>
         <script type="text/javascript" src="./app/recipes/calculator/calculator.js"></script>
 
         <script type="text/javascript" src="./app/common/models/session-model.js"></script>
@@ -51,6 +52,7 @@
         <script type="text/javascript" src="./app/common/models/recipe-model.js"></script>
         <script type="text/javascript" src="./app/common/models/grain-model.js"></script>
         <script type="text/javascript" src="./app/common/models/hop-model.js"></script>
+        <script type="text/javascript" src="./app/common/models/addition-model.js"></script>
 
     </body>
 </html>

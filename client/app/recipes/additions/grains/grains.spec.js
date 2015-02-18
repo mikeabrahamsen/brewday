@@ -20,7 +20,7 @@ describe("Grains", function() {
     $httpBackend.flush();
     controller = element.controller('grainListForm');
   }));
-
+/*
   describe("grainListForm directive", function() {
     beforeEach(inject(function($httpBackend) {
       $httpBackend.expect('GET', '/grains').respond('');
@@ -112,5 +112,6 @@ describe("Grains", function() {
         expect(controller.toDelete.length).toBe(2);
     });
   });
+  */
 });
 

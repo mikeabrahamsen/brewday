@@ -7,7 +7,7 @@ var jshint = require('gulp-jshint');
 var karma = require('karma').server;
 
 // use default task to launch BrowserSync and watch JS files
-gulp.task('default', ['browser-sync', 'sass', 'tdd', 'lint'], function () {
+gulp.task('default', ['browser-sync', 'sass', 'lint'], function () {
     gulp.watch("sass/*.scss", ['sass']);
 });
 
@@ -42,7 +42,9 @@ gulp.task('test', function (done) {
 gulp.task('tdd', function (done) {
   karma.start({
     configFile: __dirname + '/karma.conf.js'
-  }, done).on('error', done);
+  }, function () {
+    done;
+  });
 });
 
 gulp.task('lint', function() {

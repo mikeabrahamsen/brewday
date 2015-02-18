@@ -3,9 +3,8 @@ angular.module('recipes.create',[
 .controller('RecipeCreateCtrl',  ['$state', 'Recipe', 'Grain', 'Hop',
         function($state, Recipe, Grain, Hop){
 
-        this.toDelete = [];
-        this.grains = [];
-        this.hops = [];
+        var createCtrl = this;
+        this.additions = {grains: [], hops: []};
 
         this.recipe = {};
         this.submit_recipe =
@@ -17,14 +16,14 @@ angular.module('recipes.create',[
                 Recipe.create(recipe).then(function(data){
                     this.recipe_id = data.id;
                     var id = data.id;
-                    grains.forEach(function(grain){
+                    createCtrl.additions.grains.forEach(function(grain){
                         grain.brew_stage = 0;
                         grain.time = 1;
                         grain.recipe_id = id;
                         Grain.add(grain);
 
                     });
-                    hops.forEach(function(hop){
+                    createCtrl.additions.hops.forEach(function(hop){
                         hop.recipe_id = id;
                         hop.brew_stage = 0;
                         Hop.add(hop);
@@ -36,7 +35,7 @@ angular.module('recipes.create',[
 ])
 .config(function($stateProvider){
     $stateProvider
-        .state('recipes.create',{
+        .state('create',{
             url: '/create',
             controllerAs: 'recipes',
             controller: 'RecipeCreateCtrl',

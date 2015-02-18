@@ -14,9 +14,8 @@
         </div>
     </div>
     <hr />
-    <grain-list-form grains="recipes.grains" to-delete="recipes.toDelete"></grain-list-form>
-    <hop-list-form hops="recipes.hops" to-delete="recipes.toDelete"></hop-list-form>
 
+    <additions-form additions="recipes.additions" to-delete="[]"></additions-form>
     <div class="col-md-12">
         <hr style="padding-bottom: 40px"/>
         <button type="submit" ng-show="!readOnly" class="btn btn-success pull-right">Save Recipe</button>

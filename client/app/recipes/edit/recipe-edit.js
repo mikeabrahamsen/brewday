@@ -8,6 +8,7 @@ angular.module('recipes.edit',[
         this.grains = grains;
         this.hops = hops;
         this.toDelete = [];
+        this.additions = {grains: this.grains, hops: this.hops};
 
         this.submit_recipe =
             function submit_recipe(name,beertype,grains,hops){
