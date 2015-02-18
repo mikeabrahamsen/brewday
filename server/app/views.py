@@ -346,7 +346,11 @@ class HopRecipeView(restful.Resource):
 class AdditionListView(restful.Resource):
     @marshal_with(addition_fields)
     def get(self, recipe_id):
-        additions = RecipeAddition.query.filter_by(recipe_id=recipe_id).all()
+        grains = RecipeAddition.query.filter_by(recipe_id=recipe_id,
+                                                addition_type='grain').all()
+        hops = RecipeAddition.query.filter_by(recipe_id=recipe_id,
+                                              addition_type='hop').all()
+        additions = {'grains': grains, 'hops': hops}
         return additions
 
     @auth.login_required

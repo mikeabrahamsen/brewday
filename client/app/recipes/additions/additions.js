@@ -2,47 +2,80 @@ angular.module('recipes.additions',[
   'recipes.additions.hops',
   'recipes.additions.grains'
 ])
-.controller('AdditionFormCtrl', ['Hop','Grain',
-        function(Hop, Grain){
-        var additionFormCtrl = this;
-        var original_additions = [];
-        this.HopModel = Hop;
-        this.GrainModel = Grain;
+.directive('additionsForm', function(){
+  return {
+    restrict: "E",
+    scope: {
+      additions: '=',
+      toDelete: '=',
+    },
+    controller: "AdditionFormCtrl",
+    controllerAs: "additionCtrl",
+    bindToController: true,
+    templateUrl: 'app/recipes/additions/additions-form.html'
+  };
+})
+.controller(
+  'AdditionFormCtrl', ['Hop','Grain','AdditionService',
+    function(Hop, Grain, AdditionService){
+      var additionCtrl = this;
+      var original_additions = [];
+      this.options = {grains: [], hops: []};
 
-        this.additionTypeName = function(){
-          return this.additionType.toLowerCase() + 's';};
-        this.addFunctionName = function(){
-          return "addNew" + this.additionType;};
-        this.removeFunctionName = function(){
-          return "remove" + this.additionType;};
-        this.optionFunctionName = function(){
-          return this.additionType.toLowerCase() + "_options";};
-        this.getFunctionName = function(){
-          return this.additionType + "Model";};
+      AdditionService.setDefaultAdditions(this.additions, original_additions);
+      this.addNewAddition = function(additionType) {
+        return AdditionService.addNewAddition(additionType, this.additions);
+      };
+      AdditionService.setOptions(this.additions, this.options);
 
-        this[this.additionTypeName()] = this.additions;
+      this.removeAddition = function(addition){
+        AdditionService.removeAddition(
+          addition,
+          this.additions,
+          original_additions,
+          this.toDelete);
+      };
+    }
+])
+.service('AdditionService', ['Hop', 'Grain', function(Hop, Grain) {
+  this.HopModel = Hop;
+  this.GrainModel = Grain;
+  var addService = this;
 
-        if(this.additions.length < 1)
-            this.additions = [{id: this.additionType + '1'}];
-        else
-            original_additions = this.additions.slice(0);
+  this.getFunctionName = function(additionType) {
+    return additionType.charAt(0).toUpperCase() + additionType.substring(1).slice(0,-1) + 'Model';
+  };
+  this.addNewAddition = function(additionType,additions) {
+    var addType = additionType + 's';
+    var newItemNo = additions[addType].length+1;
+    var newAddition = {'id': additionType + newItemNo, 'additionType': additionType};
+    additions[addType].push(newAddition);
+    return newAddition;
+  };
+  this.setOptions = function(additions,options) {
+    _.each(additions, function(addition, additionType) {
+      options[additionType] =
+        addService[addService.getFunctionName(additionType)].getAll().$object;
+    });
+    return options;
+  };
+  this.setDefaultAdditions = function(additions, original_additions) {
+    _.each(additions, function(t, additionType) {
+      if(t.length < 1)
+        additions[additionType] = [{id: additionType.slice(0,-1) + '1', additionType: additionType.slice(0,-1)}];
+      else{
+        original_additions.push.apply(original_additions, t);
+      }
+    });
+    return;
+  };
 
-
-        this[this.optionFunctionName()] = this[this.getFunctionName()].getAll().$object;
-
-        this[this.addFunctionName()] = function() {
-            var newItemNo = this.additions.length+1;
-            this.additions.push({'id':this.additionTypeName() + newItemNo});
-        };
-
-        this[this.removeFunctionName()] = function(addition) {
-            // if the grain to be deleted is part of the recipe
-            // flag it for deletion
-            if (original_additions.indexOf(addition) > -1)
-            {
-                this.toDelete.push(addition);
-            }
-            this.additions.splice( this.additions.indexOf(addition), 1 );
-        };
-        }
+  this.removeAddition = function(addition, additions_list, original_additions, toDelete){
+    if (original_additions.indexOf(addition) > -1){
+      toDelete.push(addition);
+    }
+    var list = additions_list[addition.additionType + 's'];
+    list.splice(list.indexOf(addition), 1 );
+  };
+}
 ]);
