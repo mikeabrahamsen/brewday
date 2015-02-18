@@ -28,12 +28,10 @@ describe("Additions", function() {
     it("will always have a default grain", function() {
       expect(element.scope().data.additions.grains.length).toBe(1);
       expect(element.isolateScope().additionCtrl.additions.grains.length).toBe(1);
-      expect(element.isolateScope().additionCtrl.additions.grains).toEqual([{id: 'grain1', additionType: 'grain'}]);
     });
     it("will always have a default hop", function() {
       expect(element.scope().data.additions.hops.length).toBe(1);
       expect(element.isolateScope().additionCtrl.additions.hops.length).toBe(1);
-      expect(element.isolateScope().additionCtrl.additions.hops).toEqual([{id: 'hop1', additionType: 'hop'}]);
     });
     it('will take in grain data', function() {
       $scope.data.additions.grains =  [{},{},{}];
@@ -105,7 +103,7 @@ describe("Additions", function() {
     });
 
     it('will add a grain to toDelete if grain was in the original list', function() {
-      var grains = [{id: 'grain1', additionType: 'grain'},{id: 'grain2', additionType: 'grain'}];
+      var grains = [{id: 'grain1', addition_type: 'grain'},{id: 'grain2', addition_type: 'grain'}];
       $scope.data.additions.grains = grains;
       $compile(element)($scope);
       $scope.$apply();
