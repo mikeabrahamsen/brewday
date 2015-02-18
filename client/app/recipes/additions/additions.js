@@ -21,9 +21,11 @@ angular.module('recipes.additions',[
       this.options = {grains: [], hops: []};
 
       AdditionService.setDefaultAdditions(this.additions, original_additions);
+
       this.addNewAddition = function(addition_type) {
         return AdditionService.addNewAddition(addition_type, this.additions);
       };
+
       AdditionService.setOptions(this.additions, this.options);
 
       this.removeAddition = function(addition){
