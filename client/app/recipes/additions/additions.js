@@ -42,39 +42,53 @@ angular.module('recipes.additions',[
   this.GrainModel = Grain;
   var addService = this;
 
-  this.getFunctionName = function(addition_type) {
-    return addition_type.charAt(0).toUpperCase() + addition_type.substring(1).slice(0,-1) + 'Model';
+  function stripS(additionType){
+    if (additionType.slice(-1) === 's'){
+      additionType = additionType.slice(0,-1);
+    }
+    return additionType;
+  }
+  function addS(additionType){
+    if (additionType.slice(-1) != 's'){
+      additionType = additionType + 's';
+    }
+    return additionType;
+  }
+  this.getModelName = function(addition_type) {
+    addition_type = stripS(addition_type);
+    return addition_type.charAt(0).toUpperCase() + addition_type.substring(1) + 'Model';
   };
   this.addNewAddition = function(addition_type,additions) {
-    var addType = addition_type + 's';
-    var newItemNo = additions[addType].length+1;
-    var newAddition = {'id': addition_type + newItemNo, 'addition_type': addition_type};
-    additions[addType].push(newAddition);
+    var addGroup = addS(addition_type);
+    var newItemNo = additions[addGroup].length+1;
+    var newAddition = {'id': addition_type + newItemNo, 'addition_type': stripS(addGroup)};
+    additions[addGroup].push(newAddition);
     return newAddition;
   };
   this.setOptions = function(additions,options) {
     _.each(additions, function(addition, addition_type) {
       options[addition_type] =
-        addService[addService.getFunctionName(addition_type)].getAll().$object;
+        addService[addService.getModelName(addition_type)].getAll().$object;
     });
     return options;
   };
   this.setDefaultAdditions = function(additions, original_additions) {
     _.each(additions, function(t, addition_type) {
-      if(t.length < 1)
-        additions[addition_type] = [{id: addition_type.slice(0,-1) + '1', addition_type: addition_type.slice(0,-1)}];
+      if(t.length < 1){
+        addService.addNewAddition(addition_type, additions);
+      }
       else{
         original_additions.push.apply(original_additions, t);
       }
     });
-    return;
+    return additions;
   };
 
   this.removeAddition = function(addition, additions_list, original_additions, toDelete){
     if (original_additions.indexOf(addition) > -1){
       toDelete.push(addition);
     }
-    var list = additions_list[addition.addition_type + 's'];
+    var list = additions_list[addS(addition.addition_type)];
     list.splice(list.indexOf(addition), 1 );
   };
 }

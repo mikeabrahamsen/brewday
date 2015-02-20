@@ -118,4 +118,24 @@ describe("Additions", function() {
       expect(controller.toDelete.length).toBe(2);
     });
   });
+  describe('Addition Service', function() {
+    var AdditionService;
+    beforeEach(inject(function(_AdditionService_) {
+      AdditionService = _AdditionService_;
+      spyOn(AdditionService, 'addNewAddition');
+    }));
+    it('should set default addition by calling add new additions', function() {
+      additions = {grains: [], hops: []}
+      AdditionService.setDefaultAdditions(additions, []);
+      expect(AdditionService.addNewAddition).toHaveBeenCalled();
+    })
+    it('should be able to set the model name', function() {
+      var modelName = AdditionService.getModelName('hop');
+      expect(modelName).toBe('HopModel');
+      var modelName = AdditionService.getModelName('hops');
+      expect(modelName).toBe('HopModel');
+      var modelName = AdditionService.getModelName('Hops');
+      expect(modelName).toBe('HopModel');
+    });
+  });
 });
