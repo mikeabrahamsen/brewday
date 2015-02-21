@@ -17,15 +17,12 @@ angular.module('recipes.create',[
                     this.recipe_id = data.id;
                     var id = data.id;
                     createCtrl.additions.grains.forEach(function(grain){
-                        grain.brew_stage = 0;
-                        grain.time = 1;
                         grain.recipe_id = id;
                         Grain.add(grain);
 
                     });
                     createCtrl.additions.hops.forEach(function(hop){
                         hop.recipe_id = id;
-                        hop.brew_stage = 0;
                         Hop.add(hop);
                     });
                 $state.go('recipes.view', {recipe_id: id});
