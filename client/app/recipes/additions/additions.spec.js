@@ -154,12 +154,33 @@ describe("Additions", function() {
       expect(additions.grains.length).toBe(1);
       expect(additions.grains[0].getRestangularUrl()).toBe('/recipes/1/grains');
     });
+    it('will add a new addition not a restangular object if recipe NOT is given', function() {
+      var additions = {grains: [], hops: []};
+      expect(additions.grains.length).toBe(0);
+      var addition = AdditionService.addNewAddition('grain',additions, {});
+      expect(additions.grains.length).toBe(1);
+      expect(additions.grains[0].recipe_id).not.toBeDefined();
+    });
     it('add additions with a recipe id if available', function() {
       var additions = {grains: [], hops: []};
       expect(additions.grains.length).toBe(0);
       var addition = AdditionService.addNewAddition('grain',additions, recipe);
       expect(additions.grains.length).toBe(1);
       expect(additions.grains[0].recipe_id).toBe(recipe.id);
+    });
+    it('add additions with amount of zero', function() {
+      var additions = {grains: [], hops: []};
+      expect(additions.grains.length).toBe(0);
+      var addition = AdditionService.addNewAddition('grain',additions, recipe);
+      expect(additions.grains.length).toBe(1);
+      expect(additions.grains[0].amount).toBe(0);
+    });
+    it('add additions with brew stage of zero', function() {
+      var additions = {grains: [], hops: []};
+      expect(additions.grains.length).toBe(0);
+      var addition = AdditionService.addNewAddition('grain',additions, recipe);
+      expect(additions.grains.length).toBe(1);
+      expect(additions.grains[0].brew_stage).toBe(0);
     });
   });
 });

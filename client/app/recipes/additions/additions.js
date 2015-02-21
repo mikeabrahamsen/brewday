@@ -62,9 +62,10 @@ angular.module('recipes.additions',[
   this.addNewAddition = function(addition_type,additions, recipe) {
     var addGroup = addS(addition_type);
     var newItemNo = additions[addGroup].length+1;
-    var newAddition = {'recipe_id': recipe.id, 'brew_stage': 0, 'addition_type': stripS(addGroup)};
+    var newAddition = {'recipe_id': undefined, 'brew_stage': 0, 'addition_type': stripS(addGroup), amount: 0};
     // if we have the recipe - make a restangular object
     if(typeof(recipe.id) !== 'undefined'){
+      newAddition.recipe_id = recipe.id;
       Restangular.restangularizeElement(recipe, newAddition, addGroup);
     }
     additions[addGroup].push(newAddition);
