@@ -4,24 +4,28 @@ describe("Additions", function() {
   var $scope;
   var $httpBackend;
   var controller;
+  var recipe;
   beforeEach(module("recipes.additions"));
   beforeEach(module("brewday.models.grain"));
   beforeEach(module("brewday.models.hop"));
   beforeEach(module("brewday.templates"));
   beforeEach(module("restangular"));
-  beforeEach(inject(function(_$compile_, $rootScope, _$httpBackend_) {
+  beforeEach(inject(function(_$compile_, $rootScope, _$httpBackend_, Restangular) {
     $httpBackend = _$httpBackend_;
     $httpBackend.expect('GET', '/grains').respond('');
     $httpBackend.expect('GET', '/hops').respond('');
+    recipe = Restangular.one('recipes', 1);
     $scope = $rootScope;
     $compile = _$compile_;
     $scope.data = {
       additions: {grains: [], hops: []},
-      toDelete: []
+      toDelete: [],
+      recipe: recipe
     };
-    element = angular.element("<additions-form additions='data.additions' to-delete='data.toDelete'></additions-form>");
+    element = angular.element("<additions-form additions='data.additions' to-delete='data.toDelete' recipe='data.recipe'></additions-form>");
     $compile(element)($rootScope);
     $scope.$apply();
+    $httpBackend.flush();
     controller = element.controller('additionsForm');
   }));
   describe("directive", function() {
@@ -42,7 +46,7 @@ describe("Additions", function() {
     });
 
     it('will take in toDelete data', function() {
-      $scope.data = {toDelete: [{},{},{}], additions: {grains: []}};
+      $scope.data = {toDelete: [{},{},{}], additions: {grains: []}, recipe: recipe};
       $scope.$apply();
       expect(element.scope().data.toDelete.length).toBe(3);
       expect(element.isolateScope().additionCtrl.toDelete.length).toBe(3);
@@ -120,22 +124,42 @@ describe("Additions", function() {
   });
   describe('Addition Service', function() {
     var AdditionService;
-    beforeEach(inject(function(_AdditionService_) {
+    var Grain;
+    beforeEach(inject(function(_AdditionService_, _Grain_) {
       AdditionService = _AdditionService_;
-      spyOn(AdditionService, 'addNewAddition');
+      Grain = _Grain_;
+      spyOn(AdditionService, 'addNewAddition').and.callThrough();
     }));
     it('should set default addition by calling add new additions', function() {
-      additions = {grains: [], hops: []}
-      AdditionService.setDefaultAdditions(additions, []);
+      var additions = {grains: [], hops: []};
+      expect(additions.grains.length).toBe(0);
+      expect(additions.hops.length).toBe(0);
+      AdditionService.setDefaultAdditions(additions, [], recipe);
       expect(AdditionService.addNewAddition).toHaveBeenCalled();
-    })
+      expect(additions.grains.length).toBe(1);
+      expect(additions.hops.length).toBe(1);
+    });
     it('should be able to set the model name', function() {
       var modelName = AdditionService.getModelName('hop');
       expect(modelName).toBe('HopModel');
-      var modelName = AdditionService.getModelName('hops');
+      modelName = AdditionService.getModelName('hops');
       expect(modelName).toBe('HopModel');
-      var modelName = AdditionService.getModelName('Hops');
+      modelName = AdditionService.getModelName('Hops');
       expect(modelName).toBe('HopModel');
+    });
+    it('will add a new addition as a restangular object if recipe is given', function() {
+      var additions = {grains: [], hops: []};
+      expect(additions.grains.length).toBe(0);
+      var addition = AdditionService.addNewAddition('grain',additions, recipe);
+      expect(additions.grains.length).toBe(1);
+      expect(additions.grains[0].getRestangularUrl()).toBe('/recipes/1/grains');
+    });
+    it('add additions with a recipe id if available', function() {
+      var additions = {grains: [], hops: []};
+      expect(additions.grains.length).toBe(0);
+      var addition = AdditionService.addNewAddition('grain',additions, recipe);
+      expect(additions.grains.length).toBe(1);
+      expect(additions.grains[0].recipe_id).toBe(recipe.id);
     });
   });
 });

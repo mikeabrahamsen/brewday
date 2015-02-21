@@ -6,6 +6,7 @@ angular.module('recipes.additions',[
     scope: {
       additions: '=',
       toDelete: '=',
+      recipe: '='
     },
     controller: "AdditionFormCtrl",
     controllerAs: "additionCtrl",
@@ -20,10 +21,10 @@ angular.module('recipes.additions',[
       var original_additions = [];
       this.options = {grains: [], hops: []};
 
-      AdditionService.setDefaultAdditions(this.additions, original_additions);
+      AdditionService.setDefaultAdditions(this.additions, original_additions, this.recipe);
 
       this.addNewAddition = function(addition_type) {
-        return AdditionService.addNewAddition(addition_type, this.additions);
+        return AdditionService.addNewAddition(addition_type, this.additions, additionCtrl.recipe);
       };
 
       AdditionService.setOptions(this.additions, this.options);
@@ -37,7 +38,7 @@ angular.module('recipes.additions',[
       };
     }
 ])
-.service('AdditionService', ['Hop', 'Grain', function(Hop, Grain) {
+.service('AdditionService', ['Hop', 'Grain', 'Restangular',function(Hop, Grain, Restangular) {
   this.HopModel = Hop;
   this.GrainModel = Grain;
   var addService = this;
@@ -58,10 +59,14 @@ angular.module('recipes.additions',[
     addition_type = stripS(addition_type);
     return addition_type.charAt(0).toUpperCase() + addition_type.substring(1) + 'Model';
   };
-  this.addNewAddition = function(addition_type,additions) {
+  this.addNewAddition = function(addition_type,additions, recipe) {
     var addGroup = addS(addition_type);
     var newItemNo = additions[addGroup].length+1;
-    var newAddition = {'id': addition_type + newItemNo, 'addition_type': stripS(addGroup)};
+    var newAddition = {'recipe_id': recipe.id, 'brew_stage': 0, 'addition_type': stripS(addGroup)};
+    // if we have the recipe - make a restangular object
+    if(typeof(recipe.id) !== 'undefined'){
+      Restangular.restangularizeElement(recipe, newAddition, addGroup);
+    }
     additions[addGroup].push(newAddition);
     return newAddition;
   };
@@ -72,10 +77,10 @@ angular.module('recipes.additions',[
     });
     return options;
   };
-  this.setDefaultAdditions = function(additions, original_additions) {
+  this.setDefaultAdditions = function(additions, original_additions, recipe) {
     _.each(additions, function(t, addition_type) {
       if(t.length < 1){
-        addService.addNewAddition(addition_type, additions);
+        addService.addNewAddition(addition_type, additions, recipe);
       }
       else{
         original_additions.push.apply(original_additions, t);
