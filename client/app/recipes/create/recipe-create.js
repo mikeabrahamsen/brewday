@@ -7,27 +7,29 @@ angular.module('recipes.create',[
         this.additions = {grains: [], hops: []};
 
         this.recipe = {};
+
+        this.createRecipe = function(recipe) {
+          Recipe.create(recipe).then(function(data){
+            createCtrl.recipe = data;
+
+            createCtrl.additions.grains.forEach(function(grain){
+              grain.recipe_id = createCtrl.recipe.id;
+              Grain.add(grain);
+            });
+            createCtrl.additions.hops.forEach(function(hop){
+              hop.recipe_id = createCtrl.recipe.id;
+              Hop.add(hop);
+            });
+            $state.go('recipes.view', {recipe_id: createCtrl.recipe.id});
+          });
+        };
         this.submit_recipe =
-            function submit_recipe(name,beertype,grains,hops){
-                var recipe = this.recipe;
-                recipe.name = name;
-                recipe.beer_type = beertype;
+          function submit_recipe(name,beertype,grains,hops){
+          createCtrl.recipe.name = name;
+          createCtrl.recipe.beer_type = beertype;
 
-                Recipe.create(recipe).then(function(data){
-                    this.recipe_id = data.id;
-                    var id = data.id;
-                    createCtrl.additions.grains.forEach(function(grain){
-                        grain.recipe_id = id;
-                        Grain.add(grain);
-
-                    });
-                    createCtrl.additions.hops.forEach(function(hop){
-                        hop.recipe_id = id;
-                        Hop.add(hop);
-                    });
-                $state.go('recipes.view', {recipe_id: id});
-                });
-            };
+          createCtrl.createRecipe(createCtrl.recipe);
+        };
         }
 ])
 .config(function($stateProvider){
