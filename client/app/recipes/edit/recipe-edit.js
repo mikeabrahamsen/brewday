@@ -1,7 +1,7 @@
 angular.module('recipes.edit',[
 ])
-.controller('RecipeCtrl',  ['$state', 'Recipe', 'Grain', 'Hop', 'recipe','grains', 'hops',
-    function($state, Recipe, Grain, Hop, recipe, grains, hops){
+.controller('RecipeCtrl',  ['$state', 'recipe', 'grains', 'hops',
+    function($state, recipe, grains, hops){
         this.recipe = recipe;
         this.data = {};
         this.readOnly = false;
