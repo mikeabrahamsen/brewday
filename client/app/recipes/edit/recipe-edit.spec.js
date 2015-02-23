@@ -85,4 +85,15 @@ describe("Recipe Edit", function() {
       expect($state.current.name).toBe('recipes.view');
     }));
   });
+  describe('Edit route', function() {
+    it('should request recipes and additions', function() {
+      $httpBackend.expect('GET', '/recipes').respond([{'name': 'grain1'},{'name': 'grain2'}]);
+      $httpBackend.expect('GET', '/recipes/1').respond([{'name': 'grain1'},{'name': 'grain2'}]);
+      $httpBackend.expect('GET', '/recipes/1/hops').respond([{'name': 'hop1'},{'name': 'hop2'}]);
+      $httpBackend.expect('GET', '/recipes/1/grains').respond([{'name': 'grain1'},{'name': 'grain2'}]);
+      $state.go('recipes.edit', {recipe_id: 1});
+      $httpBackend.flush();
+      expect($state.current.name).toBe('recipes.edit');
+    });
+  });
 });
