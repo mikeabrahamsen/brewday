@@ -30,5 +30,9 @@ describe("Recipe Edit", function() {
       expect(controller.recipe).toBeDefined();
       expect(controller.recipe.id).toBe(1);
     });
+    it('should have grains defined', function() {
+      expect(controller.grains).toBeDefined();
+      expect(controller.grains.length).toBe(0);
+    });
   });
 });
