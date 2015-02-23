@@ -1,9 +1,8 @@
 angular.module('recipes.edit',[
 ])
-.controller('RecipeCtrl',  ['$state', 'recipe', 'grains', 'hops',
+.controller('RecipeEditCtrl',  ['$state', 'recipe', 'grains', 'hops',
     function($state, recipe, grains, hops){
         this.recipe = recipe;
-        this.data = {};
         this.readOnly = false;
         this.grains = grains;
         this.hops = hops;
@@ -34,7 +33,7 @@ angular.module('recipes.edit',[
     $stateProvider
         .state('recipes.edit',{
             url: '/:recipe_id/edit',
-            controller: 'RecipeCtrl',
+            controller: 'RecipeEditCtrl',
             controllerAs: 'recipes',
             templateUrl: 'app/recipes/edit/edit.html',
             resolve: {
