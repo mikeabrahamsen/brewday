@@ -28,9 +28,9 @@ angular.module('recipes.calculator',[
     var mv = mashVol(mashThickness, grainBill);
     var sv = spargeVol(tv, mv);
 
-    this.totalVol = tv;
-    this.mashVol = mv;
-    this.spargeVol = sv;
+    this.totalVol = Math.round(tv*100) / 100;
+    this.mashVol = Math.round(mv*100) / 100;
+    this.spargeVol = Math.round(sv*100) / 100;
 
     return;
 
