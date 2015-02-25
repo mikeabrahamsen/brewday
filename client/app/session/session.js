@@ -1,9 +1,9 @@
 angular.module('session', [
-        'brewday.models.session'
+        'brewday.models.session',
+        'session.auth'
 ])
 .controller('SessionCreateCtrl',  ['$scope', '$state', 'AuthService',
     function($scope, $state, AuthService ){
-        $scope.data = {};
         $scope.login = function login(email, password){
 
             var user = {'email': '', 'password': ''};

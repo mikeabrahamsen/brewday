@@ -1,4 +1,4 @@
-angular.module('session', [
+angular.module('session.auth', [
         'brewday.models.session'
 ])
 .service('AuthService', function($q, localStorageService, Session) {
@@ -10,7 +10,7 @@ angular.module('session', [
             me.setToken(credentials);
             return deferred.resolve(user);
         }, function(response) {
-            if (response.status == 401) {
+            if (response.status == 401 || response.status == 422) {
                 return deferred.reject(false);
             }
             throw new Error('No handler for status code ' + response.status);
