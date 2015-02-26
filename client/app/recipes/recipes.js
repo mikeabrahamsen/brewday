@@ -21,12 +21,6 @@ angular.module('recipes',[
         url: '/recipes',
         controller: 'RecipeListCtrl',
         template: '<div ui-view></div>',
-        resolve: {
-            recipes: ['Recipe',
-            function(recipes){
-                return recipes.get();
-            }],
-        },
         data:{
             authRequired: true,
         }
@@ -36,5 +30,11 @@ angular.module('recipes',[
         controller: 'RecipeListCtrl',
         controllerAs: 'recipes',
         templateUrl: 'app/recipes/list.html',
+        resolve: {
+            recipes: ['Recipe',
+            function(recipes){
+                return recipes.get();
+            }],
+        },
     });
 });

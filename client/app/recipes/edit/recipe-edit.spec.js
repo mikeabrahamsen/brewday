@@ -42,7 +42,6 @@ describe("Recipe Edit", function() {
     });
     it('should save a recipe on submit', function() {
       $httpBackend.expect('PUT', '/recipes/1').respond('201', '');
-      $httpBackend.expect('GET', '/recipes').respond([{'name': 'grain1'},{'name': 'grain2'}]);
       $httpBackend.expect('GET', '/recipes/1').respond([{'name': 'grain1'},{'name': 'grain2'}]);
       $httpBackend.expect('GET', '/recipes/1/hops').respond([{'name': 'hop1'},{'name': 'hop2'}]);
       $httpBackend.expect('GET', '/recipes/1/grains').respond([{'name': 'grain1'},{'name': 'grain2'}]);
@@ -57,7 +56,6 @@ describe("Recipe Edit", function() {
       controller.toDelete = grains;
       $httpBackend.expect('PUT', '/recipes/1').respond('201', '');
       $httpBackend.expect('DELETE', '/recipes/1/grains').respond('');
-      $httpBackend.expect('GET', '/recipes').respond([{'name': 'grain1'},{'name': 'grain2'}]);
       $httpBackend.expect('GET', '/recipes/1').respond([{'name': 'grain1'},{'name': 'grain2'}]);
       $httpBackend.expect('GET', '/recipes/1/hops').respond([{'name': 'hop1'},{'name': 'hop2'}]);
       $httpBackend.expect('GET', '/recipes/1/grains').respond([{'name': 'grain1'},{'name': 'grain2'}]);
@@ -76,7 +74,6 @@ describe("Recipe Edit", function() {
       $httpBackend.expect('PUT', '/recipes/1/grains').respond('201', '');
       $httpBackend.expect('PUT', '/recipes/1/hops').respond('201', '');
       $httpBackend.expect('PUT', '/recipes/1/hops').respond('201', '');
-      $httpBackend.expect('GET', '/recipes').respond([{'name': 'grain1'},{'name': 'grain2'}]);
       $httpBackend.expect('GET', '/recipes/1').respond([{'name': 'grain1'},{'name': 'grain2'}]);
       $httpBackend.expect('GET', '/recipes/1/hops').respond([{'name': 'hop1'},{'name': 'hop2'}]);
       $httpBackend.expect('GET', '/recipes/1/grains').respond([{'name': 'grain1'},{'name': 'grain2'}]);
@@ -87,7 +84,6 @@ describe("Recipe Edit", function() {
   });
   describe('Edit route', function() {
     it('should request recipes and additions', function() {
-      $httpBackend.expect('GET', '/recipes').respond([{'name': 'grain1'},{'name': 'grain2'}]);
       $httpBackend.expect('GET', '/recipes/1').respond([{'name': 'grain1'},{'name': 'grain2'}]);
       $httpBackend.expect('GET', '/recipes/1/hops').respond([{'name': 'hop1'},{'name': 'hop2'}]);
       $httpBackend.expect('GET', '/recipes/1/grains').respond([{'name': 'grain1'},{'name': 'grain2'}]);

@@ -20,8 +20,6 @@ describe("Recipe Create", function() {
     controller = $controller("RecipeCreateCtrl", {$state: $state, Recipe: Recipe, Grain: Grain, Hop: Hop});
 
     $httpBackend.expect('POST', '/recipes').respond(201, '{"id": 1}');
-    //$httpBackend.expect('GET', '/grains').respond('');
-    //$httpBackend.expect('GET', '/hops').respond('');
   }));
   describe('Recipe Create Controller', function() {
     it('should have empty additions', function() {
@@ -39,7 +37,6 @@ describe("Recipe Create", function() {
     });
     it('should go to the view state after creating', function(){
       controller.submit_recipe("Test", "TestType", [],[]);
-      $httpBackend.expect('GET', '/recipes').respond('');
       $httpBackend.expect('GET', '/recipes/1').respond('');
       $httpBackend.expect('GET', '/recipes/1/hops').respond('');
       $httpBackend.expect('GET', '/recipes/1/grains').respond('');
@@ -49,7 +46,6 @@ describe("Recipe Create", function() {
     it('should create a recipe', function(){
       controller.recipe = {name: "TestName", beer_type: "TestType"};
       controller.createRecipe(controller.recipe);
-      $httpBackend.expect('GET', '/recipes').respond('');
       $httpBackend.expect('GET', '/recipes/1').respond('');
       $httpBackend.expect('GET', '/recipes/1/hops').respond('');
       $httpBackend.expect('GET', '/recipes/1/grains').respond('');
@@ -62,7 +58,6 @@ describe("Recipe Create", function() {
       controller.additions = {grains: [{name: 'grain1'}], hops:[]};
       controller.createRecipe(controller.recipe);
       $httpBackend.expect('POST', '/recipes/1/grains').respond('');
-      $httpBackend.expect('GET', '/recipes').respond('');
       $httpBackend.expect('GET', '/recipes/1').respond('');
       $httpBackend.expect('GET', '/recipes/1/hops').respond('');
       $httpBackend.expect('GET', '/recipes/1/grains').respond('');
@@ -74,7 +69,6 @@ describe("Recipe Create", function() {
       controller.additions = {hops: [{name: 'hop1'}], grains:[]};
       controller.createRecipe(controller.recipe);
       $httpBackend.expect('POST', '/recipes/1/hops').respond('');
-      $httpBackend.expect('GET', '/recipes').respond('');
       $httpBackend.expect('GET', '/recipes/1').respond('');
       $httpBackend.expect('GET', '/recipes/1/hops').respond('');
       $httpBackend.expect('GET', '/recipes/1/grains').respond('');
