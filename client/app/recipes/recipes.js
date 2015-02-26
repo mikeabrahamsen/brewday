@@ -1,7 +1,6 @@
 angular.module('recipes',[
         'brewday.models.recipe',
         'brewday.models.grain',
-        'brewday.models.addition',
         'brewday.models.hop',
         'recipes.additions',
         'recipes.view',
@@ -19,7 +18,6 @@ angular.module('recipes',[
     .state('recipes',{
         abstract: true,
         url: '/recipes',
-        controller: 'RecipeListCtrl',
         template: '<div ui-view></div>',
         data:{
             authRequired: true,
