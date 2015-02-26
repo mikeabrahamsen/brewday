@@ -2,9 +2,9 @@ angular.module('session', [
         'brewday.models.session',
         'session.auth'
 ])
-.controller('SessionCreateCtrl',  ['$scope', '$state', 'AuthService',
-    function($scope, $state, AuthService ){
-        $scope.login = function login(email, password){
+.controller('SessionCreateCtrl',  ['$state', 'AuthService',
+    function($state, AuthService ){
+        this.login = function login(email, password){
 
             var user = {'email': '', 'password': ''};
             user.email = email;
@@ -16,10 +16,10 @@ angular.module('session', [
         };
     }
 ])
-.controller('SessionDestroyCtrl',  ['$scope', '$state', 'AuthService',
-    function($scope, $state, AuthService ){
+.controller('SessionDestroyCtrl',  ['$state', 'AuthService',
+    function($state, AuthService ){
             AuthService.logout();
-            $scope.isLoggedIn = false;
+            this.isLoggedIn = false;
             $state.go('home');
         }
 ])
@@ -28,11 +28,13 @@ angular.module('session', [
         .state('login',{
             url: 'sessions/create',
             controller: 'SessionCreateCtrl',
+            controllerAs: 'session',
             templateUrl: 'app/session/create.html',
         })
         .state('logout',{
             url: 'sessions/destroy',
             controller: 'SessionDestroyCtrl',
+            controllerAs: 'session',
             templateUrl: 'app/session/destroy.html'
         });
 });
