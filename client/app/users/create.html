@@ -4,7 +4,7 @@
         {{error}}
     </li>
 </ul>
-<form class="form-horizontal" name="userForm" ng-submit="register(userForm.$valid, data.email, data.password)" novalidate>
+<form class="form-horizontal" name="userForm" ng-submit="user.register(data.email, data.password)" novalidate>
     <div class="form-group">
         <label class="col-sm-4 control-label">Email</label>
         <div class="col-sm-4">

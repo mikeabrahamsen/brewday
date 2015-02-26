@@ -1,12 +1,11 @@
 angular.module('user',[
         'brewday.models.user'
 ])
-.controller('UserCreateCtrl',  ['$scope', '$state', 'User',
-    function($scope, $state, User){
-        $scope.data = {};
-        $scope.register = function register(formIsValid, email, password){
+.controller('UserCreateCtrl',  ['$state', 'User',
+    function($state, User){
+        this.register = function register(email, password){
 
-            var user = {'email': '', 'pass': ''};
+            var user = {};
             user.email = email;
             user.password = password;
 
@@ -21,6 +20,7 @@ angular.module('user',[
         .state('register',{
             url: 'users/create',
             controller: 'UserCreateCtrl',
+            controllerAs: 'user',
             templateUrl: 'app/users/create.html'
         });
 });
