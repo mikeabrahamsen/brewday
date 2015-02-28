@@ -1,5 +1,5 @@
 'use strict';
-
+var combiner = require('stream-combiner2');
 var gulp = require('gulp');
 var browserSync = require('browser-sync');
 var sass = require('gulp-sass');
@@ -21,14 +21,21 @@ gulp.task('browser-sync', function() {
 });
 
 gulp.task('sass', function(){
-    return gulp.src('./sass/styles.scss').pipe(sass(
-                { style: 'expanded',
-                    includePaths: [
-                        './sass',
-                        './bower_components/bootstrap-sass-official/assets/stylesheets',
-                    ]
-                }))
-    .pipe(gulp.dest('./css'));
+var combined = combiner.obj([
+    gulp.src('./sass/styles.scss'),
+    sass(
+      { style: 'expanded',
+        includePaths: [
+          './sass',
+          './bower_components/bootstrap-sass-official/assets/stylesheets',
+          './bower_components/angular-ui-select/dist',
+        ]
+      }),
+      gulp.dest('./css')
+]);
+  combined.on('error', console.error.bind(console));
+
+  return combined;
 });
 
 gulp.task('test', function (done) {
