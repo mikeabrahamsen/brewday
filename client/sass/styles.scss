@@ -1,5 +1,7 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "selectize/selectize.bootstrap3";
+@import "../bower_components/angular-ui-select/dist/select.css";
 /*
  * Override Bootstrap's default container.
  */
@@ -118,15 +120,12 @@
  * brewday posts
  */
  
-.brewday-post {
-    margin-bottom: 60px;
-}
+
 .brewday-post-title {
     margin-bottom: 5px;
     font-size: 40px;
 }
 .brewday-post-meta {
-    margin-bottom: 20px;
     color: #999;
 }
  

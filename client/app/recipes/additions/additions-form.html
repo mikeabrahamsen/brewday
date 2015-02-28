@@ -14,7 +14,12 @@
             <input type="number" class="form-control" ng-model="grain.amount" name="amount" placeholder="lbs">
         </div>
         <div class="col-md-7">
-            <select class="form-control" ng-model="grain.addition_id" ng-options="g.id as g.name for g in additionCtrl.options.grains" ng-disabled="{{readOnly}}"></select>
+        <ui-select ng-model="grain.addition_id" theme="selectize" ng-disabled="disabled">
+            <ui-select-match placeholder="Select or search a grain in the list...">{{$select.selected.name}}</ui-select-match>
+            <ui-select-choices repeat="grain.id as grain in additionCtrl.options.grains | filter: {name: $select.search}">
+                <span ng-bind-html="grain.name | highlight: $select.search"></span>
+            </ui-select-choices>
+        </ui-select>
         </div>
         <div class="col-md-2">
             <button type="button" ng-show="additionCtrl.additions.grains.length > 1 && !readOnly" class="btn btn-danger" ng-click="additionCtrl.removeAddition(grain)">X</button>
