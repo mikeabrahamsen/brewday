@@ -66,7 +66,7 @@ recipe_fields = {
     'name': fields.String,
     'beer_type': fields.String,
     'user': fields.Nested(UserView.user_fields),
-    'created_at': fields.DateTime
+    'created_at': fields.DateTime('iso8601')
 }
 
 
