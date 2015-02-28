@@ -3,5 +3,5 @@
     <a id="recipe-{{recipe.id}}" ui-sref="recipes.view({recipe_id: recipe.id})">
         <p class="brewday-post-title">{{recipe.beer_type}} - {{recipe.name}}</p>
     </a>
-    <span>{{recipe.created_at}}</span>
+    <span>{{recipe.created_at | date:'dd MMM yyyy' }}</span>
 </div>
