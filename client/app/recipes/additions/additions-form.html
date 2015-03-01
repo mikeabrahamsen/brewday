@@ -53,7 +53,12 @@
             <input type="number" class="form-control" ng-disabled="{{readOnly}}" ng-model="hop.amount" name="amount" placeholder="oz">
         </div>
         <div class="col-md-5">
-            <select class="form-control" ng-model="hop.addition_id" ng-options="h.id as h.name for h in additionCtrl.options.hops" ng-disabled="{{readOnly}}"></select>
+        <ui-select ng-model="hop.addition_id" theme="selectize" ng-disabled="disabled">
+            <ui-select-match placeholder="Select or search a hop in the list...">{{$select.selected.name}}</ui-select-match>
+            <ui-select-choices repeat="hop.id as hop in additionCtrl.options.hops | filter: {name: $select.search}">
+                <span ng-bind-html="hop.name | highlight: $select.search"></span>
+            </ui-select-choices>
+        </ui-select>
         </div>
         <div class="col-md-1">
             <button type="button" ng-show="additionCtrl.additions.hops.length > 1 && !readOnly" class="btn btn-danger" ng-click="additionCtrl.removeAddition(hop)">X</button>
