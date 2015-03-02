@@ -21,6 +21,8 @@ module.exports = function(config) {
       'bower_components/lodash/dist/lodash.js',
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/angular-local-storage/angular-local-storage.js',
+      'bower_components/angular-ui-select/dist/select.js',
+      'bower_components/angular-sanitize/angular-sanitize.min.js',
       'app/**/*.js',
       'app/**/*.html'
     ],

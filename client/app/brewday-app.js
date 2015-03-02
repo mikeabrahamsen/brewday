@@ -5,8 +5,6 @@ angular.module('Brewday', [
     'session',
     'user',
     'recipes',
-    'ui.select',
-    'ngSanitize'
 ])
 
 .run(function($rootScope, $state, $stateParams,  $location, Restangular, AuthService) {

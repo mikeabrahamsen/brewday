@@ -1,4 +1,6 @@
 angular.module('recipes.additions',[
+    'ui.select',
+    'ngSanitize'
 ])
 .directive('additionsForm', function(){
   return {
