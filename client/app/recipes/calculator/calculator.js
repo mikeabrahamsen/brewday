@@ -13,6 +13,7 @@ angular.module('recipes.calculator',[
   calculatorService.trubLoss = 0.5;
   calculatorService.equipmentLoss = 1;
   calculatorService.mashThickness = 1.33;
+  calculatorService.grainTemp = 65;
 
 
   calculatorService.calculateWaterVol = function(grainBill){
@@ -31,10 +32,10 @@ angular.module('recipes.calculator',[
     this.totalVol = Math.round(tv*100) / 100;
     this.mashVol = Math.round(mv*100) / 100;
     this.spargeVol = Math.round(sv*100) / 100;
-
-    return;
-
-
+  };
+  calculatorService.calculateStrikeTemp = function(targetTemp){
+    var strikeTemp = (0.2 / calculatorService.mashThickness)*(targetTemp - calculatorService.grainTemp) + targetTemp;
+    return Math.round(strikeTemp*10) / 10;
   };
   function grainAbsorbtion(grainBill){
     return 0.13 * grainBill;

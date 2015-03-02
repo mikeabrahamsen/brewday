@@ -37,6 +37,10 @@ describe('Calculator Service', function() {
       expect(CalculatorService.mashVol).toBe(3.33);
       expect(CalculatorService.spargeVol).toBe(5.34);
     });
+    it('should calculate strike temperature with default values', function() {
+      var strikeTemp = CalculatorService.calculateStrikeTemp(152);
+      expect(strikeTemp).toBe(165.1);
+    });
   });
 });
 
