@@ -13,6 +13,8 @@ class User(db.Model):
                       info={'validators': Email()})
     password = db.Column(db.String(80), nullable=False)
     recipes = db.relationship('Recipe', backref='user', lazy='dynamic')
+    equipment_profiles = db.relationship('EquipmentProfile',
+                                         backref='user', lazy='dynamic')
 
     def __init__(self, email, password):
         self.email = email
@@ -20,6 +22,63 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.email
+
+
+class EquipmentProfile(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    name = db.Column(db.String(120), nullable=False)
+    _trub_loss = db.Column(INTEGER)
+    _equipment_loss = db.Column(INTEGER)
+    _fermenter_loss = db.Column(INTEGER)
+
+    gallon_ml_conversion_factor = Decimal(3785.411784)
+
+    def __init__(self, user_id, name, trub_loss,
+                 equipment_loss, fermenter_loss):
+        self.user_id = user_id
+        self.name = name
+        self.trub_loss = trub_loss
+        self.equipment_loss = equipment_loss
+        self.fermenter_loss = fermenter_loss
+
+    @hybrid_property
+    def trub_loss(self):
+        return self.mlToGallons(self._trub_loss)
+
+    @trub_loss.setter
+    def trub_loss(self, value):
+        self._trub_loss = self.gallonsToMl(value)
+
+    @hybrid_property
+    def equipment_loss(self):
+        return self.mlToGallons(self._equipment_loss)
+
+    @equipment_loss.setter
+    def equipment_loss(self, value):
+        self._equipment_loss = self.gallonsToMl(value)
+
+    @hybrid_property
+    def fermenter_loss(self):
+        return self.mlToGallons(self._fermenter_loss)
+
+    @fermenter_loss.setter
+    def fermenter_loss(self, value):
+        self._fermenter_loss = self.gallonsToMl(value)
+
+    def gallonsToMl(self, value):
+        """Convert gallons to mililiters
+
+        :param value: value to convert
+        :returns: value in ml
+
+        """
+        return int(ceil(value * self.gallon_ml_conversion_factor))
+
+    def mlToGallons(self, value):
+        return round(
+            Decimal(value / Decimal(self.gallon_ml_conversion_factor)), 2
+        )
 
 
 class Recipe(db.Model):

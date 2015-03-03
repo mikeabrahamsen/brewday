@@ -5,7 +5,7 @@ from wtforms import StringField, DecimalField
 from wtforms.validators import DataRequired
 
 from app import db
-from models import User, Recipe, Hop, Grain, RecipeAddition
+from models import User, Recipe, Hop, Grain, RecipeAddition, EquipmentProfile
 
 BaseModelForm = model_form_factory(Form)
 
@@ -59,3 +59,12 @@ class RecipeAdditionUpdateForm(ModelForm):
         model = RecipeAddition
         include = ['addition_id']
     amount = DecimalField('amount')
+
+
+class EquipmentProfileForm(ModelForm):
+    class Meta:
+        model = EquipmentProfile
+
+    trub_loss = DecimalField('trub_loss')
+    equipment_loss = DecimalField('equipment_loss')
+    fermenter_loss = DecimalField('fermenter_loss')
