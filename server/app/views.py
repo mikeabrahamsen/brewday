@@ -4,13 +4,14 @@ from flask.ext.restful import fields, marshal_with
 from sqlalchemy.orm.exc import NoResultFound, FlushError
 
 from app import api, db, flask_bcrypt, auth
-from models import User, Recipe, Hop, Grain, RecipeAddition
+from models import User, Recipe, Hop, Grain, RecipeAddition, EquipmentProfile
 from forms import (
     UserCreateForm,
     SessionCreateForm,
     RecipeCreateForm,
     RecipeAdditionCreateForm,
     RecipeUpdateForm,
+    EquipmentProfileForm,
     RecipeAdditionUpdateForm
 )
 
@@ -416,6 +417,82 @@ class RecipeAdditionView(restful.Resource):
             db.session.rollback()
             return '%s already exist' % recipe, 400
 
+equipment_fields = {
+    'id': fields.Integer,
+    'name': fields.String,
+    'trub_loss': fields.Float,
+    'equipment_loss': fields.Float,
+    'fermenter_loss': fields.Float,
+}
+
+
+class EquipmentProfileList(restful.Resource):
+    @auth.login_required
+    @marshal_with(equipment_fields)
+    def get(self):
+        equipment_profiles = EquipmentProfile.query.filter_by(
+            user_id=g.user.id).all()
+        return equipment_profiles
+
+    @auth.login_required
+    @marshal_with(equipment_fields)
+    def post(self):
+        form = EquipmentProfileForm()
+        if not form.validate_on_submit():
+            return form.errors, 422
+
+        profile = EquipmentProfile(
+            g.user.id,
+            form.name.data,
+            form.trub_loss.data,
+            form.equipment_loss.data,
+            form.fermenter_loss.data
+        )
+        db.session.add(profile)
+        db.session.commit()
+        return profile, 201
+
+
+class EquipmentProfileView(restful.Resource):
+    @auth.login_required
+    @marshal_with(equipment_fields)
+    def get(self, id):
+        equipment_profile = EquipmentProfile.query.filter_by(
+            user_id=g.user.id, id=id).one()
+        return equipment_profile
+
+    @auth.login_required
+    @marshal_with(equipment_fields)
+    def put(self, id):
+        form = EquipmentProfileForm()
+        if not form.validate_on_submit():
+            return form.errors, 422
+
+        profile = EquipmentProfile.query.filter_by(
+            user_id=g.user.id, id=id).one()
+        profile.name = form.name.data
+        profile.trub_loss = form.trub_loss.data
+        profile.equipment_loss = form.equipment_loss.data
+        profile.fermenter_loss = form.fermenter_loss.data
+        db.session.add(profile)
+        db.session.commit()
+        return profile, 201
+
+    @auth.login_required
+    @marshal_with(equipment_fields)
+    def delete(self, id):
+        try:
+            profile = EquipmentProfile.query.filter_by(id=id).one()
+
+            # delete the profile
+            db.session.delete(profile)
+            db.session.commit()
+
+            return '', 204
+        except NoResultFound:
+            db.session.rollback()
+
+
 api.add_resource(UserView, '/api/v1/users')
 api.add_resource(SessionView, '/api/v1/sessions')
 api.add_resource(RecipeListView, '/api/v1/recipes')
@@ -437,3 +514,7 @@ api.add_resource(
     RecipeAdditionView,
     '/api/v1/recipes/<int:recipe_id>/additions/<int:id>'
 )
+api.add_resource(EquipmentProfileList, '/api/v1/settings/equipment')
+api.add_resource(EquipmentProfileView,
+                 '/api/v1/settings/equipment/<int:id>'
+                 )
