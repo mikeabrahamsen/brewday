@@ -162,4 +162,4 @@ class EquipmentProfileModelTests(TestCase):
         self.assertEqual(len(response), 1)
 
 if __name__ == '__main__':
-        unittest.main()
+    unittest.main()

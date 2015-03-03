@@ -3,7 +3,7 @@ from unittest import TestCase
 
 import json
 from app import app, db
-from app.models import User, RecipeAddition
+from app.models import User, RecipeAddition, Addition
 from app.tests import init_grain_db, init_hop_db
 
 
@@ -59,16 +59,19 @@ class AdditionTests(TestCase):
         if recipe_id != 1:
             route = self.replace_recipe_id(route, recipe_id)
 
-        hop = dict(name=name,
-                   brew_stage=brew_stage,
-                   time=time,
-                   amount=amount,
-                   addition_type=addition_type
-                   )
+        addition_id = Addition.query.filter_by(name=name).one().id
+
+        addition = dict(name=name,
+                        brew_stage=brew_stage,
+                        addition_id=addition_id,
+                        time=time,
+                        amount=amount,
+                        addition_type=addition_type
+                        )
 
         rv = self.app.post(
             route,
-            data=hop,
+            data=addition,
             headers=self.auth_headers
         )
         return rv
@@ -83,7 +86,9 @@ class AdditionTests(TestCase):
         self.assertEqual(len(response), 0)
 
     def test_adding_hop(self):
-        self.add_addition('hop', 'Goldings East Kent(EK)', 2, 60, 1)
+        rv = self.add_addition('hop', 'Goldings East Kent(EK)', 2, 60, 1)
+        self.check_content_type(rv.headers)
+        self.assertEqual(rv.status_code, 201)
 
         rv = self.app.get(self.addition_route)
         self.check_content_type(rv.headers)

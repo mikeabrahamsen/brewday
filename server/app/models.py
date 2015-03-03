@@ -148,6 +148,7 @@ class RecipeAddition(db.Model):
     def __init__(self, addition, amount, brew_stage, time):
         self.addition = addition
         self.addition_type = addition.addition_type
+        self.brew_stage = brew_stage
         self.amount = amount
         self.time = time
         self.name = addition.name

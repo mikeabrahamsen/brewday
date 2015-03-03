@@ -209,11 +209,18 @@ def add_recipe_addition(addition_type, addition_id,
     try:
         addition = addition_type.query.filter_by(id=addition_id).one()
         recipe = Recipe.query.filter_by(id=recipe_id).one()
-        ra = RecipeAddition(addition, amount, brew_stage, time)
+        exists = RecipeAddition.query.filter_by(addition_id=addition.id,
+                                                time=time,
+                                                brew_stage=brew_stage).first()
+        if not exists:
+            ra = RecipeAddition(addition, amount, brew_stage, time)
 
-        addition = recipe.additions.append(ra)
-        db.session.commit()
-        return addition, 201
+            addition = recipe.additions.append(ra)
+            db.session.commit()
+            return addition, 201
+
+        else:
+            return 'Addition already exist', 400
 
     except NoResultFound:
         db.session.rollback()
