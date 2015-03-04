@@ -521,7 +521,7 @@ api.add_resource(
     RecipeAdditionView,
     '/api/v1/recipes/<int:recipe_id>/additions/<int:id>'
 )
-api.add_resource(EquipmentProfileList, '/api/v1/settings/equipment')
+api.add_resource(EquipmentProfileList, '/api/v1/equipment')
 api.add_resource(EquipmentProfileView,
-                 '/api/v1/settings/equipment/<int:id>'
+                 '/api/v1/equipment/<int:id>'
                  )
