@@ -5,6 +5,7 @@ angular.module('Brewday', [
     'session',
     'user',
     'recipes',
+    'settings',
 ])
 
 .run(function($rootScope, $state, $stateParams,  $location, Restangular, AuthService) {

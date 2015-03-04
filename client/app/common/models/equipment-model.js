@@ -8,7 +8,7 @@ angular.module('brewday.models.equipment',[
             return Restangular.all('equipment').getList();
         },
         create: function(data) {
-            return Restangular.one('equipment').post(data);
+            return Restangular.one('equipment').customPOST(data);
         },
         getOne: function(data) {
             return Restangular.one('equipment',data).get();
