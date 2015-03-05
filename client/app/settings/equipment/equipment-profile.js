@@ -5,8 +5,9 @@ angular.module('settings.equipment',[
         function($state, EquipmentProfile){
 
         var equipCreateCtrl = this;
-        equipCreateCtrl.createProfile = function(trubLoss, equipmentLoss, fermenterLoss) {
+        equipCreateCtrl.createProfile = function(name, trubLoss, equipmentLoss, fermenterLoss) {
           var profile = {
+            "name": name,
             "trub_loss": trubLoss,
             "equipment_loss": equipmentLoss,
             "fermenter_loss": fermenterLoss
@@ -39,6 +40,6 @@ angular.module('settings.equipment',[
             url: '/new',
             controllerAs: 'equipmentCreate',
             controller: 'EquipmentCreateCtrl',
-            template: '<div h1>Equipment</h1>',
+            templateUrl: 'app/settings/equipment/equipment-form.html',
         });
 });
