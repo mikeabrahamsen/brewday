@@ -18,7 +18,7 @@ class EquipmentProfileModelTests(TestCase):
         db.session.remove()
         self.app = app.test_client()
         db.create_all()
-        self.equipment_route = '/api/v1/settings/equipment'
+        self.equipment_route = '/api/v1/equipment'
 
         self.email = 'test@test.com'
         self.password = 'admin'
