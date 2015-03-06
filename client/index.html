@@ -17,6 +17,7 @@
                     <a class="brewday-nav-item" ui-sref="logout" ng-show="$stateParams.isLoggedIn">Logout</a>
                     <a class="brewday-nav-item" ui-sref="register" ng-class="{active: isActive('/users/create')}">Register</a>
                     <a class="brewday-nav-item" ui-sref="create" ng-show="$stateParams.isLoggedIn" ng-class="{active: isActive('/recipes/create')}">Create a recipe</a>
+                    <a class="brewday-nav-item" ui-sref="settings" ng-show="$stateParams.isLoggedIn" ng-class="{active: isActive('/recipes/create')}">Settings</a>
                 </nav>
             </div>
         </div>

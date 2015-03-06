@@ -4,22 +4,22 @@
             <label class="col-md-1 control-label">Name</label>
             <div class="col-md-4">
                 <input type="text" class="form-control" ng-disabled="{{readOnly}}" name="name" placeholder="Profile Name" ng-model="equipmentCreate.name" required>
-                <p ng-show="equipmentForm.name.$invalid && !equipmentForm.name.$pristine" class="help-block">Profile Name Required.</p>
+                <p ng-show="equipmentCreate.name.$invalid && !equipmentCreate.name.$pristine" class="help-block">Profile Name Required.</p>
             </div>
             <label class="col-md-2 control-label">Trub Loss</label>
             <div class="col-md-4">
                 <input type="text" class="form-control" ng-disabled="{{readOnly}}" name="trubLoss" placeholder="lbs" ng-model="equipmentCreate.trubLoss" required>
-                <p ng-show="equipmentForm.$invalid && !equipmentForm.trubLoss.$pristine" class="help-block">Beer Type is required</p>
+                <p ng-show="equipmentCreate.$invalid && !equipmentCreate.trubLoss.$pristine" class="help-block">Beer Type is required</p>
             </div>
             <label class="col-md-2 control-label">Equipment Loss</label>
             <div class="col-md-4">
                 <input type="text" class="form-control" ng-disabled="{{readOnly}}" name="equipmentLoss" placeholder="lbs" ng-model="equipmentCreate.equipmentLoss" required>
-                <p ng-show="equipmentForm.$invalid && !equipmentForm.equipmentLoss.$pristine" class="help-block">Equipment Loss is required</p>
+                <p ng-show="equipmentCreate.$invalid && !equipmentCreate.equipmentLoss.$pristine" class="help-block">Equipment Loss is required</p>
             </div>
             <label class="col-md-2 control-label">Fermenter Loss</label>
             <div class="col-md-4">
                 <input type="text" class="form-control" ng-disabled="{{readOnly}}" name="fermenterLoss" placeholder="lbs" ng-model="equipmentCreate.fermenterLoss" required>
-                <p ng-show="equipmentForm.$invalid && !equipmentForm.fermenterLoss.$pristine" class="help-block">Fermenter Loss is required</p>
+                <p ng-show="equipmentCreate.$invalid && !equipmentCreate.fermenterLoss.$pristine" class="help-block">Fermenter Loss is required</p>
             </div>
         </div>
     </div>

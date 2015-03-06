@@ -5,7 +5,7 @@ angular.module('settings',[
     $stateProvider
     .state('settings',{
         url: '/settings',
-        template: '<div ui-view></div>',
+        templateUrl: 'app/settings/settings.tmpl.html',
         data:{
             authRequired: true,
         }

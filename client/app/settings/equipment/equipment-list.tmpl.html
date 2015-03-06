@@ -1,0 +1,6 @@
+<div class="col-md-12">
+    <button type="button" class="btn btn-primary" ui-sref="settings.equipmentCreate">Create New Profile</button>
+</div>
+<div ng-repeat="profile in equipmentList.equipmentProfiles">
+    <a id="profile-{{profile.id}}" ui-sref="settings.equipmentView({profileId: profile.id})">{{profile.name}}</a>
+</div>

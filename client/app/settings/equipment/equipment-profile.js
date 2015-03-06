@@ -22,13 +22,20 @@ angular.module('settings.equipment',[
               this.equipmentProfiles = equipmentProfiles;
             }
 ])
+.controller('EquipmentViewCtrl',  ['$state', 'equipmentProfile',
+            function($state, equipmentProfile){
+              var equipmentView = this;
+              this.readOnly = true;
+              this.profile = equipmentProfile;
+            }
+])
 .config(function($stateProvider){
     $stateProvider
         .state('settings.equipment',{
             url: '/equipment',
             controllerAs: 'equipmentList',
             controller: 'EquipmentListCtrl',
-            template: '<div ui-view>Equipment List</div>',
+            templateUrl: 'app/settings/equipment/equipment-list.tmpl.html',
             resolve: {
               equipmentProfiles: ['EquipmentProfile',
                 function(equipment){
@@ -36,10 +43,22 @@ angular.module('settings.equipment',[
                 }],
             },
         })
-        .state('settings.equipment.create',{
+        .state('settings.equipmentCreate',{
             url: '/new',
             controllerAs: 'equipmentCreate',
             controller: 'EquipmentCreateCtrl',
             templateUrl: 'app/settings/equipment/equipment-form.html',
+        })
+        .state('settings.equipmentView',{
+            url: '/equipment/:profileId',
+            controllerAs: 'equipmentView',
+            controller: 'EquipmentViewCtrl',
+            templateUrl: 'app/settings/equipment/equipment-view.tmpl.html',
+            resolve: {
+                equipmentProfile: ['$stateParams', 'EquipmentProfile',
+                function($stateParams, profile){
+                    return profile.getOne($stateParams.profileId);
+                }],
+            }
         });
 });

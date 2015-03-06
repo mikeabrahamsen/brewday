@@ -1,0 +1,30 @@
+<form class="form-horizontal" name="equipmentForm" ng-submit="equipmentView.profile.createProfile(equipmentView.profile.name, equipmentView.profile.trubLoss, equipmentView.profile.equipmentLoss, equipmentView.profile.fermenterLoss)" novalidate>
+    <div class="form-group">
+        <label class="col-md-2 control-label">Name</label>
+        <div class="col-md-4">
+            <input type="text" class="form-control" ng-disabled="{{equipmentView.readOnly}}" name="name" placeholder="Profile Name" ng-model="equipmentView.profile.name" required>
+            <p ng-show="equipmentView.profile.name.$invalid && !equipmentView.profile.name.$pristine" class="help-block">Profile Name Required.</p>
+        </div>
+        <label class="col-md-2 control-label">Trub Loss</label>
+        <div class="col-md-4">
+            <input type="text" class="form-control" ng-disabled="{{equipmentView.readOnly}}" name="trubLoss" placeholder="lbs" ng-model="equipmentView.profile.trub_loss" required>
+            <p ng-show="equipmentView.profile.$invalid && !equipmentView.profile.trubLoss.$pristine" class="help-block">Beer Type is required</p>
+        </div>
+        <label class="col-md-2 control-label">Equipment Loss</label>
+        <div class="col-md-4">
+            <input type="text" class="form-control" ng-disabled="{{equipmentView.readOnly}}" name="equipmentLoss" placeholder="lbs" ng-model="equipmentView.profile.equipment_loss" required>
+            <p ng-show="equipmentView.profile.$invalid && !equipmentView.profile.equipmentLoss.$pristine" class="help-block">Equipment Loss is required</p>
+        </div>
+        <label class="col-md-2 control-label">Fermenter Loss</label>
+        <div class="col-md-4">
+            <input type="text" class="form-control" ng-disabled="{{equipmentView.readOnly}}" name="fermenterLoss" placeholder="lbs" ng-model="equipmentView.profile.fermenter_loss" required>
+            <p ng-show="equipmentView.profile.$invalid && !equipmentView.profile.fermenterLoss.$pristine" class="help-block">Fermenter Loss is required</p>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <hr style="padding-bottom: 40px"/>
+        <button type="submit" ng-show="!equipmentView.readOnly" class="btn btn-success pull-right">Save Profile</button>
+    </div>
+</form>
+
+
