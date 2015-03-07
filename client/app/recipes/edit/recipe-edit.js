@@ -1,13 +1,20 @@
 angular.module('recipes.edit',[
 ])
-.controller('RecipeEditCtrl',  ['$state', 'recipe', 'grains', 'hops',
-    function($state, recipe, grains, hops){
+.controller('RecipeEditCtrl',  ['$state', 'recipe', 'grains', 'hops', 'EquipmentProfile',
+    function($state, recipe, grains, hops, EquipmentProfile){
+        var editCtrl = this;
         this.recipe = recipe;
         this.readOnly = false;
         this.grains = grains;
         this.hops = hops;
         this.toDelete = [];
         this.additions = {grains: this.grains, hops: this.hops};
+        EquipmentProfile.getOne(recipe.equipment_id).then(function(data){
+          editCtrl.equipment_id = data.id;
+        });
+        EquipmentProfile.get().then(function(data){
+          editCtrl.equipmentList = data;
+        });
 
         this.submit_recipe =
             function submit_recipe(name,beertype,grains,hops){

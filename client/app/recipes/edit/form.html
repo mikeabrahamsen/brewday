@@ -12,6 +12,17 @@
                 <p ng-show="postForm.beer_type.$invalid && !postForm.beer_type.$pristine" class="help-block">Beer Type is required</p>
             </div>
         </div>
+        <div class="row">
+            <label class="col-md-1 control-label">Equipment Profile</label>
+            <div class="col-md-4">
+                <ui-select ng-model="recipes.equipment_id" theme="selectize" ng-disabled="disabled">
+                <ui-select-match placeholder="Select or search a profile in the list...">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="equipment.id as equipment in recipes.equipmentList | filter: {name: $select.search}">
+                <span ng-bind-html="equipment.name | highlight: $select.search"></span>
+                </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
     </div>
     <hr />
     <additions-form additions="recipes.additions" to-delete="recipes.toDelete" recipe="recipes.recipe"></additions-form>
