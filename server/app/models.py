@@ -86,14 +86,16 @@ class Recipe(db.Model):
     name = db.Column(db.String(120), nullable=False)
     beer_type = db.Column(db.String(120), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    equipment_id = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, default=db.func.now())
     additions = db.relationship("RecipeAddition", backref="recipe",
                                 cascade='all, delete-orphan')
 
-    def __init__(self, name, beer_type):
+    def __init__(self, name, beer_type, equipment_id):
         self.name = name
         self.beer_type = beer_type
         self.user_id = g.user.id
+        self.equipment_id = equipment_id
 
     def __repr__(self):
         return '<Recipe %r>' % self.name

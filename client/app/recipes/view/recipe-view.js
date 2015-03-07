@@ -1,11 +1,15 @@
 angular.module('recipes.view',[
 ])
-.controller('RecipeViewCtrl',  ['$state', 'recipe', 'grains', 'hops',
-        function($state, recipe, grains, hops){
+.controller('RecipeViewCtrl',  ['$state', 'recipe', 'grains', 'hops', 'EquipmentProfile',
+        function($state, recipe, grains, hops, EquipmentProfile){
+            var recipeView = this;
             this.recipe = recipe;
             this.grains = grains;
             this.hops = hops;
             this.additions = {grains: this.grains, hops: this.hops};
+            EquipmentProfile.getOne(recipe.equipment_id).then(function(data){
+              recipeView.equipmentProfile = data;
+            });
             this.readOnly = true;
 
             this.delete = function(recipe){

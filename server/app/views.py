@@ -66,6 +66,7 @@ recipe_fields = {
     'id': fields.Integer,
     'name': fields.String,
     'beer_type': fields.String,
+    'equipment_id': fields.Integer,
     'user': fields.Nested(UserView.user_fields),
     'created_at': fields.DateTime('iso8601')
 }
@@ -84,7 +85,8 @@ class RecipeListView(restful.Resource):
         form = RecipeCreateForm()
         if not form.validate_on_submit():
             return form.errors, 422
-        recipe = Recipe(form.name.data, form.beer_type.data)
+        recipe = Recipe(form.name.data, form.beer_type.data,
+                        form.equipment_id.data)
         db.session.add(recipe)
         db.session.commit()
         return recipe, 201
