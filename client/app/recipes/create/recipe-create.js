@@ -5,6 +5,7 @@ angular.module('recipes.create',[
 
         var createCtrl = this;
         this.additions = {grains: [], hops: []};
+        this.toDelete = [];
 
         this.recipe = {};
         EquipmentProfile.get().then(function(data){
