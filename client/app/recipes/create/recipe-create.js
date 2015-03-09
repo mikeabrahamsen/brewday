@@ -6,11 +6,7 @@ angular.module('recipes.create',[
         var createCtrl = this;
         this.additions = {grains: [], hops: []};
         this.toDelete = [];
-
-        this.recipe = {};
-        EquipmentProfile.get().then(function(data){
-          createCtrl.equipmentList = data;
-        });
+        this.recipe = {equipment_id: 0};
 
         this.createRecipe = function(recipe) {
           Recipe.create(recipe).then(function(data){
@@ -32,7 +28,6 @@ angular.module('recipes.create',[
           createCtrl.recipe.name = name;
           createCtrl.recipe.beer_type = beertype;
           createCtrl.recipe.equipment_id = equipment_id;
-          console.log(equipment_id);
 
           createCtrl.createRecipe(createCtrl.recipe);
         };

@@ -7,9 +7,7 @@ angular.module('recipes.view',[
             this.grains = grains;
             this.hops = hops;
             this.additions = {grains: this.grains, hops: this.hops};
-            EquipmentProfile.getOne(recipe.equipment_id).then(function(data){
-              recipeView.equipmentProfile = data;
-            });
+
             this.readOnly = true;
 
             this.delete = function(recipe){

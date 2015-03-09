@@ -108,6 +108,7 @@ class RecipeView(restful.Resource):
         recipe = Recipe.query.filter_by(user_id=g.user.id, id=id).one()
         recipe.name = form.name.data
         recipe.beer_type = form.beer_type.data
+        recipe.equipment_id = form.equipment_id.data
         db.session.commit()
 
         return recipe, 201

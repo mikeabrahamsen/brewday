@@ -6,7 +6,8 @@ angular.module('recipes',[
         'recipes.view',
         'recipes.edit',
         'recipes.create',
-        'recipes.calculator'
+        'recipes.calculator',
+        'recipes.equipment'
 ])
 .controller('RecipeListCtrl',  ['recipes',
         function(recipes){

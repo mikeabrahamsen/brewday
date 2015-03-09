@@ -1,0 +1,13 @@
+<ng-form name="grainForm" ng-model="equipmentCtrl.equipmentId">
+<div class="row">
+    <label class="col-md-1 control-label">Equipment Profile</label>
+    <div class="col-md-4">
+        <ui-select ng-model="equipmentCtrl.equipmentId" theme="selectize" ng-disabled="disabled">
+        <ui-select-match placeholder="Select or search a profile in the list...">{{$select.selected.name}}</ui-select-match>
+        <ui-select-choices repeat="equipment.id as equipment in equipmentCtrl.equipmentList | filter: {name: $select.search}">
+        <span ng-bind-html="equipment.name | highlight: $select.search"></span>
+        </ui-select-choices>
+        </ui-select>
+    </div>
+</div>
+</ng-form>
