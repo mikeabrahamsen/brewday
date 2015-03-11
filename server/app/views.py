@@ -25,12 +25,13 @@ def verify_password(email, password):
     return flask_bcrypt.check_password_hash(user.password, password)
 
 
-class UserView(restful.Resource):
-    user_fields = {
-        'id': fields.Integer,
-        'email': fields.String
-    }
+user_fields = {
+    'id': fields.Integer,
+    'email': fields.String
+}
 
+
+class UserView(restful.Resource):
     @marshal_with(user_fields)
     def post(self):
         form = UserCreateForm()
@@ -38,7 +39,13 @@ class UserView(restful.Resource):
             return form.errors, 422
 
         user = User(form.email.data, form.password.data)
+
+        # create default equipment profile
+        equipment_profile = EquipmentProfile(user.id,
+                                             'Default Profile', 0.5, 1.0, 0.0)
+
         db.session.add(user)
+        db.session.add(equipment_profile)
         db.session.commit()
         return user
 
@@ -49,7 +56,7 @@ class UserView(restful.Resource):
 
 
 class SessionView(restful.Resource):
-    @marshal_with(UserView.user_fields)
+    @marshal_with(user_fields)
     def post(self):
         form = SessionCreateForm()
         if not form.validate_on_submit():
@@ -61,13 +68,21 @@ class SessionView(restful.Resource):
             return user, 201
         return '', 401
 
+equipment_fields = {
+    'id': fields.Integer,
+    'name': fields.String,
+    'trub_loss': fields.Float,
+    'equipment_loss': fields.Float,
+    'fermenter_loss': fields.Float,
+}
+
 
 recipe_fields = {
     'id': fields.Integer,
     'name': fields.String,
     'beer_type': fields.String,
-    'equipment_id': fields.Integer,
-    'user': fields.Nested(UserView.user_fields),
+    'equipment_profile': fields.Nested(equipment_fields),
+    'user': fields.Nested(user_fields),
     'created_at': fields.DateTime('iso8601')
 }
 
@@ -96,8 +111,14 @@ class RecipeView(restful.Resource):
     @auth.login_required
     @marshal_with(recipe_fields)
     def get(self, id):
-        recipes = Recipe.query.filter_by(user_id=g.user.id, id=id).one()
-        return recipes
+        recipe = Recipe.query.filter_by(user_id=g.user.id, id=id).one()
+        equipment_profile = EquipmentProfile.query.filter_by(
+            user_id=g.user.id,
+            id=recipe.equipment_id).one()
+
+        recipe.equipment_profile = equipment_profile
+
+        return recipe
 
     @auth.login_required
     @marshal_with(recipe_fields)
@@ -426,14 +447,6 @@ class RecipeAdditionView(restful.Resource):
         except FlushError:
             db.session.rollback()
             return '%s already exist' % recipe, 400
-
-equipment_fields = {
-    'id': fields.Integer,
-    'name': fields.String,
-    'trub_loss': fields.Float,
-    'equipment_loss': fields.Float,
-    'fermenter_loss': fields.Float,
-}
 
 
 class EquipmentProfileList(restful.Resource):
