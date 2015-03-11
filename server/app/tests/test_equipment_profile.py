@@ -19,6 +19,7 @@ class EquipmentProfileModelTests(TestCase):
         self.app = app.test_client()
         db.create_all()
         self.equipment_route = '/api/v1/equipment'
+        self.user_route = '/api/v1/users'
 
         self.email = 'test@test.com'
         self.password = 'admin'
@@ -35,6 +36,20 @@ class EquipmentProfileModelTests(TestCase):
 
     def check_content_type(self, headers):
         self.assertEqual(headers['Content-Type'], 'application/json')
+
+    def test_default_profile_exists(self):
+        user_data = {'email': 'test@wondertest.com', 'password': 'admin'}
+        rv = self.app.post(self.user_route, data=user_data)
+        self.check_content_type(rv.headers)
+
+        e = EquipmentProfile.query.all()
+        rv = self.app.get(self.user_route)
+        self.assertEqual(rv.status_code, 200)
+        response = json.loads(rv.data)
+        self.assertEqual(len(response), 2)
+        self.assertNotEqual(e, [])
+        self.assertEqual(e[0].name, 'Default Profile')
+        self.assertEqual(e[0].trub_loss, 0.5)
 
     def test_creating_equipment_profile(self):
         profile = EquipmentProfile(1, 'mpro', 1, 1, 1)
