@@ -73,7 +73,7 @@ class EquipmentProfile(db.Model):
         :returns: value in ml
 
         """
-        return int(ceil(value * self.gallon_ml_conversion_factor))
+        return int(ceil(Decimal(value) * self.gallon_ml_conversion_factor))
 
     def mlToGallons(self, value):
         return round(
