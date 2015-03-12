@@ -15,10 +15,10 @@ describe('Calculator Service', function() {
       expect(CalculatorService.grainBill).toEqual(0);
     });
     it('should have an initial batch size', function() {
-      expect(CalculatorService.batchSize).toEqual(5);
+      expect(CalculatorService.details.batchSize).toEqual(5);
     });
     it('should have an initial boil time', function() {
-      expect(CalculatorService.boilTime).toEqual(60);
+      expect(CalculatorService.details.boilTime).toEqual(60);
     });
     it('should have an initial trub loss', function() {
       expect(CalculatorService.trubLoss).toEqual(0.5);
@@ -27,7 +27,7 @@ describe('Calculator Service', function() {
       expect(CalculatorService.equipmentLoss).toEqual(1);
     });
     it('should have an initial mash thickness', function() {
-      expect(CalculatorService.mashThickness).toEqual(1.33);
+      expect(CalculatorService.details.mashThickness).toEqual(1.33);
     });
   });
   describe('calculator', function() {
