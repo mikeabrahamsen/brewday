@@ -65,6 +65,6 @@ class EquipmentProfileForm(ModelForm):
     class Meta:
         model = EquipmentProfile
 
-    trub_loss = DecimalField('trub_loss')
-    equipment_loss = DecimalField('equipment_loss')
-    fermenter_loss = DecimalField('fermenter_loss')
+    trubLoss = DecimalField('trubLoss')
+    equipmentLoss = DecimalField('equipmentLoss')
+    fermenterLoss = DecimalField('fermenterLoss')

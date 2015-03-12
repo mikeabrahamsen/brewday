@@ -38,32 +38,32 @@ class EquipmentProfile(db.Model):
                  equipment_loss, fermenter_loss):
         self.user_id = user_id
         self.name = name
-        self.trub_loss = trub_loss
-        self.equipment_loss = equipment_loss
-        self.fermenter_loss = fermenter_loss
+        self.trubLoss = trub_loss
+        self.equipmentLoss = equipment_loss
+        self.fermenterLoss = fermenter_loss
 
     @hybrid_property
-    def trub_loss(self):
+    def trubLoss(self):
         return self.mlToGallons(self._trub_loss)
 
-    @trub_loss.setter
-    def trub_loss(self, value):
+    @trubLoss.setter
+    def trubLoss(self, value):
         self._trub_loss = self.gallonsToMl(value)
 
     @hybrid_property
-    def equipment_loss(self):
+    def equipmentLoss(self):
         return self.mlToGallons(self._equipment_loss)
 
-    @equipment_loss.setter
-    def equipment_loss(self, value):
+    @equipmentLoss.setter
+    def equipmentLoss(self, value):
         self._equipment_loss = self.gallonsToMl(value)
 
     @hybrid_property
-    def fermenter_loss(self):
+    def fermenterLoss(self):
         return self.mlToGallons(self._fermenter_loss)
 
-    @fermenter_loss.setter
-    def fermenter_loss(self, value):
+    @fermenterLoss.setter
+    def fermenterLoss(self, value):
         self._fermenter_loss = self.gallonsToMl(value)
 
     def gallonsToMl(self, value):

@@ -15,9 +15,7 @@ angular.module('recipes.equipment',[
       });
 
       this.updateCalc = function () {
-        Calculator.trubLoss = equipmentCtrl.profile.trub_loss;
-        Calculator.equipmentLoss = equipmentCtrl.profile.equipment_loss;
-        Calculator.fermenterLoss = equipmentCtrl.profile.fermenter_loss;
+        Calculator.equipmentProfile = this.profile;
       };
     }
   ])

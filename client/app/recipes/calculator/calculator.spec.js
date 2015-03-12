@@ -21,10 +21,10 @@ describe('Calculator Service', function() {
       expect(CalculatorService.details.boilTime).toEqual(60);
     });
     it('should have an initial trub loss', function() {
-      expect(CalculatorService.trubLoss).toEqual(0.5);
+      expect(CalculatorService.equipmentProfile.trubLoss).toEqual(0.5);
     });
     it('should have an initial equipment loss', function() {
-      expect(CalculatorService.equipmentLoss).toEqual(1);
+      expect(CalculatorService.equipmentProfile.equipmentLoss).toEqual(1);
     });
     it('should have an initial mash thickness', function() {
       expect(CalculatorService.details.mashThickness).toEqual(1.33);

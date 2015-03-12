@@ -3,7 +3,7 @@
     <label class="col-md-2 control-label">Batch Size</label>
     <div class="col-md-2">
         <input type="number" step=".5" class="form-control" ng-disabled="{{readOnly}}" name="batchSize" placeholder="Batch Size" ng-model="detailCtrl.recipe.details.batchSize" required>
-        <p ng-show="detailsForm.batchSize.$invalid && !detailsForm.name.$pristine" class="help-block">Batch Size Required</p>
+        <p ng-show="detailsForm.batchSize.$invalid && !detailsForm.batchSize.$pristine" class="help-block">Batch Size Required</p>
     </div>
     <label class="col-md-2 control-label">Boil Time</label>
     <div class="col-md-2">

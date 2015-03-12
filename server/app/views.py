@@ -71,9 +71,9 @@ class SessionView(restful.Resource):
 equipment_fields = {
     'id': fields.Integer,
     'name': fields.String,
-    'trub_loss': fields.Float,
-    'equipment_loss': fields.Float,
-    'fermenter_loss': fields.Float,
+    'trubLoss': fields.Float,
+    'equipmentLoss': fields.Float,
+    'fermenterLoss': fields.Float,
 }
 
 
@@ -467,9 +467,9 @@ class EquipmentProfileList(restful.Resource):
         profile = EquipmentProfile(
             g.user.id,
             form.name.data,
-            form.trub_loss.data,
-            form.equipment_loss.data,
-            form.fermenter_loss.data
+            form.trubLoss.data,
+            form.equipmentLoss.data,
+            form.fermenterLoss.data
         )
         db.session.add(profile)
         db.session.commit()

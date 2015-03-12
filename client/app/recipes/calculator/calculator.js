@@ -11,19 +11,22 @@ angular.module('recipes.calculator',[
     boilTime: 60,
     mashThickness: 1.33
   };
+  calculatorService.equipmentProfile = {
+    name: "Default Profile",
+    trubLoss: 0.5,
+    equipmentLoss: 1,
+    fermenterLoss: 0,
+  };
 
   calculatorService.grainBill = 0;
-  calculatorService.trubLoss = 0.5;
-  calculatorService.equipmentLoss = 1;
-  calculatorService.fermenterLoss = 0;
   calculatorService.grainTemp = 65;
 
 
   calculatorService.calculateWaterVol = function(grainBill){
     var batchSize = calculatorService.details.batchSize;
     var bt = calculatorService.details.boilTime;
-    var trubLoss = calculatorService.trubLoss;
-    var equipmentLoss = calculatorService.equipmentLoss;
+    var trubLoss = calculatorService.equipmentProfile.trubLoss;
+    var equipmentLoss = calculatorService.equipmentProfile.equipmentLoss;
     var mashThickness = calculatorService.details.mashThickness;
 
     var ga = grainAbsorbtion(grainBill);

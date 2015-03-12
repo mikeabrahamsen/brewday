@@ -8,9 +8,9 @@ angular.module('settings.equipment',[
         equipCreateCtrl.createProfile = function(name, trubLoss, equipmentLoss, fermenterLoss) {
           var profile = {
             "name": name,
-            "trub_loss": trubLoss,
-            "equipment_loss": equipmentLoss,
-            "fermenter_loss": fermenterLoss
+            "trubLoss": trubLoss,
+            "equipmentLoss": equipmentLoss,
+            "fermenterLoss": fermenterLoss
           };
           EquipmentProfile.create(profile);
         };
@@ -27,6 +27,11 @@ angular.module('settings.equipment',[
               var equipmentView = this;
               this.readOnly = true;
               this.profile = equipmentProfile;
+              this.delete = function(recipe){
+                equipmentView.profile.remove();
+                $state.go('settings.equipment',{}, {reload: true});
+              };
+
             }
 ])
 .config(function($stateProvider){
