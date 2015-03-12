@@ -9,6 +9,7 @@ angular.module('recipes',[
         'recipes.calculator',
         'recipes.equipment',
         'settings.equipment',
+        'recipes.details',
 ])
 .controller('RecipeListCtrl',  ['recipes',
         function(recipes){

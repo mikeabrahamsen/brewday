@@ -6,23 +6,25 @@ angular.module('recipes.calculator',[
   calculatorService.totalVol = 0;
   calculatorService.mashVol = 0;
   calculatorService.spargeVol = 0;
+  calculatorService.details = {
+    batchSize: 5,
+    boilTime: 60,
+    mashThickness: 1.33
+  };
 
   calculatorService.grainBill = 0;
-  calculatorService.batchSize = 5;
-  calculatorService.boilTime = 60;
   calculatorService.trubLoss = 0.5;
   calculatorService.equipmentLoss = 1;
   calculatorService.fermenterLoss = 0;
-  calculatorService.mashThickness = 1.33;
   calculatorService.grainTemp = 65;
 
 
   calculatorService.calculateWaterVol = function(grainBill){
-    var batchSize = calculatorService.batchSize;
-    var bt = calculatorService.boilTime;
+    var batchSize = calculatorService.details.batchSize;
+    var bt = calculatorService.details.boilTime;
     var trubLoss = calculatorService.trubLoss;
     var equipmentLoss = calculatorService.equipmentLoss;
-    var mashThickness = calculatorService.mashThickness;
+    var mashThickness = calculatorService.details.mashThickness;
 
     var ga = grainAbsorbtion(grainBill);
     var pv = preBoilVol(bt, batchSize, trubLoss);
@@ -35,7 +37,7 @@ angular.module('recipes.calculator',[
     this.spargeVol = Math.round(sv*100) / 100;
   };
   calculatorService.calculateStrikeTemp = function(targetTemp){
-    var strikeTemp = (0.2 / calculatorService.mashThickness)*(targetTemp - calculatorService.grainTemp) + targetTemp;
+    var strikeTemp = (0.2 / calculatorService.details.mashThickness)*(targetTemp - calculatorService.grainTemp) + targetTemp;
     return Math.round(strikeTemp*10) / 10;
   };
   function grainAbsorbtion(grainBill){
