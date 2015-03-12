@@ -1,12 +1,12 @@
 angular.module('recipes.create',[
 ])
-.controller('RecipeCreateCtrl',  ['$state', 'Recipe', 'Grain', 'Hop', 'EquipmentProfile',
-        function($state, Recipe, Grain, Hop, EquipmentProfile){
+.controller('RecipeCreateCtrl',  ['$state', 'Recipe', 'Grain', 'Hop',
+        function($state, Recipe, Grain, Hop){
 
         var createCtrl = this;
         this.additions = {grains: [], hops: []};
         this.toDelete = [];
-        this.recipe = {equipment_id: 0};
+        this.recipe = {};
 
         this.createRecipe = function(recipe) {
           Recipe.create(recipe).then(function(data){

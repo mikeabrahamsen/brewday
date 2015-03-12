@@ -10,9 +10,9 @@ angular.module('recipes.edit',[
         this.toDelete = [];
         this.additions = {grains: this.grains, hops: this.hops};
 
-        console.log(recipe.equipment_id);
         this.submit_recipe =
             function submit_recipe(name,beertype,grains,hops){
+                recipe.equipment_id = recipe.equipment_profile.id;
                 recipe.put();
 
                 this.toDelete.forEach(function(addition){

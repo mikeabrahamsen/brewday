@@ -16,7 +16,7 @@ describe("Recipe Edit", function() {
   beforeEach(inject(function($rootScope, _$httpBackend_, $controller, _$state_, _AdditionService_, Recipe) {
     $httpBackend = _$httpBackend_;
     AdditionService = _AdditionService_;
-    $httpBackend.expect('GET', '/recipes/1').respond('{"id": 1, "name": "TestRecipe"}');
+    $httpBackend.expect('GET', '/recipes/1').respond('{"id": 1, "name": "TestRecipe", "equipment_profile": {"id":0}}');
     var recipe = Recipe.getOne(1).$object;
     var grains = [];
     var hops = [];
@@ -26,7 +26,7 @@ describe("Recipe Edit", function() {
     controller = $controller("RecipeEditCtrl", {$state: $state, recipe: recipe, grains: grains, hops: hops});
 
   }));
-  describe('Recipe Edit Controller', function() {
+  describe('Controller', function() {
     it('should have a recipe', function() {
       expect(controller.recipe).toBeDefined();
       expect(controller.recipe.id).toBe(1);
@@ -82,7 +82,7 @@ describe("Recipe Edit", function() {
       expect($state.current.name).toBe('recipes.view');
     }));
   });
-  describe('Edit route', function() {
+  describe('Route', function() {
     it('should request recipes and additions', function() {
       $httpBackend.expect('GET', '/recipes/1').respond([{'name': 'grain1'},{'name': 'grain2'}]);
       $httpBackend.expect('GET', '/recipes/1/hops').respond([{'name': 'hop1'},{'name': 'hop2'}]);
