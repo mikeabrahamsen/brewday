@@ -5,7 +5,7 @@ angular.module('recipes.details',[
   'RecipeDetailCtrl',['CalculatorService',
     function(Calculator){
       var detailCtrl = this;
-      Calculator.details = this.recipe.details;
+      this.recipe.details = Calculator.details;
     }
   ])
 .directive('recipeDetails', function(){

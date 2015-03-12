@@ -1,0 +1,19 @@
+<ng-form name="detailsForm" ng-model="detailCtrl.recipe.details">
+<div class="row">
+    <label class="col-md-2 control-label">Batch Size</label>
+    <div class="col-md-2">
+        <input type="number" step=".5" class="form-control" ng-disabled="{{readOnly}}" name="batchSize" placeholder="Batch Size" ng-model="detailCtrl.recipe.details.batchSize" required>
+        <p ng-show="detailsForm.batchSize.$invalid && !detailsForm.name.$pristine" class="help-block">Batch Size Required</p>
+    </div>
+    <label class="col-md-2 control-label">Boil Time</label>
+    <div class="col-md-2">
+        <input type="number" class="form-control" ng-disabled="{{readOnly}}" name="boilTime" placeholder="Boil Time" ng-model="detailCtrl.recipe.details.boilTime" required>
+        <p ng-show="detailsForm.boilTime.$invalid && !detailsForm.boilTime.$pristine" class="help-block">Boil time is required</p>
+    </div>
+    <label class="col-md-2 control-label">Mash Thickness</label>
+    <div class="col-md-2">
+        <input type="number" class="form-control" ng-disabled="{{readOnly}}" name="mashThickness" placeholder="Boil Time" ng-model="detailCtrl.recipe.details.mashThickness" required>
+        <p ng-show="detailsForm.mashThickness.$invalid && !detailsForm.mashThickness.$pristine" class="help-block">Mash thickness is required</p>
+    </div>
+</div>
+</ng-form>
