@@ -12,6 +12,7 @@ angular.module('recipes.calculator',[
   calculatorService.boilTime = 60;
   calculatorService.trubLoss = 0.5;
   calculatorService.equipmentLoss = 1;
+  calculatorService.fermenterLoss = 0;
   calculatorService.mashThickness = 1.33;
   calculatorService.grainTemp = 65;
 

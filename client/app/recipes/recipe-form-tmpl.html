@@ -12,7 +12,7 @@
                 <p ng-show="postForm.beer_type.$invalid && !postForm.beer_type.$pristine" class="help-block">Beer Type is required</p>
             </div>
         </div>
-        <equipment-select equipment-id="recipes.recipe.equipment_id"></equipment-select>
+        <equipment-select profile="recipes.recipe.equipment_profile"></equipment-select>
     </div>
     <hr />
     <additions-form additions="recipes.additions" to-delete="recipes.toDelete" recipe="recipes.recipe"></additions-form>
