@@ -1,5 +1,6 @@
 angular.module('recipes.equipment',[
-
+    'ui.select',
+    'ngSanitize',
 ])
 .controller(
   'RecipeEquipmentCtrl',['EquipmentProfile', 'CalculatorService',
@@ -11,7 +12,7 @@ angular.module('recipes.equipment',[
         if(!equipmentCtrl.profile){
           equipmentCtrl.profile = data[0];
         }
-          equipmentCtrl.updateCalc();
+        equipmentCtrl.updateCalc();
       });
 
       this.updateCalc = function () {
