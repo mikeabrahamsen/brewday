@@ -494,9 +494,9 @@ class EquipmentProfileView(restful.Resource):
         profile = EquipmentProfile.query.filter_by(
             user_id=g.user.id, id=id).one()
         profile.name = form.name.data
-        profile.trub_loss = form.trub_loss.data
-        profile.equipment_loss = form.equipment_loss.data
-        profile.fermenter_loss = form.fermenter_loss.data
+        profile.trubLoss = form.trubLoss.data
+        profile.equipmentLoss = form.equipmentLoss.data
+        profile.fermenterLoss = form.fermenterLoss.data
         db.session.add(profile)
         db.session.commit()
         return profile, 201

@@ -5,7 +5,7 @@ angular.module('settings.equipment',[
         function($state, EquipmentProfile){
 
         var equipCreateCtrl = this;
-        equipCreateCtrl.createProfile = function(name, trubLoss, equipmentLoss, fermenterLoss) {
+        this.createProfile = function(name, trubLoss, equipmentLoss, fermenterLoss) {
           var profile = {
             "name": name,
             "trubLoss": trubLoss,
@@ -13,6 +13,21 @@ angular.module('settings.equipment',[
             "fermenterLoss": fermenterLoss
           };
           EquipmentProfile.create(profile);
+          $state.go('settings.equipmentList');
+        };
+        }
+])
+.controller('EquipmentEditCtrl',  ['$state','equipmentProfile',
+        function($state, equipmentProfile){
+        var equipEditCtrl = this;
+        this.profile = equipmentProfile;
+        equipEditCtrl.createProfile = function(name, trubLoss, equipmentLoss, fermenterLoss) {
+          equipEditCtrl.profile.name = name;
+          equipEditCtrl.profile.trubLoss = trubLoss;
+          equipEditCtrl.profile.equipmentLoss = equipmentLoss;
+          equipEditCtrl.profile.fermenterLoss = fermenterLoss;
+          equipEditCtrl.profile.save();
+          $state.go('settings.equipmentList');
         };
         }
 ])
@@ -38,6 +53,11 @@ angular.module('settings.equipment',[
     $stateProvider
         .state('settings.equipment',{
             url: '/equipment',
+            template: '<div ui-view></div>',
+            abstract: true,
+        })
+        .state('settings.equipmentList',{
+            url: '',
             controllerAs: 'equipmentList',
             controller: 'EquipmentListCtrl',
             templateUrl: 'app/settings/equipment/equipment-list.tmpl.html',
@@ -49,8 +69,8 @@ angular.module('settings.equipment',[
             },
         })
         .state('settings.equipmentCreate',{
-            url: '/new',
-            controllerAs: 'equipmentCreate',
+            url: '/createEquipmentProfile',
+            controllerAs: 'equipment',
             controller: 'EquipmentCreateCtrl',
             templateUrl: 'app/settings/equipment/equipment-form.html',
         })
@@ -59,6 +79,18 @@ angular.module('settings.equipment',[
             controllerAs: 'equipmentView',
             controller: 'EquipmentViewCtrl',
             templateUrl: 'app/settings/equipment/equipment-view.tmpl.html',
+            resolve: {
+                equipmentProfile: ['$stateParams', 'EquipmentProfile',
+                function($stateParams, profile){
+                    return profile.getOne($stateParams.profileId);
+                }],
+            }
+        })
+        .state('settings.equipmentEdit',{
+            url: '/equipment/:profileId/edit',
+            controllerAs: 'equipment',
+            controller: 'EquipmentEditCtrl',
+            templateUrl: 'app/settings/equipment/equipment-form.html',
             resolve: {
                 equipmentProfile: ['$stateParams', 'EquipmentProfile',
                 function($stateParams, profile){

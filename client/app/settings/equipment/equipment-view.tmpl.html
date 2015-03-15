@@ -1,5 +1,6 @@
 <form class="form-horizontal" name="equipmentForm" ng-submit="equipmentView.profile.createProfile(equipmentView.profile.name, equipmentView.profile.trubLoss, equipmentView.profile.equipmentLoss, equipmentView.profile.fermenterLoss)" novalidate>
     <div class="col-md-12">
+        <a ui-sref="settings.equipmentEdit({profileId: equipmentView.profile.id})" role="button" class="btn btn-primary">Edit Equipment Profile</a>
         <button type="button" class="btn btn-danger" ng-click="equipmentView.delete(recipes.recipe)">Delete</button>
     </div>
     <div class="form-group">
