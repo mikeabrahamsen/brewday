@@ -49,16 +49,16 @@ class EquipmentProfileModelTests(TestCase):
         self.assertEqual(len(response), 2)
         self.assertNotEqual(e, [])
         self.assertEqual(e[0].name, 'Default Profile')
-        self.assertEqual(e[0].trub_loss, 0.5)
+        self.assertEqual(e[0].trubLoss, 0.5)
 
     def test_creating_equipment_profile(self):
         profile = EquipmentProfile(1, 'mpro', 1, 1, 1)
         self.assertEqual(profile.name, 'mpro')
         self.assertEqual(profile.user_id, 1)
 
-        self.assertEqual(profile.trub_loss, 1)
-        self.assertEqual(profile.equipment_loss, 1)
-        self.assertEqual(profile.fermenter_loss, 1)
+        self.assertEqual(profile.trubLoss, 1)
+        self.assertEqual(profile.equipmentLoss, 1)
+        self.assertEqual(profile.fermenterLoss, 1)
 
         self.assertEqual(profile._fermenter_loss, 3786)
         self.assertEqual(profile._equipment_loss, 3786)
@@ -66,9 +66,9 @@ class EquipmentProfileModelTests(TestCase):
 
     def test_submitting_profile(self):
         profile_data = {'name': 'test',
-                        'trub_loss': 1,
-                        'equipment_loss': 1,
-                        'fermenter_loss': 1,
+                        'trubLoss': 1,
+                        'equipmentLoss': 1,
+                        'fermenterLoss': 1,
                         }
         rv = self.app.post(self.equipment_route, data=profile_data,
                            headers=self.auth_headers)
@@ -83,9 +83,9 @@ class EquipmentProfileModelTests(TestCase):
 
     def test_profile_list(self):
         profile_data = {'name': 'test',
-                        'trub_loss': 1,
-                        'equipment_loss': 1,
-                        'fermenter_loss': 1,
+                        'trubLoss': 1,
+                        'equipmentLoss': 1,
+                        'fermenterLoss': 1,
                         }
         self.app.post(self.equipment_route, data=profile_data,
                       headers=self.auth_headers)
@@ -110,9 +110,9 @@ class EquipmentProfileModelTests(TestCase):
 
     def test_single_get(self):
         profile_data = {'name': 'stainless',
-                        'trub_loss': 11,
-                        'equipment_loss': 410000,
-                        'fermenter_loss': 1.5,
+                        'trubLoss': 11,
+                        'equipmentLoss': 410000,
+                        'fermenterLoss': 1.5,
                         }
         self.app.post(self.equipment_route, data=profile_data,
                       headers=self.auth_headers)
@@ -121,19 +121,19 @@ class EquipmentProfileModelTests(TestCase):
                                headers=self.auth_headers)
         response = json.loads(profile.data)
         self.assertEqual(response['name'], 'stainless')
-        self.assertEqual(response['trub_loss'], 11)
-        self.assertEqual(response['equipment_loss'], 410000)
+        self.assertEqual(response['trubLoss'], 11)
+        self.assertEqual(response['equipmentLoss'], 410000)
 
     def test_put(self):
         profile_data = {'name': 'test',
-                        'trub_loss': 1,
-                        'equipment_loss': 1,
-                        'fermenter_loss': 1,
+                        'trubLoss': 1,
+                        'equipmentLoss': 1,
+                        'fermenterLoss': 1,
                         }
         self.app.post(self.equipment_route, data=profile_data,
                       headers=self.auth_headers)
         profile_data['name'] = 'test_put'
-        profile_data['equipment_loss'] = 42
+        profile_data['equipmentLoss'] = 42
         rv = self.app.put(self.equipment_route + '/1',
                           data=profile_data,
                           headers=self.auth_headers)
@@ -145,15 +145,15 @@ class EquipmentProfileModelTests(TestCase):
                                headers=self.auth_headers)
         response = json.loads(profile.data)
         self.assertEqual(response['name'], 'test_put')
-        self.assertEqual(response['equipment_loss'], 42)
-        self.assertEqual(response['fermenter_loss'], 1)
-        self.assertEqual(response['trub_loss'], 1)
+        self.assertEqual(response['equipmentLoss'], 42)
+        self.assertEqual(response['fermenterLoss'], 1)
+        self.assertEqual(response['trubLoss'], 1)
 
     def test_delete(self):
         profile_data = {'name': 'test',
-                        'trub_loss': 1,
-                        'equipment_loss': 1,
-                        'fermenter_loss': 1,
+                        'trubLoss': 1,
+                        'equipmentLoss': 1,
+                        'fermenterLoss': 1,
                         }
         self.app.post(self.equipment_route, data=profile_data,
                       headers=self.auth_headers)

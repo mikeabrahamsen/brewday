@@ -3,7 +3,7 @@ from unittest import TestCase
 
 import json
 from app import app, db
-from app.models import User
+from app.models import User, EquipmentProfile
 
 
 class RecipeRouteTests(TestCase):
@@ -21,8 +21,8 @@ class RecipeRouteTests(TestCase):
 
         self.email = 'test@test.com'
         self.password = 'admin'
-        u = User(email=self.email, password=self.password)
-        db.session.add(u)
+        self.user = User(email=self.email, password=self.password)
+        db.session.add(self.user)
         db.session.commit()
         self.auth_headers = {'Authorization': 'Basic ' +
                              base64.b64encode(self.email + ":" + self.password)
@@ -93,6 +93,10 @@ class RecipeRouteTests(TestCase):
     def test_specifig_recipe_get(self):
         recipe = {'name': 'Chocolate Stout', 'beer_type': 'Irish Red'}
         self.add_recipe(recipe, self.auth_headers)
+        ep = EquipmentProfile(self.user.id, 'Default Profile', 0.5, 1.0, 0.0)
+        ep.id = 0
+        db.session.add(ep)
+        db.session.commit()
 
         rv = self.app.get(self.recipe_route + '/1', headers=self.auth_headers)
         response = json.loads(rv.data)
