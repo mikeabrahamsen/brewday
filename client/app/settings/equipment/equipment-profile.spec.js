@@ -7,6 +7,7 @@ describe("Equipment Profile", function() {
   var EquipmentProfile;
 
   beforeEach(module("ui.router"));
+  beforeEach(module("brewday.templates"));
   beforeEach(module("settings"));
   beforeEach(module("brewday.models.equipment"));
   beforeEach(module("restangular"));
@@ -34,6 +35,7 @@ describe("Equipment Profile", function() {
       var equipmentLoss = 2;
       var fermenterLoss = 3;
       equipmentController.createProfile(trubLoss, equipmentLoss, fermenterLoss);
+      $httpBackend.expect('GET', '/equipment').respond(200, '[{"id": 1}]');
       $httpBackend.flush();
     });
   });
