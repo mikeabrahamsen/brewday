@@ -1,5 +1,6 @@
 angular.module('Brewday', [
     'ui.router',
+    'ui.bootstrap',
     'restangular',
     'LocalStorageModule',
     'session',
