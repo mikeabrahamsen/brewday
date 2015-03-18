@@ -7,24 +7,33 @@
         <link rel="stylesheet" type="text/css" href="./css/styles.css">
     </head>
     <body>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Brewday</a>
+                </div>
+                <div collapse="navCollapsed" class="collapse navbar-collapse" ng-click="navCollapsed=true">
+                    <ul class="nav navbar-nav">
+                        <li><a class="brewday-nav-item" ui-sref="home" ng-class="{active: isActive('/')}">Home</a></li>
+                        <li><a class="brewday-nav-item" href="#/recipes" ng-class="{active: isActive('/')}">Recipes</a></li>
+                        <li><a class="brewday-nav-item" ui-sref="login" ng-hide="$stateParams.isLoggedIn" ng-class="{active: isActive('/sessions/create')}">Login</a></li>
+                        <li><a class="brewday-nav-item" ui-sref="logout" ng-show="$stateParams.isLoggedIn">Logout</a></li>
+                        <li><a class="brewday-nav-item" ui-sref="register" ng-class="{active: isActive('/users/create')}">Register</a></li>
+                        <li><a class="brewday-nav-item" ui-sref="create" ng-show="$stateParams.isLoggedIn" ng-class="{active: isActive('/recipes/create')}">Create a recipe</a></li>
+                        <li><a class="brewday-nav-item" ui-sref="settings" ng-show="$stateParams.isLoggedIn" ng-class="{active: isActive('/recipes/create')}">Settings</a></li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
 
-        <div class="brewday-masthead">
-            <div class="container">
-                <nav class="brewday-nav">
-                    <a class="brewday-nav-item" ui-sref="home" ng-class="{active: isActive('/')}">Home</a>
-                    <a class="brewday-nav-item" href="#/recipes" ng-class="{active: isActive('/')}">Recipes</a>
-                    <a class="brewday-nav-item" ui-sref="login" ng-hide="$stateParams.isLoggedIn" ng-class="{active: isActive('/sessions/create')}">Login</a>
-                    <a class="brewday-nav-item" ui-sref="logout" ng-show="$stateParams.isLoggedIn">Logout</a>
-                    <a class="brewday-nav-item" ui-sref="register" ng-class="{active: isActive('/users/create')}">Register</a>
-                    <a class="brewday-nav-item" ui-sref="create" ng-show="$stateParams.isLoggedIn" ng-class="{active: isActive('/recipes/create')}">Create a recipe</a>
-                    <a class="brewday-nav-item" ui-sref="settings" ng-show="$stateParams.isLoggedIn" ng-class="{active: isActive('/recipes/create')}">Settings</a>
-                </nav>
-            </div>
-        </div>
-
-        <div class="container main-view">
+        <div class="container-fluid main-view">
             <div ui-view></div>
-
         </div><!-- /.container -->
 
         <div class="brewday-footer">
