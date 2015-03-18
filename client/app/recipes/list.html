@@ -1,7 +1,8 @@
 <input type="text" class="form-control" id="filter" ng-model="filter.name" placeholder="Search"/>
-<div ng-repeat="recipe in recipes.recipes | filter: filter" class="brewday-post">
-    <a id="recipe-{{recipe.id}}" ui-sref="recipes.view({recipe_id: recipe.id})">
-        <p class="brewday-post-title">{{recipe.beer_type}} - {{recipe.name}}</p>
+<div class="list-group recipe-list" ng-repeat="recipe in recipes.recipes | filter: filter" class="brewday-post">
+    <a class="list-group-item list-group-item-info" id="recipe-{{recipe.id}}" 
+        ui-sref="recipes.view({recipe_id: recipe.id})">
+        {{recipe.name}}
+    <div class="hidden-xs">{{recipe.beer_type}} - {{recipe.created_at | date:'dd MMM yyyy' }}</div>
     </a>
-    <span>{{recipe.created_at | date:'dd MMM yyyy' }}</span>
 </div>
