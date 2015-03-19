@@ -10,6 +10,20 @@ html{
     font-size:100%; 
 }
 
+/* Recipe List */
 .recipe-list{
     margin-top: 1em;
+}
+
+/* Recipe View */
+.recipe-view{
+    table {
+        table-layout:fixed;
+        tr{
+            height: 1em;
+        }
+        td{
+            overflow:hidden;white-space:nowrap; 
+        }
+    }
 }
