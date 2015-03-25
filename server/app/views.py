@@ -40,11 +40,12 @@ class UserView(restful.Resource):
 
         user = User(form.email.data, form.password.data)
 
+        db.session.add(user)
+        db.session.commit()
+
         # create default equipment profile
         equipment_profile = EquipmentProfile(user.id,
                                              'Default Profile', 0.5, 1.0, 0.0)
-
-        db.session.add(user)
         db.session.add(equipment_profile)
         db.session.commit()
         return user
