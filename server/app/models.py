@@ -129,8 +129,9 @@ class Grain(Addition):
     id = db.Column(db.Integer, db.ForeignKey('addition.id'), primary_key=True)
     __mapper_args__ = {'polymorphic_identity': 'grain'}
 
-    def __init__(self, name):
+    def __init__(self, name, region):
         self.name = name
+        self.region = region
 
 
 class RecipeAddition(db.Model):
