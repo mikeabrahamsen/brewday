@@ -23,6 +23,7 @@ module.exports = function(config) {
       'bower_components/angular-local-storage/angular-local-storage.js',
       'bower_components/angular-ui-select/dist/select.js',
       'bower_components/angular-sanitize/angular-sanitize.min.js',
+      'bower_components/angular-bootstrap/ui-bootstrap.min.js',
       'app/**/*.js',
       'app/**/*.html'
     ],
