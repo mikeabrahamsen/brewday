@@ -3,7 +3,7 @@ from unittest import TestCase
 
 import json
 from app import app, db
-from app.models import User, RecipeAddition, Addition
+from app.models import User, RecipeAddition, Addition, Grain
 from app.tests import init_grain_db, init_hop_db
 
 
@@ -54,12 +54,17 @@ class AdditionTests(TestCase):
         return route.replace('/1', '/' + str(recipe_id))
 
     def add_addition(self, addition_type, name, brew_stage, time,
-                     amount, recipe_id=1):
+                     amount, recipe_id=1, region=''):
         route = self.addition_route
         if recipe_id != 1:
             route = self.replace_recipe_id(route, recipe_id)
 
-        addition_id = Addition.query.filter_by(name=name).one().id
+        if addition_type == 'grain':
+            addition_id = Grain.query.filter_by(name=name,
+                                                region=region).one().id
+
+        else:
+            addition_id = Addition.query.filter_by(name=name).one().id
 
         addition = dict(name=name,
                         brew_stage=brew_stage,
@@ -119,7 +124,7 @@ class AdditionTests(TestCase):
         self.assertEqual(len(response), 2)
 
     def test_adding_grain(self):
-        self.add_addition('grain', 'American - Pale 2-Row', 0, 60, 1)
+        self.add_addition('grain', 'Pale 2-Row', 0, 60, 1, region='American')
 
         rv = self.app.get(self.addition_route)
         self.check_content_type(rv.headers)
@@ -137,8 +142,8 @@ class AdditionTests(TestCase):
         # check that we now have a grain added
         self.assertEqual(len(response), 1)
 
-        self.add_addition('grain', 'American - Chocolate', 0, 60, 11)
-        self.add_addition('grain', 'American - Pilsner', 0, 60, 12)
+        self.add_addition('grain', 'Chocolate', 0, 60, 11, region='American')
+        self.add_addition('grain', 'Pilsner', 0, 60, 12, region="American")
 
         rv = self.app.get(self.grain_route)
         self.check_content_type(rv.headers)
@@ -149,7 +154,8 @@ class AdditionTests(TestCase):
         self.assertEqual(len(response), 3)
 
     def test_adding_grains_and_hops(self):
-        rv = self.add_addition('grain', 'American - Pale 2-Row', 0, 60, 1)
+        rv = self.add_addition('grain', 'Pale 2-Row', 0, 60, 1,
+                               region='American')
         rv1 = self.add_addition('hop', 'Cascade', 2, 45, 1)
 
         self.check_content_type(rv.headers)
@@ -180,12 +186,12 @@ class AdditionTests(TestCase):
 
     def test_adding_duplicate_additions_fails(self):
         rv = self.add_addition('grain',
-                               'American - Pale 2-Row', 0, 60, 1)
+                               'Pale 2-Row', 0, 60, 1, region='American')
         self.check_content_type(rv.headers)
         self.assertEqual(rv.status_code, 201)
 
         rv = self.add_addition('grain',
-                               'American - Pale 2-Row', 0, 60, 1)
+                               'Pale 2-Row', 0, 60, 1, region='American')
         self.check_content_type(rv.headers)
         self.assertEqual(rv.status_code, 400)
 
@@ -235,8 +241,8 @@ class AdditionTests(TestCase):
         self.assertEqual(len(response), 2)
 
         self.add_addition('grain',
-                          'American - Pale 2-Row', 0, 60, 1, 2)
-        self.add_addition('grain', 'American - Pilsner', 0, 40, 1, 2)
+                          'Pale 2-Row', 0, 60, 1, 2, region='American')
+        self.add_addition('grain', 'Pilsner', 0, 40, 1, 2, region='American')
 
         rv = self.app.get(self.grain_route)
         self.check_content_type(rv.headers)
@@ -257,7 +263,7 @@ class AdditionTests(TestCase):
 
     def test_grain_conversions(self):
         self.add_addition('grain',
-                          'American - Pale 2-Row', 0, 60, 1.5)
+                          'Pale 2-Row', 0, 60, 1.5, region='American')
 
         # check the correct values are being stored in the database
         # and that getting the amount property does the conversion

@@ -12,8 +12,8 @@ hop_db_count = Hop.query.count()
 
 if len(grain_list) != grain_db_count:
     Grain.query.delete()
-    for i, grain in grain_list:
-        db.session.add(Grain(grain))
+    for grain in grain_list:
+        db.session.add(Grain(grain[2], grain[1]))
 
 if len(hop_list) != hop_db_count:
     Hop.query.delete()

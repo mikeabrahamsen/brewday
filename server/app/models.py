@@ -127,10 +127,15 @@ class Hop(Addition):
 
 class Grain(Addition):
     id = db.Column(db.Integer, db.ForeignKey('addition.id'), primary_key=True)
+    region = db.Column(db.String(120), nullable=True)
     __mapper_args__ = {'polymorphic_identity': 'grain'}
 
-    def __init__(self, name):
+    def __init__(self, name, region):
         self.name = name
+        self.region = region
+
+    def __repr__(self):
+        return '<%r %r %r>' % (self.addition_type, self.name, self.region)
 
 
 class RecipeAddition(db.Model):
