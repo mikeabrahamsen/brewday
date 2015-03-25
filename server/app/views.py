@@ -113,12 +113,17 @@ class RecipeView(restful.Resource):
     @marshal_with(recipe_fields)
     def get(self, id):
         recipe = Recipe.query.filter_by(user_id=g.user.id, id=id).one()
-        equipment_profile = EquipmentProfile.query.filter_by(
-            user_id=g.user.id,
-            id=recipe.equipment_id).one()
+
+        try:
+            equipment_profile = EquipmentProfile.query.filter_by(
+                user_id=g.user.id,
+                id=recipe.equipment_id).one()
+        except NoResultFound:
+            equipment_profile = EquipmentProfile.query.filter_by(
+                user_id=g.user.id,
+                name='Default Profile').one()
 
         recipe.equipment_profile = equipment_profile
-
         return recipe
 
     @auth.login_required
