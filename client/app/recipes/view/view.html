@@ -1,44 +1,25 @@
 <div class="recipe-view">
     <div class="row">
-        <h3 col-xs-12>{{recipes.recipe.name}}</h3>
-        <h5>{{recipes.recipe.beer_type}}</h5>
+        <h3 col-xs-12>{{vm.recipe.name}}</h3>
+        <h5>{{vm.recipe.beer_type}}</h5>
     </div>
     <div class="row">
-        <a ui-sref="recipes.edit({recipe_id: recipes.recipe.id})" role="button" class="btn btn-primary">Edit Recipe</a>
-        <button type="button" class="btn btn-danger" ng-click="recipes.delete(recipes.recipe)">Delete</button>
+        <a ui-sref="recipes.edit({recipe_id: vm.recipe.id})" role="button" class="btn btn-primary">Edit Recipe</a>
+        <button type="button" class="btn btn-danger" ng-click="recipes.delete(vm.recipe)">Delete</button>
     </div>
-<div class="col-xs-12 col-md-6">
-    <div class="panel panel-default">
-        <div class="panel-heading">Grain Additions</div>
-        <table class="table table-condensed table-striped">
-            <tr>
-                <th class="col-xs-2">#</th>
-                <th>Name</th>
-            </tr>
-        <tr data-ng-repeat="grain in recipes.grains | orderBy: 'amount': true" >
-            <td>{{grain.amount}}</td>
-            <td>{{grain.name}}</td>
-        </tr>
-        </table>
+    <div class="row">
+        <tabset class="hidden-xs">
+        <tab ng-repeat="tab in vm.tabs" heading="{{tab.title}}" active="tab.active" disabled="tab.disabled">
+        <div ng-include="tab.template"></div>
+        </tab>
+        </tabset>
+
+        <accordion class="visible-xs" close-others="oneAtATime">
+        <accordion-group heading="{{tab.title}}" is-open="tab.active" ng-repeat="tab in vm.tabs">
+            <div ng-include="tab.template"></div>
+        </accordion-group>
+        </accordion>
     </div>
-</div>
-<div class="col-xs-12 col-md-6">
-    <div class="panel panel-default">
-        <div class="panel-heading">Hop Additions</div>
-        <table class="table table-condensed table-striped">
-            <tr>
-                <th class="col-xs-3">Time</th>
-                <th class="col-xs-2">#</th>
-                <th>Name</th>
-            </tr>
-        <tr data-ng-repeat="hop in recipes.hops| orderBy: 'time': true" >
-            <td class="col-xs-2">{{hop.time}}</td>
-            <td>{{hop.amount}}</td>
-            <td>{{hop.name}}</td>
-        </tr>
-        </table>
-    </div>
-</div>
-<equipment-select profile="recipes.recipe.equipment_profile"></equipment-select>
-<water-calculations grains="recipes.grains"></water-calculations>
+    <equipment-select profile="vm.recipe.equipment_profile"></equipment-select>
+    <water-calculations grains="vm.grains"></water-calculations>
 </div>

@@ -8,6 +8,11 @@ angular.module('recipes.view',[
             this.hops = hops;
             this.additions = {grains: this.grains, hops: this.hops};
 
+            this.tabs = [
+              { title:'Grains', template: 'app/recipes/view/view-grains.html'},
+              { title:'Hops', template: 'app/recipes/view/view-hops.html'}
+            ];
+
             this.readOnly = true;
 
             this.delete = function(recipe){
@@ -22,7 +27,7 @@ angular.module('recipes.view',[
             url: '/:recipe_id',
             templateUrl: 'app/recipes/view/view.html',
             controller: 'RecipeViewCtrl',
-            controllerAs: 'recipes',
+            controllerAs: 'vm',
             resolve: {
                 recipe: ['$stateParams', 'Recipe',
                 function($stateParams, recipe){

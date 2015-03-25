@@ -1,13 +1,14 @@
-describe("Recipe View Controller", function() {
+describe("Recipe View", function() {
   var element;
   var $scope;
   var $state;
   var $httpBackend;
   var controller;
-  beforeEach(module("brewday.templates"));
   beforeEach(module("ui.router"));
+  beforeEach(module("ui.bootstrap"));
   beforeEach(module("recipes"));
   beforeEach(module("restangular"));
+  beforeEach(module("brewday.templates"));
   beforeEach(inject(function($rootScope, _$httpBackend_, $controller, _$state_, Recipe) {
     $httpBackend = _$httpBackend_;
     $httpBackend.expect('GET','/recipes/1').respond({name: 'test-recipe'});
@@ -25,7 +26,7 @@ describe("Recipe View Controller", function() {
     $httpBackend.verifyNoOutstandingExpectation ();
     $httpBackend.verifyNoOutstandingRequest ();
   });
-  describe('Viewing recipes', function() {
+  describe('Controller', function() {
     it('should have a recipe defined', function() {
       expect(controller.recipe).toBeDefined();
       expect(controller.recipe.name).toBe('test-recipe');
