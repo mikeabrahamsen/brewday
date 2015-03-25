@@ -5,8 +5,8 @@ from hop_list import hop_list
 
 
 def init_grain_db():
-    for i, grain in grain_list:
-        db.session.add(Grain(grain))
+    for grain in grain_list:
+        db.session.add(Grain(grain[2], grain[1]))
     db.session.commit()
 
 
