@@ -105,6 +105,7 @@ class Addition(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     addition_type = db.Column(db.String(50))
+    region = db.Column(db.String(120), nullable=True)
 
     __mapper_args__ = {'polymorphic_identity': 'addition',
                        'polymorphic_on': addition_type,
@@ -127,7 +128,6 @@ class Hop(Addition):
 
 class Grain(Addition):
     id = db.Column(db.Integer, db.ForeignKey('addition.id'), primary_key=True)
-    region = db.Column(db.String(120), nullable=True)
     __mapper_args__ = {'polymorphic_identity': 'grain'}
 
     def __init__(self, name, region):
@@ -149,16 +149,18 @@ class RecipeAddition(db.Model):
     addition_type = db.Column(db.String(50))
     name = db.Column(db.String(50))
     addition = db.relationship(Addition, lazy='joined')
+    region = db.Column(db.String(120), nullable=True)
 
     brew_stage = db.Column(db.Integer, default=0)
 
-    def __init__(self, addition, amount, brew_stage, time):
+    def __init__(self, addition, amount, brew_stage, time, region=None):
         self.addition = addition
         self.addition_type = addition.addition_type
         self.brew_stage = brew_stage
         self.amount = amount
         self.time = time
         self.name = addition.name
+        self.region = addition.region
 
     def __repr__(self):
         return '<%r %r %r>' % (self.addition_type, self.addition.name,

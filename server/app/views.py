@@ -164,11 +164,13 @@ recipe_addition_fields = {
     'time': fields.Integer,
     'amount': fields.Float,  # so we can send decimals after conversions
     'recipe_id': fields.Integer,
+    'region': fields.String
 }
 
 addition_fields = {
     'id': fields.Integer,
-    'name': fields.String
+    'name': fields.String,
+    'region': fields.String
 }
 
 

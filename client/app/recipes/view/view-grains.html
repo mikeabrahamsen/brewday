@@ -1,15 +1,13 @@
 <div class="col-xs-12 col-md-12">
-    <div class="panel panel-default">
-        <div class="panel-heading">Grain Additions</div>
-        <table class="table table-condensed table-striped">
-            <tr>
-                <th class="col-xs-2">#</th>
-                <th>Name</th>
-            </tr>
+    <table class="table table-condensed table-striped">
+        <tr>
+            <th class="col-xs-2">Weight</th>
+            <th>Name</th>
+        </tr>
         <tr data-ng-repeat="grain in vm.grains | orderBy: 'amount': true" >
             <td>{{grain.amount}}</td>
             <td>{{grain.name}}</td>
+            <td>{{grain.region}}</td>
         </tr>
-        </table>
-    </div>
+    </table>
 </div>
