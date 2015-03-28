@@ -6,8 +6,7 @@
         </tr>
         <tr data-ng-repeat="grain in vm.grains | orderBy: 'amount': true" >
             <td>{{grain.amount}}</td>
-            <td>{{grain.name}}</td>
-            <td>{{grain.region}}</td>
+            <td>{{grain.name}} <small>- {{grain.region}}</small></td>
         </tr>
     </table>
 </div>
