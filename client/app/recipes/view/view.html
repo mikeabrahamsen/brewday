@@ -5,7 +5,7 @@
     </div>
     <div class="row">
         <a ui-sref="recipes.edit({recipe_id: vm.recipe.id})" role="button" class="btn btn-primary">Edit Recipe</a>
-        <button type="button" class="btn btn-danger" ng-click="recipes.delete(vm.recipe)">Delete</button>
+        <button type="button" class="btn btn-danger" ng-click="vm.delete(vm.recipe)">Delete</button>
     </div>
     <div class="row">
         <tabset class="hidden-xs">

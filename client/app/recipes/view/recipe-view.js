@@ -15,8 +15,8 @@ angular.module('recipes.view',[
 
             this.readOnly = true;
 
-            this.delete = function(recipe){
-                recipe.remove();
+            this.delete = function(){
+                recipeView.recipe.remove();
                 $state.go('recipes.list',{}, {reload: true});
             };
         }
