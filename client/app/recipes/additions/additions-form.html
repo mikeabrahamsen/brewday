@@ -18,6 +18,7 @@
             <ui-select-match placeholder="Select or search a grain in the list...">{{$select.selected.name}}</ui-select-match>
             <ui-select-choices repeat="grain.id as grain in additionCtrl.options.grains | filter: {name: $select.search}">
                 <span ng-bind-html="grain.name | highlight: $select.search"></span>
+                <small ng-bind-html="grain.region | highlight: $select.search"></small>
             </ui-select-choices>
         </ui-select>
         </div>
