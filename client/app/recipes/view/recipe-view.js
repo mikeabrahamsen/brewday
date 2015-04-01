@@ -9,6 +9,7 @@ angular.module('recipes.view',[
             this.additions = {grains: this.grains, hops: this.hops};
 
             this.tabs = [
+              { title:'Overview', template: 'app/recipes/view/view-overview.html'},
               { title:'Grains', template: 'app/recipes/view/view-grains.html'},
               { title:'Hops', template: 'app/recipes/view/view-hops.html'}
             ];
