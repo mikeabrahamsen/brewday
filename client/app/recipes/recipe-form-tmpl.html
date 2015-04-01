@@ -1,4 +1,4 @@
-<form class="form-horizontal" name="postForm" ng-submit="recipes.submit_recipe(recipes.recipe.name, recipes.recipe.beer_type, recipes.grains, recipes.hops)" novalidate>
+<form class="form-horizontal" name="recipeForm" ng-submit="recipes.submit_recipe(recipes.recipe.name, recipes.recipe.beer_type, recipes.grains, recipes.hops)" novalidate>
     <div class="form-group">
         <div class="row">
             <label class="col-md-1 control-label">Name</label>
@@ -17,9 +17,10 @@
     </div>
     <hr />
     <additions-form additions="recipes.additions" to-delete="recipes.toDelete" recipe="recipes.recipe"></additions-form>
-    <div class="col-md-12">
-        <hr style="padding-bottom: 40px"/>
-        <button type="submit" ng-show="!readOnly" class="btn btn-success pull-right">Save Recipe</button>
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            <button type="submit" class="btn btn-success pull-right">Save Recipe</button>
+        </div>
     </div>
 </form>
 
