@@ -8,7 +8,9 @@ angular.module('recipes.additions',[
     scope: {
       additions: '=',
       toDelete: '=',
-      recipe: '='
+      recipe: '=',
+      showGrains: '@',
+      showHops: '@'
     },
     controller: "AdditionFormCtrl",
     controllerAs: "additionCtrl",

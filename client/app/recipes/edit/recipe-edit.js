@@ -10,6 +10,12 @@ angular.module('recipes.edit',[
         this.toDelete = [];
         this.additions = {grains: this.grains, hops: this.hops};
 
+        this.tabs = [
+          { title:'Recipe Info', template: 'app/recipes/recipe-info-form-tmpl.html'},
+          { title:'Grains', showGrains: true},
+          { title:'Hops', showGrains: false}
+        ];
+
         this.submit_recipe =
             function submit_recipe(name,beertype,grains,hops){
                 recipe.equipment_id = recipe.equipment_profile.id;
@@ -37,7 +43,7 @@ angular.module('recipes.edit',[
         .state('recipes.edit',{
             url: '/:recipe_id/edit',
             controller: 'RecipeEditCtrl',
-            controllerAs: 'recipes',
+            controllerAs: 'vm',
             templateUrl: 'app/recipes/edit/edit.html',
             resolve: {
                 recipe: ['$stateParams', 'Recipe',

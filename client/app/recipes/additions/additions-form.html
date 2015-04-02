@@ -1,4 +1,4 @@
-<div class="col-md-6">
+<div ng-show="additionCtrl.showGrains == 'true'" class="col-md-6">
     <ng-form name="grainForm" ng-model="additionCtrl.additions.grains">
     <h3>Add Grain Additions</h3>
     <div class="row">
@@ -31,7 +31,7 @@
     </div>
     </ng-form>
 </div>
-<div class="col-md-6">
+<div ng-show="additionCtrl.showHops == 'true'" class="col-md-6">
     <ng-form name="hopForm" ng-model="additionCtrl.additions.hops">
     <h3>Add Hop Additions</h3>
     <div class="row">

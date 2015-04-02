@@ -1,3 +1,18 @@
 <h1>Edit Recipe</h1>
-<ng-include src="'app/recipes/recipe-form-tmpl.html'"></ng-include>
-<water-calculations grains="recipes.grains"></water-calculations>
+<form class="form-horizontal" name="recipeForm" ng-submit="recipes.submit_recipe(recipes.recipe.name, recipes.recipe.beer_type, recipes.grains, recipes.hops)" novalidate>
+    <div class="row">
+        <tabset class="hidden-xs">
+        <tab ng-repeat="tab in vm.tabs" heading="{{tab.title}}" active="tab.active" disabled="tab.disabled">
+            <div ng-show="tab.template" ng-include="tab.template"></div>
+            <additions-form ng-hide="tab.template" additions="vm.additions" to-delete="vm.toDelete" recipe="vm.recipe" show-grains="{{tab.showGrains}}" show-hops="{{!tab.showGrains}}"></additions-form>
+        </tab>
+        </tabset>
+
+        <accordion class="visible-xs " close-others="oneAtATime">
+        <accordion-group heading="{{tab.title}}" is-open="tab.active" ng-repeat="tab in vm.tabs">
+            <div ng-show="tab.template" ng-include="tab.template"></div>
+            <additions-form ng-hide="tab.template" additions="vm.additions" to-delete="vm.toDelete" recipe="vm.recipe" show-grains="{{tab.showGrains}}" show-hops="{{!tab.showGrains}}"></additions-form>
+        </accordion-group>
+        </accordion>
+    </div>
+</form>
