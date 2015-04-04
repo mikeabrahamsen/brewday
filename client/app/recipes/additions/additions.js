@@ -31,8 +31,8 @@ angular.module('recipes.additions',[
         return AdditionService.addNewAddition(addition_type, this.additions, additionCtrl.recipe);
       };
 
-      AdditionService.setOptions(this.additions, this.options);
-
+      AdditionService.setOptions(this.additions, this.options,
+                                 this.showGrains, this.showHops);
       this.removeAddition = function(addition){
         AdditionService.removeAddition(
           addition,
@@ -75,10 +75,15 @@ angular.module('recipes.additions',[
     additions[addGroup].push(newAddition);
     return newAddition;
   };
-  this.setOptions = function(additions,options) {
+  this.setOptions = function(additions, options, showGrains, showHops) {
+    showGrains = (typeof showGrains === 'undefined') ? true : showGrains;
+    showHops = (typeof showHops === 'undefined') ? true : showHops;
     _.each(additions, function(addition, addition_type) {
-      options[addition_type] =
-        addService[addService.getModelName(addition_type)].getAll().$object;
+      if( (addition_type == 'grains' && showGrains)
+        || (addition_type == 'hops' && showHops)){
+          options[addition_type] =
+            addService[addService.getModelName(addition_type)].getAll().$object;
+        }
     });
     return options;
   };
