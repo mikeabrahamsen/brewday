@@ -50,7 +50,7 @@ angular.module('Brewday', [
 
 .config(function($stateProvider, $urlRouterProvider, RestangularProvider) {
 
-    RestangularProvider.setBaseUrl('http://localhost:5000/api/v1');
+    RestangularProvider.setBaseUrl('http://brewday.carbonrail.com/api/v1');
 
     $urlRouterProvider.otherwise('/');
 
