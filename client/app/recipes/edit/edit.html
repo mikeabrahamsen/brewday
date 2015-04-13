@@ -1,5 +1,5 @@
 <h1>Edit Recipe</h1>
-<form class="form-horizontal" name="recipeForm" ng-submit="recipes.submit_recipe(recipes.recipe.name, recipes.recipe.beer_type, recipes.grains, recipes.hops)" novalidate>
+<form class="form-horizontal" name="recipeForm" ng-submit="vm.submit_recipe(vm.recipe.name, vm.recipe.beer_type, vm.grains, vm.hops)" novalidate>
     <div class="row">
         <tabset class="hidden-xs">
         <tab ng-repeat="tab in vm.tabs" heading="{{tab.title}}" active="tab.active" disabled="tab.disabled">
@@ -15,4 +15,10 @@
         </accordion-group>
         </accordion>
     </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            <button type="submit" class="btn btn-success pull-right">Save Recipe</button>
+        </div>
+    </div>
+
 </form>

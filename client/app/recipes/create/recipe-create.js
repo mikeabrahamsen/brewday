@@ -25,6 +25,7 @@ angular.module('recipes.create',[
         };
         this.submit_recipe =
           function submit_recipe(name,beertype,grains,hops, equipment_id){
+          console.log("submitting");
           createCtrl.recipe.name = name;
           createCtrl.recipe.beer_type = beertype;
           createCtrl.recipe.equipment_id = equipment_id;
@@ -37,7 +38,7 @@ angular.module('recipes.create',[
     $stateProvider
         .state('create',{
             url: '/create',
-            controllerAs: 'recipes',
+            controllerAs: 'vm',
             controller: 'RecipeCreateCtrl',
             templateUrl: 'app/recipes/create/create.html',
         });
