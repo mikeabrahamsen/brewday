@@ -12,3 +12,8 @@ server/app/config.py
 
 .sass-cache
 *.css.map
+
+virtualenv
+brewday.uwsgi.ini
+brewday.nginx.conf
+/server/log
