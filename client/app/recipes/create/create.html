@@ -1,3 +1,14 @@
 <h1>Create Recipe</h1>
-<ng-include src="'app/recipes/recipe-form-tmpl.html'"></ng-include>
-<water-calculations grains="recipes.additions.grains"></water-calculations>
+
+<form class="form-horizontal" name="recipeForm" ng-submit="vm.submit_recipe(vm.recipe.name, vm.recipe.beer_type, vm.grains, vm.hops)" novalidate>
+    <ng-include src="'app/recipes/recipe-info-form-tmpl.html'"></ng-include>
+    <additions-form additions="vm.additions" to-delete="vm.toDelete" recipe="vm.recipe" show-grains="true" show-hops="true"></additions-form>
+    <ng-include src="'app/recipes/recipe-form-tmpl.html'"></ng-include>
+
+    <hr />
+<div class="row">
+    <div class="col-xs-12 col-md-12">
+        <button type="submit" class="btn btn-success pull-right">Save Recipe</button>
+    </div>
+</div>
+</form>
