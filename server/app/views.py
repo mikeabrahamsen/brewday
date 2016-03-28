@@ -242,6 +242,7 @@ def add_recipe_addition(addition_type, addition_id,
         addition = addition_type.query.filter_by(id=addition_id).one()
         recipe = Recipe.query.filter_by(id=recipe_id).one()
         exists = RecipeAddition.query.filter_by(addition_id=addition.id,
+                                                recipe_id=recipe_id,
                                                 time=time,
                                                 brew_stage=brew_stage).first()
         if not exists:
