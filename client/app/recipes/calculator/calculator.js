@@ -6,6 +6,7 @@ angular.module('recipes.calculator',[
   calculatorService.totalVol = 0;
   calculatorService.mashVol = 0;
   calculatorService.spargeVol = 0;
+  calculatorService.preBoilVol = 0;
   calculatorService.details = {
     batchSize: 5,
     boilTime: 60,
@@ -38,6 +39,7 @@ angular.module('recipes.calculator',[
     this.totalVol = Math.round(tv*100) / 100;
     this.mashVol = Math.round(mv*100) / 100;
     this.spargeVol = Math.round(sv*100) / 100;
+    this.preBoilVol = Math.round(pv*100) / 100;
   };
   calculatorService.calculateStrikeTemp = function(targetTemp){
     var strikeTemp = (0.2 / calculatorService.details.mashThickness)*(targetTemp - calculatorService.grainTemp) + targetTemp;
